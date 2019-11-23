@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:ent="https://jojokobi.lima-city.de/mcutil"
+	targetNamespace="https://jojokobi.lima-city.de/mcutil"
+	elementFormDefault="qualified">
+	
+	
+
+    <complexType name="entities">
+    	<sequence>
+    		<element name="entity" type="ent:entity"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="entities" type="ent:entities"></element>
+
+    <complexType name="entity">
+    	<sequence>
+    		<element name="ticks_lived" type="int" minOccurs="1"
+    			maxOccurs="1">
+    		</element>
+    		<element name="location" type="ent:location" minOccurs="1"
+    			maxOccurs="1">
+    		</element>
+    		<element name="spawn_point" type="ent:location"
+    			minOccurs="1" maxOccurs="1">
+    		</element>
+    		<element name="data" type="string" minOccurs="0"
+    			maxOccurs="1">
+    		</element>
+
+    	</sequence>
+    	<attribute name="namespace" type="string"></attribute>
+    	<attribute name="key" type="string"></attribute>
+    </complexType>
+
+    <complexType name="location">
+    	<sequence>
+    		<element name="x" type="double"></element>
+    		<element name="y" type="double"></element>
+    		<element name="z" type="double"></element>
+    		<element name="pitch" type="float"></element>
+    		<element name="yaw" type="float"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="ai">
+    	<sequence>
+    		<element name="namespace" type="string"></element>
+    		<element name="key" type="string"></element>
+    	</sequence>
+    </complexType>
+</schema>

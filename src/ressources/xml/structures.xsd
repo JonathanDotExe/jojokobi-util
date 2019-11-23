@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:strc="https://jojokobi.lima-city.de/mcutil"
+	targetNamespace="https://jojokobi.lima-city.de/mcutil"
+	elementFormDefault="qualified">
+	
+	
+
+
+    <complexType name="structure">
+    	<sequence>
+    		<element name="id" type="string" minOccurs="1"
+    			maxOccurs="1">
+    		</element>
+
+    		<element name="x" type="int" minOccurs="1" maxOccurs="1"></element>
+    		<element name="y" type="int" minOccurs="1" maxOccurs="1"></element>
+    		<element name="z" type="int" minOccurs="1" maxOccurs="1"></element>
+    		<element name="width" type="int" minOccurs="1"
+    			maxOccurs="1">
+    		</element>
+    		<element name="height" type="int" minOccurs="1"
+    			maxOccurs="1">
+    		</element>
+    		<element name="length" type="int" minOccurs="1"
+    			maxOccurs="1">
+    		</element>
+    		<element name="data" type="string" minOccurs="0" maxOccurs="1"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="structures">
+    	<sequence>
+    		<element name="structure" type="strc:structure" minOccurs="1" maxOccurs="1"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="structures" type="strc:structures"></element>
+</schema>

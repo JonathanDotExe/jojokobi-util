@@ -1,0 +1,19 @@
+name: JojokobiUtil
+main: at.jojokobi.mcutil.JojokobiUtilPlugin
+version: 1.0
+author: jojokobi
+load: STARTUP
+api-version: 1.14
+commands:
+  generate:
+    description: Generates a custom structure from the plugins using JojokobiUtil
+    usage: /generate <identifier>
+  removestruc:
+    description: Removes all custom strucures the executor is in
+    usage: /removestruc
+  spawncustom:
+    description: Spawns a custom entity from the plugins using JojokobiUtil
+    usage: /spawncustom <namespace:identifier>
+  dumpheap:
+    description: Writes a heap dump into a log file
+    usage: /dumpheap
