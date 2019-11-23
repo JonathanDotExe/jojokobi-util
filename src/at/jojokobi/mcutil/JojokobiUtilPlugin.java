@@ -8,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import at.jojokobi.mcutil.commands.DumpHeapCommand;
 import at.jojokobi.mcutil.commands.GenerateCommand;
 import at.jojokobi.mcutil.commands.RemoveStructureCommand;
 import at.jojokobi.mcutil.commands.SpawnCustomCommand;
@@ -81,7 +80,6 @@ public class JojokobiUtilPlugin extends JavaPlugin{
 		getCommand(GenerateCommand.COMMAND_NAME).setExecutor(new GenerateCommand(generationHandler));
 		getCommand(RemoveStructureCommand.COMMAND_NAME).setExecutor(new RemoveStructureCommand(generationHandler));
 		getCommand(SpawnCustomCommand.COMMAND_NAME).setExecutor(new SpawnCustomCommand(entityHandler, CustomSpawnsHandler.getInstance()));
-		getCommand(DumpHeapCommand.COMMAND_NAME).setExecutor(new DumpHeapCommand());
 	}
 	
 	@Override
