@@ -33,6 +33,7 @@ public class LootItem implements ConfigurationSerializable{
 	private int maxCount = 1;
 	private int minCount = 1;
 	private boolean enchant = false;
+	private boolean damage = true;
 
 	public LootItem(double chance, ItemStack item, int minCount, int maxCount) {
 		this.chance = chance;
@@ -56,12 +57,13 @@ public class LootItem implements ConfigurationSerializable{
 			item = new ItemStack(this.item);
 			int amount = minCount + random.nextInt(maxCount - minCount + 1);
 			item.setAmount(amount);
-			if (item.getItemMeta() instanceof Damageable && item.getType().getMaxDurability() > 0 && !item.getItemMeta().isUnbreakable()) {
+			//damage
+			if (damage && item.getItemMeta() instanceof Damageable && item.getType().getMaxDurability() > 0 && !item.getItemMeta().isUnbreakable()) {
 				ItemMeta meta =  item.getItemMeta();
 				((Damageable) meta).setDamage(random.nextInt(item.getType().getMaxDurability()));
 				item.setItemMeta(meta);
 			}
-			else if (ItemHandler.getCustomItem(item) instanceof CustomTool) {
+			else if (damage && ItemHandler.getCustomItem(item) instanceof CustomTool) {
 				CustomTool tool = ((CustomTool) ItemHandler.getCustomItem(item));
 				tool.setDurability(item, random.nextInt(tool.getMaxDurability()) + 1);
 			}
@@ -142,6 +144,15 @@ public class LootItem implements ConfigurationSerializable{
 
 	public LootItem setEnchant(boolean enchant) {
 		this.enchant = enchant;
+		return this;
+	}
+
+	public boolean isDamage() {
+		return damage;
+	}
+
+	public LootItem setDamage(boolean damage) {
+		this.damage = damage;
 		return this;
 	}
 
