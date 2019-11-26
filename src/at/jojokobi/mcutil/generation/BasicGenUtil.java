@@ -1,7 +1,5 @@
 package at.jojokobi.mcutil.generation;
 
-
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -16,45 +14,45 @@ public final class BasicGenUtil {
 		
 	}
 	
-	public static List<BlockState> generateCubeStates (Location place, Material block, int width, int height, int length) {
-		return generateCubeStates (place, block, null, BlockModifier.getEmptyModifier(), width, height, length);
-	}
-	
-	public static List<BlockState> generateCubeStates (Location place, Material block, BlockModifier modifier, int width, int height, int length) {
-		return generateCubeStates (place, block, null, modifier, width, height, length);
-	}
-	
-	/**
-	 * Generates a cube
-	 * 
-	 * @param place		Location where the block should be placed
-	 * @param block		Material to place
-	 * @param replace	Material to replace
-	 * @param modifier	Block Modifier to modify the Block
-	 * @param width		Width of the cube
-	 * @param height	Height of the cube
-	 * @param length	Length of the cube
-	 */
-	public static List<BlockState> generateCubeStates (Location place, Material block, Material replace, BlockModifier modifier, int width, int height, int length) {
-		List<BlockState> states = new ArrayList<BlockState> ();
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				for (int z = 0; z < length; z++) {
-					Location blockplace = new Location (place.getWorld(), x + place.getBlockX(), y + place.getBlockY(), z + place.getBlockZ());
-					if (replace == null || blockplace.getBlock().getType() == replace) {
-						BlockState state = blockplace.getBlock().getState();
-						state.setType(block);
-						modifier.modify(state);
-						states.add(state);
-					}
-				}
-			}
-		}
-		return states;
-	}
+//	public static List<BlockState> generateCubeStates (Location place, Material block, int width, int height, int length) {
+//		return generateCubeStates (place, block, null, BlockModifier.getEmptyModifier(), width, height, length);
+//	}
+//	
+//	public static List<BlockState> generateCubeStates (Location place, Material block, BlockModifier modifier, int width, int height, int length) {
+//		return generateCubeStates (place, block, null, modifier, width, height, length);
+//	}
+//	
+//	/**
+//	 * Generates a cube
+//	 * 
+//	 * @param place		Location where the block should be placed
+//	 * @param block		Material to place
+//	 * @param replace	Material to replace
+//	 * @param modifier	Block Modifier to modify the Block
+//	 * @param width		Width of the cube
+//	 * @param height	Height of the cube
+//	 * @param length	Length of the cube
+//	 */
+//	public static List<BlockState> generateCubeStates (Location place, Material block, Material replace, BlockModifier modifier, int width, int height, int length) {
+//		List<BlockState> states = new ArrayList<BlockState> ();
+//		for (int x = 0; x < width; x++) {
+//			for (int y = 0; y < height; y++) {
+//				for (int z = 0; z < length; z++) {
+//					Location blockplace = new Location (place.getWorld(), x + place.getBlockX(), y + place.getBlockY(), z + place.getBlockZ());
+//					if (replace == null || blockplace.getBlock().getType() == replace) {
+//						BlockState state = blockplace.getBlock().getState();
+//						state.setType(block);
+//						modifier.modify(state);
+//						states.add(state);
+//					}
+//				}
+//			}
+//		}
+//		return states;
+//	}
 	
 	public static void generateCube (Location place, Material block, int width, int height, int length) {
-		generateCube(place, block, BlockModifier.getEmptyModifier(), width, height, length);
+		generateCube(place, block, null, width, height, length);
 	}
 	
 	public static void generateCube (Location place, Material block, BlockModifier modifier, int width, int height, int length) {
@@ -62,7 +60,21 @@ public final class BasicGenUtil {
 	}
 	
 	public static void generateCube (Location place, Material block, Material replace, BlockModifier modifier, int width, int height, int length) {
-		updateBlocks(generateCubeStates(place, block, replace, modifier, width, height, length));
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				for (int z = 0; z < length; z++) {
+					Location blockplace = new Location (place.getWorld(), x + place.getBlockX(), y + place.getBlockY(), z + place.getBlockZ());
+					if (replace == null || blockplace.getBlock().getType() == replace) {
+						blockplace.getBlock().setType(block);
+						if (modifier != null) {
+							BlockState state = blockplace.getBlock().getState();
+							state.setType(block);
+							modifier.modify(state);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	public static void updateBlocks (List<BlockState> states) {
