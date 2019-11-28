@@ -42,10 +42,11 @@ public final class NMSEntityUtil {
 		rotateVehicle(entity, place.getYaw(), place.getPitch());
 	}
 	
-	public void setTNTSource (TNTPrimed tnt, LivingEntity source) {
+	public static void setTNTSource (TNTPrimed tnt, LivingEntity source) {
 		EntityTNTPrimed nmsTNT = ((CraftTNTPrimed) tnt).getHandle();
 		try {
 			Field field = nmsTNT.getClass().getDeclaredField("source");
+			field.setAccessible(true);
 			field.set(nmsTNT, source);
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
