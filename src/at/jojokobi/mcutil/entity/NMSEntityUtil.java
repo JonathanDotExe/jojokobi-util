@@ -9,6 +9,7 @@ import java.util.TreeMap;
 
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftTNTPrimed;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -47,7 +48,7 @@ public final class NMSEntityUtil {
 		try {
 			Field field = nmsTNT.getClass().getDeclaredField("source");
 			field.setAccessible(true);
-			field.set(nmsTNT, source);
+			field.set(nmsTNT, ((CraftLivingEntity) source).getHandle());
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
