@@ -9,14 +9,17 @@ import java.util.TreeMap;
 
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftTNTPrimed;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.util.Vector;
 
 import net.minecraft.server.v1_14_R1.BehaviorController;
 import net.minecraft.server.v1_14_R1.EntityHuman;
 import net.minecraft.server.v1_14_R1.EntityInsentient;
 import net.minecraft.server.v1_14_R1.EntityLiving;
+import net.minecraft.server.v1_14_R1.EntityTNTPrimed;
 import net.minecraft.server.v1_14_R1.PathfinderGoal;
 import net.minecraft.server.v1_14_R1.PathfinderGoalLookAtPlayer;
 import net.minecraft.server.v1_14_R1.PathfinderGoalRandomLookaround;
@@ -37,6 +40,17 @@ public final class NMSEntityUtil {
 	public static void rotateVehicle (Entity entity, Vector rotation) {
 		Location place = entity.getLocation().setDirection(rotation);
 		rotateVehicle(entity, place.getYaw(), place.getPitch());
+	}
+	
+	public void setTNTSource (TNTPrimed tnt, LivingEntity source) {
+		EntityTNTPrimed nmsTNT = ((CraftTNTPrimed) tnt).getHandle();
+		try {
+			Field field = nmsTNT.getClass().getDeclaredField("source");
+			field.set(nmsTNT, source);
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 //	public static void setBoundingBox (Entity entity, float width, float length) {
