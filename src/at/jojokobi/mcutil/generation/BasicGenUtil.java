@@ -70,7 +70,7 @@ public final class BasicGenUtil {
 							BlockState state = blockplace.getBlock().getState();
 							state.setType(block);
 							modifier.modify(state);
-							state.update();
+							state.update(true);
 						}
 					}
 				}
