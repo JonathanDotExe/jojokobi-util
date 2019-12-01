@@ -1,9 +1,11 @@
 package at.jojokobi.mcutil.generation;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 
 import at.jojokobi.mcutil.generation.population.BlockModifier;;
@@ -56,15 +58,19 @@ public final class BasicGenUtil {
 	}
 	
 	public static void generateCube (Location place, Material block, BlockModifier modifier, int width, int height, int length) {
-		generateCube(place, block, null, modifier, width, height, length);
+		generateCube(place, block, b -> true, modifier, width, height, length);
 	}
 	
 	public static void generateCube (Location place, Material block, Material replace, BlockModifier modifier, int width, int height, int length) {
+		generateCube(place, block, b -> b.getType() == replace || replace == null, modifier, width, height, length);
+	}
+	
+	public static void generateCube (Location place, Material block, Predicate<Block> replace, BlockModifier modifier, int width, int height, int length) {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				for (int z = 0; z < length; z++) {
 					Location blockplace = new Location (place.getWorld(), x + place.getBlockX(), y + place.getBlockY(), z + place.getBlockZ());
-					if (replace == null || blockplace.getBlock().getType() == replace) {
+					if (replace.test(blockplace.getBlock())) {
 						blockplace.getBlock().setType(block);
 						if (modifier != null) {
 							BlockState state = blockplace.getBlock().getState();
