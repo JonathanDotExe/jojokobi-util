@@ -1,14 +1,15 @@
 package at.jojokobi.mcutil.item;
 
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import net.minecraft.server.v1_14_R1.NBTBase;
-import net.minecraft.server.v1_14_R1.NBTTagByte;
-import net.minecraft.server.v1_14_R1.NBTTagCompound;
-import net.minecraft.server.v1_14_R1.NBTTagInt;
-import net.minecraft.server.v1_14_R1.NBTTagString;
+import net.minecraft.server.v1_15_R1.NBTBase;
+import net.minecraft.server.v1_15_R1.NBTTagByte;
+import net.minecraft.server.v1_15_R1.NBTTagCompound;
+import net.minecraft.server.v1_15_R1.NBTTagInt;
+import net.minecraft.server.v1_15_R1.NBTTagString;
+
 
 public final class ItemUtil {
 
@@ -17,7 +18,7 @@ public final class ItemUtil {
 	}
 	
 	public static void printTagCompount (ItemStack item) {
-		net.minecraft.server.v1_14_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+		net.minecraft.server.v1_15_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound root = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
 		System.out.println(root);
 	}
@@ -30,21 +31,21 @@ public final class ItemUtil {
 	}
 	
 	public static void setNBTTag (ItemStack item, String key, NBTBase value) {
-		net.minecraft.server.v1_14_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+		net.minecraft.server.v1_15_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound root = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
 		root.set (key, value);
 		item.setItemMeta(CraftItemStack.getItemMeta(nmsItem));
 	}
 	
 	public static void removeNBTTag (ItemStack item, String key) {
-		net.minecraft.server.v1_14_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+		net.minecraft.server.v1_15_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound root = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
 		root.remove (key);
 		item.setItemMeta(CraftItemStack.getItemMeta(nmsItem));
 	}
 	
 	public static NBTBase getNBTTag (ItemStack item, String key) {
-		net.minecraft.server.v1_14_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+		net.minecraft.server.v1_15_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 		NBTBase base = null;
 		NBTTagCompound root = nmsItem.getTag();
 		if (root != null) {
@@ -54,11 +55,11 @@ public final class ItemUtil {
 	}
 	
 	public static void setNBTString (ItemStack item, String key, String value) {
-		setNBTTag(item, key, new NBTTagString(value));
+		setNBTTag(item, key, NBTTagString.a(value));
 	}
 	
 	public static String getNBTString (ItemStack item, String key) {
-		net.minecraft.server.v1_14_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+		net.minecraft.server.v1_15_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 		String value = "";
 		NBTTagCompound root = nmsItem.getTag();
 		if (root != null) {
@@ -68,11 +69,11 @@ public final class ItemUtil {
 	}
 	
 	public static void setNBTInt (ItemStack item, String key, int value) {
-		setNBTTag(item, key, new NBTTagInt(value));
+		setNBTTag(item, key, NBTTagInt.a(value));
 	}
 	
 	public static int getNBTInt (ItemStack item, String key) {
-		net.minecraft.server.v1_14_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+		net.minecraft.server.v1_15_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 		int value = 0;
 		NBTTagCompound root = nmsItem.getTag();
 		if (root != null) {
@@ -82,11 +83,11 @@ public final class ItemUtil {
 	}
 	
 	public static void setNBTByte (ItemStack item, String key, byte value) {
-		setNBTTag(item, key, new NBTTagByte(value));
+		setNBTTag(item, key, NBTTagByte.a(value));
 	}
 	
 	public static byte getNBTByte (ItemStack item, String key) {
-		net.minecraft.server.v1_14_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+		net.minecraft.server.v1_15_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 		byte value = 0;
 		NBTTagCompound root = nmsItem.getTag();
 		if (root != null) {
@@ -96,11 +97,11 @@ public final class ItemUtil {
 	}
 	
 	public static void setNBTBoolean (ItemStack item, String key, boolean value) {
-		setNBTTag(item, key, new NBTTagByte(value ? (byte) 1 : (byte) 0));
+		setNBTTag(item, key, NBTTagByte.a(value ? (byte) 1 : (byte) 0));
 	}
 	
 	public static boolean getNBTBoolean (ItemStack item, String key) {
-		net.minecraft.server.v1_14_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+		net.minecraft.server.v1_15_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 		boolean value = false;
 		NBTTagCompound root = nmsItem.getTag();
 		if (root != null) {
