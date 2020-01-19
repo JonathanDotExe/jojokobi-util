@@ -81,6 +81,17 @@ public class TypedMap {
 		return number;
 	}
 	
+	public long getLong (String key) {
+		long number = 0;
+		try {
+			number = Long.parseLong(map.get(key) + "");
+		}
+		catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		return number;
+	}
+	
 	public float getFloat (String key) {
 		float number = 0;
 		try {
