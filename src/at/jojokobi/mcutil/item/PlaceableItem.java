@@ -80,7 +80,7 @@ public abstract class PlaceableItem extends CustomItem {
 		place.add(0.5, 0, 0.5);
 		ArmorStand stand = (ArmorStand) place.getWorld().spawnEntity(place, EntityType.ARMOR_STAND);
 		stand.setVisible(false);
-		stand.setHelmet(createItem());
+		stand.getEquipment().setHelmet(createItem());
 		return stand;
 	}
 	
@@ -92,10 +92,10 @@ public abstract class PlaceableItem extends CustomItem {
 		boolean isEntity = false;
 		if (entity instanceof ArmorStand) {
 			ArmorStand stand = (ArmorStand) entity;
-			ItemStack stack = stand.getHelmet();
+			ItemStack stack = stand.getEquipment().getHelmet();
 			if (ItemUtil.getNBTString(stack, IDENTIFIER_TAG).equals(getIdentifier()) && ItemUtil.getNBTString(stack, NAMESPACE_TAG).equals(getNamespace())) {
 				fixItem(stack);
-				stand.setHelmet(stack);
+				stand.getEquipment().setHelmet(stack);
 			}
 			if (stack != null && isItem(stack)) {
 				isEntity = true;
