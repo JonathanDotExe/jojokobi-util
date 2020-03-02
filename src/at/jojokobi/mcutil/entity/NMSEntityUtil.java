@@ -68,7 +68,7 @@ public final class NMSEntityUtil {
 		PathfinderGoalSelector targetSelector = nmsEntity.targetSelector;
 		
 		try {
-			Field brField = EntityLiving.class.getDeclaredField("br");
+			Field brField = EntityLiving.class.getDeclaredField("bo");
 			brField.setAccessible(true);
 			BehaviorController<?> controller = (BehaviorController<?>) brField.get(nmsEntity);
 			
