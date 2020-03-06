@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -50,6 +53,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import at.jojokobi.mcutil.TimeUUIDGenerator;
+import at.jojokobi.mcutil.UUIDGenerator;
 import at.jojokobi.mcutil.generation.GenerationHandler;
 import at.jojokobi.mcutil.gui.InventoryGUIHandler;
 
@@ -57,8 +62,9 @@ public class EntityHandler implements Listener {
 
 	public static final String ENTITIES_ELEMENT = "entities";
 
-	private List<CustomEntity<?>> entities = new ArrayList<>();
+	private Map<UUID, CustomEntity<?>> entities = new HashMap<>();
 	private EntityTypeHandler<CustomEntity<?>> handler = new EntityTypeHandler<>();
+	private UUIDGenerator uuidGenerator = new TimeUUIDGenerator();
 	private InventoryGUIHandler guiHandler;
 	private Plugin plugin;
 	private String savefile;
@@ -378,13 +384,16 @@ public class EntityHandler implements Listener {
 //	}
 //	
 
-	public void addEntity(CustomEntity<?> entity) {
-		if (entity != null && entity.canSpawn() && !entities.contains(entity)) {
+	public UUID addEntity(CustomEntity<?> entity) {
+		UUID uuid = null;
+		if (entity != null && entity.canSpawn() && !entities.containsValue(entity)) {
 			entity.setHandler(this);
 			entity.spawn();
 			RemovalHandler.markForRemoval(entity.getEntity());
-			entities.add(entity);
+			uuid = uuidGenerator.nextUUID();
+			entities.put(uuid, entity);
 		}
+		return uuid;
 	}
 
 	public void addSavedEntity(CustomEntity<?> entity) {
@@ -393,8 +402,25 @@ public class EntityHandler implements Listener {
 		addEntity(entity);
 	}
 
+	public void removeEntity(UUID uuid) {
+		entities.remove(uuid);
+	}
+	
+	public UUID getUniqueID (CustomEntity<? extends Entity> entity) {
+		for (var e : entities.entrySet()) {
+			if (e.getValue() == entity) {
+				return e.getKey();
+			}
+		}
+		return null;
+	}
+	
+	public CustomEntity<?> getEntity (UUID uuid) {
+		return entities.get(uuid);
+	}
+	
 	public void removeEntity(CustomEntity<? extends Entity> entity) {
-		entities.remove(entity);
+		entities.remove(getUniqueID(entity));
 	}
 
 	public <T extends CustomEntity<?>> List<T> getEntities(Class<T> clazz) {
@@ -408,7 +434,7 @@ public class EntityHandler implements Listener {
 	}
 
 	public List<CustomEntity<?>> getEntities() {
-		return new ArrayList<CustomEntity<?>>(entities);
+		return new ArrayList<CustomEntity<?>>(entities.values());
 	}
 
 	@EventHandler
