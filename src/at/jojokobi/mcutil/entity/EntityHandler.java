@@ -166,7 +166,6 @@ public class EntityHandler implements Listener {
 			config.load(file);
 			Object obj = config.get(ENTITIES_ELEMENT);
 			if (obj instanceof SerializableMap) {
-				System.out.println("Found da Map");
 				SerializableMap entities = (SerializableMap) obj;
 				for (var e : entities.getData().entrySet()) {
 					if (e.getValue() instanceof CustomEntity<?>) {
