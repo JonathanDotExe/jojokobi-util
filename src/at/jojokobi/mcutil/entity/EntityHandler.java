@@ -163,12 +163,31 @@ public class EntityHandler implements Listener {
 		FileConfiguration config = new YamlConfiguration();
 		try {
 			config.load(file);
-			List<?> entities = config.getList(ENTITIES_ELEMENT, new ArrayList<>());
-			for (Object e : entities) {
-				if (e instanceof CustomEntity<?>) {
-					CustomEntity<?> entity = (CustomEntity<?>) e;
-					entity.setHandler(EntityHandler.this);
-					addSavedEntity(entity);
+			Object obj = config.get(ENTITIES_ELEMENT);
+			if (obj instanceof Map<?, ?>) {
+				Map<?, ?> entities = (Map<?, ?>) obj;
+				for (var e : entities.entrySet()) {
+					if (e.getValue() instanceof CustomEntity<?>) {
+						try {
+							CustomEntity<?> entity = (CustomEntity<?>) e.getValue();
+							entity.setHandler(EntityHandler.this);
+							addSavedEntity(entity, UUID.fromString(e.getKey() + ""));
+						}
+						catch (IllegalArgumentException exc) {
+							exc.printStackTrace();
+						}
+					}
+				}
+			}
+			else {
+				//Legacy
+				List<?> entities = config.getList(ENTITIES_ELEMENT, new ArrayList<>());
+				for (Object e : entities) {
+					if (e instanceof CustomEntity<?>) {
+						CustomEntity<?> entity = (CustomEntity<?>) e;
+						entity.setHandler(EntityHandler.this);
+						addSavedEntity(entity);
+					}
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -225,10 +244,10 @@ public class EntityHandler implements Listener {
 		folder.mkdirs();
 //		File file = new File(folder, GenerationHandler.getSaveName(chunk) + ".yml");
 		List<CustomEntity<?>> entities = getEntitiesInChunk(chunk);
-		List<CustomEntity<?>> save = new ArrayList<>();
-		for (CustomEntity<?> entity : entities) {
-			if (entity.isSave()) {
-				save.add(entity);
+		Map<UUID, CustomEntity<?>> save = new HashMap<UUID, CustomEntity<?>>();
+		for (var e : entities) {
+			if (e.isSave()) {
+				save.put(getUniqueID(e), e);
 			}
 		}
 		//Plugin Files
@@ -236,16 +255,21 @@ public class EntityHandler implements Listener {
 			File pluginFolder = new File(folder, plugin.getName());
 			pluginFolder.mkdirs();
 			File file = new File(pluginFolder, GenerationHandler.getSaveName(chunk) + ".yml");
-			CustomEntity<?>[] pluginEntities = save.stream().filter(e -> e.getPlugin() == plugin.getClass()).toArray(CustomEntity<?>[]::new);
-			if (pluginEntities.length > 0) {
-				saveFile(Arrays.asList(pluginEntities), file);
+			Map<String, CustomEntity<?>> pluginEntities = new HashMap<String, CustomEntity<?>>();
+			for (var e : save.entrySet()) {
+				if (e.getValue().getPlugin() == plugin.getClass()) {
+					pluginEntities.put(e.getKey() + "", e.getValue());
+				}
+			}
+			if (!pluginEntities.isEmpty()) {
+				saveFile(pluginEntities, file);
 			} else if (file.exists() && file.isFile()) {
 				file.delete();
 			}
 		}
 	}
 	
-	private void saveFile (List<CustomEntity<?>> save, File file) {
+	private void saveFile (Map<String, CustomEntity<?>> save, File file) {
 		FileConfiguration config = new YamlConfiguration();
 		config.set(ENTITIES_ELEMENT, save);
 		try {
@@ -395,11 +419,26 @@ public class EntityHandler implements Listener {
 		}
 		return uuid;
 	}
+	
+	private void addEntity(CustomEntity<?> entity, UUID uuid) {
+		if (entity != null && entity.canSpawn() && !entities.containsValue(entity)) {
+			entity.setHandler(this);
+			entity.spawn();
+			RemovalHandler.markForRemoval(entity.getEntity());
+			entities.put(uuid, entity);
+		}
+	}
 
-	public void addSavedEntity(CustomEntity<?> entity) {
+	public UUID addSavedEntity(CustomEntity<?> entity) {
 		entity.setSave(true);
 		entity.setDespawnTicks(-1);
-		addEntity(entity);
+		return addEntity(entity);
+	}
+	
+	public void addSavedEntity(CustomEntity<?> entity, UUID uuid) {
+		entity.setSave(true);
+		entity.setDespawnTicks(-1);
+		addEntity(entity, uuid);
 	}
 
 	public void removeEntity(UUID uuid) {
