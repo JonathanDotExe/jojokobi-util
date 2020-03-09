@@ -53,6 +53,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import at.jojokobi.mcutil.SerializableMap;
 import at.jojokobi.mcutil.TimeUUIDGenerator;
 import at.jojokobi.mcutil.UUIDGenerator;
 import at.jojokobi.mcutil.generation.GenerationHandler;
@@ -164,14 +165,15 @@ public class EntityHandler implements Listener {
 		try {
 			config.load(file);
 			Object obj = config.get(ENTITIES_ELEMENT);
-			if (obj instanceof Map<?, ?>) {
-				Map<?, ?> entities = (Map<?, ?>) obj;
-				for (var e : entities.entrySet()) {
+			if (obj instanceof SerializableMap) {
+				System.out.println("Found da Map");
+				SerializableMap entities = (SerializableMap) obj;
+				for (var e : entities.getData().entrySet()) {
 					if (e.getValue() instanceof CustomEntity<?>) {
 						try {
 							CustomEntity<?> entity = (CustomEntity<?>) e.getValue();
 							entity.setHandler(EntityHandler.this);
-							addSavedEntity(entity, UUID.fromString(e.getKey() + ""));
+							addSavedEntity(entity, UUID.fromString(e.getKey()));
 						}
 						catch (IllegalArgumentException exc) {
 							exc.printStackTrace();
@@ -271,7 +273,7 @@ public class EntityHandler implements Listener {
 	
 	private void saveFile (Map<String, CustomEntity<?>> save, File file) {
 		FileConfiguration config = new YamlConfiguration();
-		config.set(ENTITIES_ELEMENT, save);
+		config.set(ENTITIES_ELEMENT, new SerializableMap(save));
 		try {
 			config.save(file);
 		} catch (IOException e) {
