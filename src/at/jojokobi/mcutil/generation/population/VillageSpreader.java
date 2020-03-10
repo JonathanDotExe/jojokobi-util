@@ -56,6 +56,10 @@ public class VillageSpreader {
 	
 	public List<StructureInstance<? extends Structure>> generateVillage (Random random, long seed, Location place) {
 		VillageNode[][] area = generateVillageMap(random);
+		return generateVillage(area, seed, place);
+	}
+	
+	public List<StructureInstance<? extends Structure>> generateVillage (VillageNode[][] area, long seed, Location place) {
 		List<StructureInstance<? extends Structure>> strucs = new ArrayList<>();
 		for (int z = 0; z < area.length; z++) {
 			for (int x = 0; x < area[z].length; x++) {
