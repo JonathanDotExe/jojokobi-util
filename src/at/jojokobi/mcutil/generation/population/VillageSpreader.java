@@ -17,6 +17,7 @@ public class VillageSpreader {
 	private int height = 8;
 	private int unitWidth = 16;
 	private int unitHeight = 16;
+	private boolean forceHeight = false;
 	private VillagePathGenerator pathGenerator = new CleanPathGenerator();
 	private Function<Material, Material> blockFunction = b -> Material.GRAVEL;
 	
@@ -59,6 +60,14 @@ public class VillageSpreader {
 		return generateVillage(area, seed, place);
 	}
 	
+	public boolean isForceHeight() {
+		return forceHeight;
+	}
+
+	public void setForceHeight(boolean forceHeight) {
+		this.forceHeight = forceHeight;
+	}
+
 	public List<StructureInstance<? extends Structure>> generateVillage (VillageNode[][] area, long seed, Location place) {
 		List<StructureInstance<? extends Structure>> strucs = new ArrayList<>();
 		for (int z = 0; z < area.length; z++) {
@@ -70,7 +79,9 @@ public class VillageSpreader {
 					pathGenerator.generatePath(housePlace, unitWidth, unitHeight, node.isTop(), node.isRight(), node.isBottom(), node.isLeft(), blockFunction);
 					if (node.getHouse() != null) {
 						housePlace.add(unitWidth/2 - node.getHouse().getWidth()/2, 0, unitHeight/2 - node.getHouse().getLength()/2);
-						housePlace.setY(node.getHouse().calculatePlacementY(node.getHouse().getWidth(), node.getHouse().getLength(), housePlace));
+						if (!forceHeight) {
+							housePlace.setY(node.getHouse().calculatePlacementY(node.getHouse().getWidth(), node.getHouse().getLength(), housePlace));
+						}
 						strucs.addAll(node.getHouse().generate(housePlace, seed));
 					}
 				}
