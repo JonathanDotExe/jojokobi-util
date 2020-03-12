@@ -21,6 +21,7 @@ public class RealHealthAccessor implements HealthAccessor{
 	public double getHealth(CustomEntity<?> entity) {
 		if (updateHealth) {
 			((Damageable) entity.getEntity()).setHealth(tmpHealth);
+			updateHealth = false;
 		}
 		return ((Damageable) entity.getEntity()).getHealth();
 	}
@@ -33,6 +34,7 @@ public class RealHealthAccessor implements HealthAccessor{
 		}
 		else {
 			((Damageable) entity.getEntity()).setHealth(health);
+			updateHealth = false;
 		}
 	}
 
