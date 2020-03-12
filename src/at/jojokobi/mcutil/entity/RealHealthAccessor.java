@@ -13,15 +13,27 @@ import org.bukkit.event.entity.EntityDamageEvent;
  *
  */
 public class RealHealthAccessor implements HealthAccessor{
+	
+	private double tmpHealth = 0;
+	private boolean updateHealth = false;
 
 	@Override
 	public double getHealth(CustomEntity<?> entity) {
+		if (updateHealth) {
+			((Damageable) entity.getEntity()).setHealth(tmpHealth);
+		}
 		return ((Damageable) entity.getEntity()).getHealth();
 	}
 
 	@Override
 	public void setHealth(double health, CustomEntity<?> entity) {
-		((Damageable) entity.getEntity()).setHealth(health);
+		if (entity.getEntity() == null) {
+			updateHealth = true;
+			tmpHealth = health;
+		}
+		else {
+			((Damageable) entity.getEntity()).setHealth(health);
+		}
 	}
 
 	@Override
