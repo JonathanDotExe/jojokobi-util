@@ -28,7 +28,7 @@ public final class FurnitureGenUtil {
 		doorbottomData.setHinge(hinge ? Hinge.RIGHT : Hinge.LEFT);
 		doorbottomData.setFacing(direction);
 		doorbottom.setBlockData(doorbottomData);
-		doorbottom.update(true);
+		doorbottom.update(true, false);
 		//Top
 		place.setY(place.getY() + 1);
 		BlockState doortop = place.getBlock().getState();
@@ -37,8 +37,8 @@ public final class FurnitureGenUtil {
 		doortopData.setHalf(Half.TOP);
 		doortopData.setHinge(hinge ? Hinge.RIGHT : Hinge.LEFT);
 		doortopData.setFacing(direction);
-		doortop.setBlockData(doorbottomData);
-		doortop.update(true);
+		doortop.setBlockData(doortopData);
+		doortop.update(true, false);
 	}
 	
 	public static void generateDoor (Location loc, Material door, BlockFace direction, boolean isOpen) {
