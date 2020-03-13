@@ -74,6 +74,7 @@ public class LootItem implements ConfigurationSerializable{
 					Enchantment ench = Enchantment.values()[random.nextInt(Enchantment.values().length)];
 					EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
 					meta.addStoredEnchant(ench, random.nextInt(ench.getMaxLevel()) + 1, true);
+					item.setItemMeta(meta);
 				}
 				else {
 					for (int i = 0; i < 3; i++) {
