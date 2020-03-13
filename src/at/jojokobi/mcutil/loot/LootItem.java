@@ -9,6 +9,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -69,10 +70,18 @@ public class LootItem implements ConfigurationSerializable{
 			}
 			//Enchant
 			if (enchant) {
-				for (int i = 0; i < 3; i++) {
+				if (item.getItemMeta() instanceof EnchantmentStorageMeta) {
 					Enchantment ench = Enchantment.values()[random.nextInt(Enchantment.values().length)];
-					if (ench.canEnchantItem(item)) {
-						item.addEnchantment(ench, random.nextInt(ench.getMaxLevel()) + 1);
+					EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
+					meta.addStoredEnchant(ench, random.nextInt(ench.getMaxLevel()) + 1, true);
+				}
+				else {
+					for (int i = 0; i < 3; i++) {
+						Enchantment ench = Enchantment.values()[random.nextInt(Enchantment.values().length)];
+						
+						if (ench.canEnchantItem(item)) {
+							item.addEnchantment(ench, random.nextInt(ench.getMaxLevel()) + 1);
+						}
 					}
 				}
 			}
