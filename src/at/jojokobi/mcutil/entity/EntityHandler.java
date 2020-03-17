@@ -167,7 +167,7 @@ public class EntityHandler implements Listener {
 			Object obj = config.get(ENTITIES_ELEMENT);
 			if (obj instanceof SerializableMap) {
 				SerializableMap entities = (SerializableMap) obj;
-				for (var e : entities.getData().entrySet()) {
+				for (Map.Entry<String, ?> e : entities.getData().entrySet()) {
 					if (e.getValue() instanceof CustomEntity<?>) {
 						try {
 							CustomEntity<?> entity = (CustomEntity<?>) e.getValue();
@@ -246,7 +246,7 @@ public class EntityHandler implements Listener {
 //		File file = new File(folder, GenerationHandler.getSaveName(chunk) + ".yml");
 		List<CustomEntity<?>> entities = getEntitiesInChunk(chunk);
 		Map<UUID, CustomEntity<?>> save = new HashMap<UUID, CustomEntity<?>>();
-		for (var e : entities) {
+		for (CustomEntity<?> e : entities) {
 			if (e.isSave()) {
 				save.put(getUniqueID(e), e);
 			}
@@ -257,7 +257,7 @@ public class EntityHandler implements Listener {
 			pluginFolder.mkdirs();
 			File file = new File(pluginFolder, GenerationHandler.getSaveName(chunk) + ".yml");
 			Map<String, CustomEntity<?>> pluginEntities = new HashMap<String, CustomEntity<?>>();
-			for (var e : save.entrySet()) {
+			for (Map.Entry<UUID, CustomEntity<?>> e : save.entrySet()) {
 				if (e.getValue().getPlugin() == plugin.getClass()) {
 					pluginEntities.put(e.getKey() + "", e.getValue());
 				}
@@ -447,7 +447,7 @@ public class EntityHandler implements Listener {
 	}
 	
 	public UUID getUniqueID (CustomEntity<? extends Entity> entity) {
-		for (var e : entities.entrySet()) {
+		for (Map.Entry<UUID, CustomEntity<?>> e : entities.entrySet()) {
 			if (e.getValue() == entity) {
 				return e.getKey();
 			}
