@@ -7,8 +7,9 @@ public class PseudoHealthAccessor implements HealthAccessor {
 	private double health;
 	private double maxHealth;
 
-	public PseudoHealthAccessor() {
-		
+	public PseudoHealthAccessor(double maxHealth) {
+		this.maxHealth = maxHealth;
+		this.health = maxHealth;
 	}
 
 	@Override
