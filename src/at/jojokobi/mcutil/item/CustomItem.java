@@ -253,8 +253,7 @@ public abstract class CustomItem implements Listener, Identifiable {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			Player player = event.getPlayer();
-			ItemStack held = player.getInventory().getItemInMainHand();
+			ItemStack held = event.getItem();
 			if (held != null && isItem(held)) {
 				onUse(held, event);
 				event.setCancelled(true);
