@@ -81,8 +81,13 @@ public class EntityHandler implements Listener {
 			// Entity Loop
 			@Override
 			public void run() {
-				for (CustomEntity<?> entity : getEntities()) {
-					entity.loop();
+				try {
+					for (CustomEntity<?> entity : getEntities()) {
+						entity.loop();
+					}
+				}
+				catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}, 5L, 5L);
