@@ -57,8 +57,9 @@ public abstract class CustomTool extends CustomItem{
 	}
 	
 	@Override
-	public void onUse(ItemStack item, PlayerInteractEvent event) {
-		if (useItem(item, event)) {
+	public boolean onUse(ItemStack item, PlayerInteractEvent event) {
+		boolean used = useItem(item, event);
+		if (used) {
 			int durability = getDurability(item);
 			if (durability > 0) {
 				setDurability(item, durability - 1);
@@ -67,6 +68,7 @@ public abstract class CustomTool extends CustomItem{
 				item.setAmount(0);
 			}
 		}
+		return used;
 	}
 	
 	@Override
@@ -84,8 +86,8 @@ public abstract class CustomTool extends CustomItem{
 	}
 	
 	@Override
-	public void onUse(ItemStack item, Player player) {
-		
+	public boolean onUse(ItemStack item, Player player) {
+		return false;
 	}
 	
 	@Override

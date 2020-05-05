@@ -175,15 +175,15 @@ public abstract class CustomItem implements Listener, Identifiable {
 
 	public abstract Recipe getRecipe();
 
-	public void onUse(ItemStack item, PlayerInteractEvent event) {
-		onUse(item, event.getPlayer());
+	public boolean onUse(ItemStack item, PlayerInteractEvent event) {
+		return onUse(item, event.getPlayer());
 	}
 
 	public void onHit(ItemStack item, EntityDamageByEntityEvent event) {
 		onHit(item, event.getDamager(), event.getEntity());
 	}
 
-	public abstract void onUse(ItemStack item, Player player);
+	public abstract boolean onUse(ItemStack item, Player player);
 
 	public abstract void onHit(ItemStack item, Entity damager, Entity defender);
 
@@ -254,8 +254,7 @@ public abstract class CustomItem implements Listener, Identifiable {
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			ItemStack held = event.getItem();
-			if (held != null && isItem(held)) {
-				onUse(held, event);
+			if (held != null && isItem(held) && onUse(held, event)) {
 				event.setCancelled(true);
 			}
 		}
