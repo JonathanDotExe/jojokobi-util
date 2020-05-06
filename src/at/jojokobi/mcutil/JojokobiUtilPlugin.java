@@ -71,7 +71,7 @@ public class JojokobiUtilPlugin extends JavaPlugin{
 		generationHandler = new GenerationHandler(this, "mcutil" + File.separator + "structures");
 		Bukkit.getPluginManager().registerEvents(generationHandler, this);
 		
-		dimensionHandler = new DimensionHandler();
+		dimensionHandler = new DimensionHandler(this);
 		Bukkit.getPluginManager().registerEvents(dimensionHandler, this);
 		
 		spawnerHandler = new CustomEntitySpawnerHandler(entityHandler, this);

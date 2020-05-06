@@ -11,6 +11,7 @@ import org.bukkit.WorldCreator;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.plugin.Plugin;
 
 public class DimensionHandler implements Listener {
 	
@@ -25,14 +26,21 @@ public class DimensionHandler implements Listener {
 //		}
 //	}
 	
+	private Plugin plugin;
+	
 	@Deprecated
-	public DimensionHandler() {
-		
+	public DimensionHandler(Plugin plugin) {
+		this.plugin = plugin;
 	}
 	
 	@EventHandler
 	public void onWorldLoad (WorldLoadEvent event) {
 		System.out.println("Loaded word: " + event.getWorld().getName());
+		Bukkit.getScheduler().runTask(plugin, () -> {
+			for (CustomDimension dim : dimensions) {
+				getDimensionWorld(event.getWorld(), dim);
+			}
+		});
 	}
 	
 	/**
