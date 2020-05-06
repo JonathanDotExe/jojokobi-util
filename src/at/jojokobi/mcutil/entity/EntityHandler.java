@@ -81,13 +81,12 @@ public class EntityHandler implements Listener {
 			// Entity Loop
 			@Override
 			public void run() {
-				try {
-					for (CustomEntity<?> entity : getEntities()) {
+				for (CustomEntity<?> entity : getEntities()) {
+					try {
 						entity.loop();
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				}
-				catch (Exception e) {
-					e.printStackTrace();
 				}
 			}
 		}, 5L, 5L);
@@ -152,20 +151,21 @@ public class EntityHandler implements Listener {
 			public void run() {
 				File folder = new File(Bukkit.getWorldContainer(),
 						chunk.getWorld().getName() + File.separator + savefile);
-				//Legacy File
+				// Legacy File
 				File legacyFile = new File(folder, GenerationHandler.getSaveName(chunk) + ".yml");
 				loadFile(legacyFile);
 				legacyFile.renameTo(new File(folder, GenerationHandler.getSaveName(chunk) + "_old.yml"));
-				//Plugin files
+				// Plugin files
 				for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
-					File pluginFile = new File(folder, plugin.getName() + File.separator + GenerationHandler.getSaveName(chunk) + ".yml");
+					File pluginFile = new File(folder,
+							plugin.getName() + File.separator + GenerationHandler.getSaveName(chunk) + ".yml");
 					loadFile(pluginFile);
 				}
 			}
 		}, 1L);
 	}
-	
-	private void loadFile (File file) {
+
+	private void loadFile(File file) {
 		FileConfiguration config = new YamlConfiguration();
 		try {
 			config.load(file);
@@ -178,15 +178,13 @@ public class EntityHandler implements Listener {
 							CustomEntity<?> entity = (CustomEntity<?>) e.getValue();
 							entity.setHandler(EntityHandler.this);
 							addSavedEntity(entity, UUID.fromString(e.getKey()));
-						}
-						catch (IllegalArgumentException exc) {
+						} catch (IllegalArgumentException exc) {
 							exc.printStackTrace();
 						}
 					}
 				}
-			}
-			else {
-				//Legacy
+			} else {
+				// Legacy
 				List<?> entities = config.getList(ENTITIES_ELEMENT, new ArrayList<>());
 				for (Object e : entities) {
 					if (e instanceof CustomEntity<?>) {
@@ -256,7 +254,7 @@ public class EntityHandler implements Listener {
 				save.put(getUniqueID(e), e);
 			}
 		}
-		//Plugin Files
+		// Plugin Files
 		for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
 			File pluginFolder = new File(folder, plugin.getName());
 			pluginFolder.mkdirs();
@@ -274,8 +272,8 @@ public class EntityHandler implements Listener {
 			}
 		}
 	}
-	
-	private void saveFile (Map<String, CustomEntity<?>> save, File file) {
+
+	private void saveFile(Map<String, CustomEntity<?>> save, File file) {
 		FileConfiguration config = new YamlConfiguration();
 		config.set(ENTITIES_ELEMENT, new SerializableMap(save));
 		try {
@@ -425,7 +423,7 @@ public class EntityHandler implements Listener {
 		}
 		return uuid;
 	}
-	
+
 	private void addEntity(CustomEntity<?> entity, UUID uuid) {
 		if (entity != null && entity.canSpawn() && !entities.containsValue(entity)) {
 			entity.setHandler(this);
@@ -440,7 +438,7 @@ public class EntityHandler implements Listener {
 		entity.setDespawnTicks(-1);
 		return addEntity(entity);
 	}
-	
+
 	public void addSavedEntity(CustomEntity<?> entity, UUID uuid) {
 		entity.setSave(true);
 		entity.setDespawnTicks(-1);
@@ -450,8 +448,8 @@ public class EntityHandler implements Listener {
 	public void removeEntity(UUID uuid) {
 		entities.remove(uuid);
 	}
-	
-	public UUID getUniqueID (CustomEntity<? extends Entity> entity) {
+
+	public UUID getUniqueID(CustomEntity<? extends Entity> entity) {
 		for (Map.Entry<UUID, CustomEntity<?>> e : entities.entrySet()) {
 			if (e.getValue() == entity) {
 				return e.getKey();
@@ -459,11 +457,11 @@ public class EntityHandler implements Listener {
 		}
 		return null;
 	}
-	
-	public CustomEntity<?> getEntity (UUID uuid) {
+
+	public CustomEntity<?> getEntity(UUID uuid) {
 		return entities.get(uuid);
 	}
-	
+
 	public void removeEntity(CustomEntity<? extends Entity> entity) {
 		entities.remove(getUniqueID(entity));
 	}
@@ -579,9 +577,9 @@ public class EntityHandler implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler
-	public void onTransform (EntityTransformEvent event) {
+	public void onTransform(EntityTransformEvent event) {
 		CustomEntity<?> entity = getCustomEntityForEntity(event.getEntity());
 		if (entity != null) {
 			entity.onTransform(event);
