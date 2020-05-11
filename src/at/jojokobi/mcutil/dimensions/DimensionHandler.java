@@ -10,7 +10,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.plugin.Plugin;
 
 public class DimensionHandler implements Listener {
@@ -34,8 +34,8 @@ public class DimensionHandler implements Listener {
 	}
 	
 	@EventHandler
-	public void onWorldLoad (WorldLoadEvent event) {
-		System.out.println("Loaded word: " + event.getWorld().getName());
+	public void onWorldInit (WorldInitEvent event) {
+		System.out.println("Initilized world: " + event.getWorld().getName());
 		Bukkit.getScheduler().runTask(plugin, () -> {
 			for (CustomDimension dim : dimensions) {
 				getDimensionWorld(event.getWorld(), dim);
