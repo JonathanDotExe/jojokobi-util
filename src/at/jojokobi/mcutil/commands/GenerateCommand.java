@@ -1,14 +1,17 @@
 package at.jojokobi.mcutil.commands;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import at.jojokobi.mcutil.generation.GenerationHandler;
 import at.jojokobi.mcutil.generation.population.Structure;
 
-public class GenerateCommand implements CommandExecutor{
+public class GenerateCommand implements TabExecutor{
 	
 	public static final String COMMAND_NAME = "generate";
 	
@@ -47,6 +50,12 @@ public class GenerateCommand implements CommandExecutor{
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+		String lastArg = args[args.length - 1];
+		return genHandler.getStructures().stream().map(spawn -> spawn.getIdentifier()).filter(s -> s.contains(lastArg)).collect(Collectors.toList());
 	}
 
 }

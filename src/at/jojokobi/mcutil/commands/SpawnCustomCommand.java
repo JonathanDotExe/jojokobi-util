@@ -1,11 +1,13 @@
 package at.jojokobi.mcutil.commands;
 
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.bukkit.Location;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import at.jojokobi.mcutil.entity.CustomEntity;
@@ -13,7 +15,7 @@ import at.jojokobi.mcutil.entity.EntityHandler;
 import at.jojokobi.mcutil.entity.spawns.CustomSpawn;
 import at.jojokobi.mcutil.entity.spawns.CustomSpawnsHandler;
 
-public class SpawnCustomCommand implements CommandExecutor{
+public class SpawnCustomCommand implements TabExecutor{
 
 	public static final String COMMAND_NAME = "spawncustom";
 	
@@ -56,6 +58,12 @@ public class SpawnCustomCommand implements CommandExecutor{
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+		String lastArg = args[args.length - 1];
+		return spawnHandler.getItemList().stream().map(spawn -> spawn.stringify()).filter(s -> s.contains(lastArg)).collect(Collectors.toList());
 	}
 
 }

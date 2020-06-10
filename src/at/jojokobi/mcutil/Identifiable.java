@@ -10,4 +10,8 @@ public interface Identifiable {
 		return new NamespacedEntry(getNamespace(), getIdentifier());
 	}
 	
+	public default String stringify() {
+		return getNamespace() + ":" + getIdentifier();
+	}
+	
 }
