@@ -179,7 +179,7 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 	
 	public abstract Class<? extends JavaPlugin> getPlugin ();
 	
-	private void move (Vector velocity) {
+	protected void move (Vector velocity) {
 		Location place = entity.getLocation();
 		velocity.normalize();
 		velocity.multiply(getGeneralSpeedMultiplier());
