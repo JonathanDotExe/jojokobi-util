@@ -124,8 +124,13 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 			//Move
 			if (goal != null && getEntity().getLocation().getWorld() == goal.getLocation().getWorld()) {
 				Vector velocity = goal.getLocation().clone().subtract(getEntity().getLocation()).toVector();
-				if (canMove() && (velocity.getX() != 0 || velocity.getY() != 0 || velocity.getZ() != 0) && !reachedGoal()) {
-					move(velocity);
+				if (canMove() && (velocity.getX() != 0 || velocity.getY() != 0 || velocity.getZ() != 0)) {
+					if (reachedGoal()) {
+						NMSEntityUtil.rotateVehicle(entity, velocity);						
+					}
+					else {
+						move(velocity);
+					}
 				}
 			}
 			//Despawn
