@@ -1,11 +1,14 @@
 package at.jojokobi.mcutil.entity.ai;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -28,18 +31,25 @@ public class InteractEntityTask implements EntityTask {
 	
 	@Override
 	public boolean canApply(CustomEntity<?> entity) {
-		List<Entity> entities = getTargets(entity);
-		for (Entity e : entities) {
-			if (isInteracting(e, entity)) {
-				if (e instanceof Player) {
-					condition.request(entity, true);
-					break;
-				}
-				else {
-					condition.request(entity, false);
+		List<Entity> entities = null;
+		if (goal == null) {
+			entities = getTargets(entity);
+			for (Entity e : entities) {
+				if (isInteracting(e, entity)) {
+					if (e instanceof Player) {
+						condition.request(entity, true);
+						break;
+					}
+					else {
+						condition.request(entity, false);
+					}
 				}
 			}
 		}
+		else {
+			entities = new ArrayList<Entity>();
+		}
+
 		return (goal != null || entities.size() > 0) && condition.canApply(entity);
 	}
 	
@@ -49,7 +59,7 @@ public class InteractEntityTask implements EntityTask {
 		if (dir.length() != 0) {
 			dir.normalize();
 		}
-		return new WrapperLocatable(goal.getLocation().add(dir));
+		return new WrapperLocatable(entity.getEntity().getLocation().add(dir));
 	}
 
 	@Override
@@ -73,6 +83,7 @@ public class InteractEntityTask implements EntityTask {
 
 	@Override
 	public void deactivate(CustomEntity<?> entity) {
+		System.out.println("Deactivate: " + entity.getEntity().getCustomName() + "/" + goal);
 		condition.deactivate(entity);
 		goal = null;
 	}
@@ -88,10 +99,10 @@ public class InteractEntityTask implements EntityTask {
 		if (entityDir.length() != 0) {
 			entityDir.normalize();
 		}
-		return entityDir.subtract(dir).length() < 0.5;
+		return entityDir.subtract(dir).length() < 0.3;
 	}
 	
 	private List<Entity> getTargets(CustomEntity<?> entity) {
-		return entity.getEntity().getNearbyEntities(radius, radius, radius).stream().filter(e -> e instanceof LivingEntity || entity.getHandler().getCustomEntityForEntity(e) != null).collect(Collectors.toList());
+		return entity.getEntity().getNearbyEntities(radius, radius, radius).stream().filter(e -> (e instanceof LivingEntity && !(e instanceof Monster) && !(e instanceof ArmorStand)) || entity.getHandler().getCustomEntityForEntity(e) != null).collect(Collectors.toList());
 	}
 }
