@@ -83,7 +83,6 @@ public class InteractEntityTask implements EntityTask {
 
 	@Override
 	public void deactivate(CustomEntity<?> entity) {
-		System.out.println("Deactivate: " + entity.getEntity().getCustomName() + "/" + goal);
 		condition.deactivate(entity);
 		goal = null;
 	}

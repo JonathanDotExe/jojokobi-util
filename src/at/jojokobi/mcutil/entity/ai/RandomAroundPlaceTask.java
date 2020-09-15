@@ -33,7 +33,7 @@ public class RandomAroundPlaceTask implements EntityTask{
 	@Override
 	public boolean canApply(CustomEntity<?> entity) {
 		Location place = this.place.apply(entity);
-		return entity.getEntity().getWorld() == place.getWorld() && (goal != null && entity.getEntity().getLocation().distanceSquared(place) <= maxDistance) || (goal == null && entity.getEntity().getLocation().distanceSquared(place) <= startDistance);
+		return entity.getEntity().getWorld() == place.getWorld() && ((goal != null && entity.getEntity().getLocation().distanceSquared(place) <= maxDistance * maxDistance) || (goal == null && entity.getEntity().getLocation().distanceSquared(place) <= startDistance * startDistance));
 	}
 
 	@Override
