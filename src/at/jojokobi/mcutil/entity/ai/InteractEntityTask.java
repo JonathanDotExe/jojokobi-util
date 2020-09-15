@@ -1,8 +1,11 @@
 package at.jojokobi.mcutil.entity.ai;
 
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -25,7 +28,7 @@ public class InteractEntityTask implements EntityTask {
 	
 	@Override
 	public boolean canApply(CustomEntity<?> entity) {
-		List<Entity> entities = entity.getEntity().getNearbyEntities(radius, radius, radius);
+		List<Entity> entities = getTargets(entity);
 		for (Entity e : entities) {
 			if (isInteracting(e, entity)) {
 				if (e instanceof Player) {
@@ -52,7 +55,7 @@ public class InteractEntityTask implements EntityTask {
 	@Override
 	public void activate(CustomEntity<?> entity) {
 		condition.activate(entity);
-		List<Entity> entities = entity.getEntity().getNearbyEntities(radius, radius, radius);
+		List<Entity> entities = getTargets(entity);
 		
 		for (Entity e : entities) {
 			if (isInteracting(e, entity)) {
@@ -65,6 +68,7 @@ public class InteractEntityTask implements EntityTask {
 				}
 			}
 		}
+		goal = entities.get(new Random().nextInt(entities.size()));
 	}
 
 	@Override
@@ -75,13 +79,19 @@ public class InteractEntityTask implements EntityTask {
 	
 	private boolean isInteracting(Entity e, CustomEntity<?> entity) {
 		Vector dir = entity.getEntity().getLocation().toVector().subtract(e.getLocation().toVector());
+		dir.setY(0);
 		if (dir.length() != 0) {
 			dir.normalize();
 		}
-		else {
-			return false;
-		}
 		Vector entityDir = e.getLocation().getDirection();
-		return entityDir.subtract(dir).length() < 0.2;
+		entityDir.setY(0);
+		if (entityDir.length() != 0) {
+			entityDir.normalize();
+		}
+		return entityDir.subtract(dir).length() < 0.5;
+	}
+	
+	private List<Entity> getTargets(CustomEntity<?> entity) {
+		return entity.getEntity().getNearbyEntities(radius, radius, radius).stream().filter(e -> e instanceof LivingEntity || entity.getHandler().getCustomEntityForEntity(e) != null).collect(Collectors.toList());
 	}
 }

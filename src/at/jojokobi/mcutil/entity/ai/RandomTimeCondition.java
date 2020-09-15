@@ -41,11 +41,13 @@ public class RandomTimeCondition implements TaskCondition {
 	@Override
 	public void activate(CustomEntity<?> entity) {
 		switchTime = random.nextInt(maxTaskTime - minTaskTime + 1) + minTaskTime;
+		state = ApplyState.APPLY;
 	}
 
 	@Override
 	public void deactivate(CustomEntity<?> entity) {
 		switchTime = random.nextInt(maxWaitTime - minWaitTime + 1) + minWaitTime;
+		state = requested ? ApplyState.LOCKED : ApplyState.WAIT;
 		requested = false;
 	}	
 
