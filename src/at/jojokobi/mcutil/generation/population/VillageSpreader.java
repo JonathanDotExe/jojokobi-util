@@ -20,6 +20,7 @@ public class VillageSpreader {
 	private boolean forceHeight = false;
 	private VillagePathGenerator pathGenerator = new CleanPathGenerator();
 	private Function<Material, Material> blockFunction = b -> Material.GRAVEL;
+	private float stepMultiplier = 1;
 	
 	public VillageSpreader(Structure... houses) {
 		if (houses.length > 0) {
@@ -105,28 +106,29 @@ public class VillageSpreader {
 			}
 			
 			steps++;
-			if (random.nextInt(steps) == 0) {
+			int chance = Math.round(steps * stepMultiplier);
+			if (random.nextInt(chance) == 0) {
 				VillageNode n = generateVillageMap(random, area, x - 1, z, steps);
 				if (n != null) {
 					node.setLeft(true);
 					n.setRight(true);
 				}
 			}
-			if (random.nextInt(steps) == 0) {
+			if (random.nextInt(chance) == 0) {
 				VillageNode n = generateVillageMap(random, area, x, z - 1, steps);
 				if (n != null) {
 					node.setTop(true);
 					n.setBottom(true);
 				}
 			}
-			if (random.nextInt(steps) == 0) {
+			if (random.nextInt(chance) == 0) {
 				VillageNode n = generateVillageMap(random, area, x + 1, z, steps);
 				if (n != null) {
 					node.setRight(true);
 					n.setLeft(true);
 				}
 			}
-			if (random.nextInt(steps) == 0) {
+			if (random.nextInt(chance) == 0) {
 				VillageNode n = generateVillageMap(random, area, x, z + 1, steps);
 				if (n != null) {
 					node.setBottom(true);
@@ -185,6 +187,14 @@ public class VillageSpreader {
 
 	public void setBlockFunction(Function<Material, Material> blockFunction) {
 		this.blockFunction = blockFunction;
+	}
+
+	public float getStepMultiplier() {
+		return stepMultiplier;
+	}
+
+	public void setStepMultiplier(float stepMultiplier) {
+		this.stepMultiplier = stepMultiplier;
 	}
 	
 }
