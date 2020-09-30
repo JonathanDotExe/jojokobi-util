@@ -23,12 +23,7 @@ public class VillageSpreader {
 	private float stepMultiplier = 1;
 	
 	public VillageSpreader(Structure... houses) {
-		if (houses.length > 0) {
-			this.houses.addAll(Arrays.asList(houses));
-		}
-		else {
-			throw new IllegalArgumentException("The village must contain at least one house!");
-		}
+		this.houses.addAll(Arrays.asList(houses));
 	}
 	
 //	public VillageNode generateVillage (Random random, int x, int z) {
@@ -104,9 +99,9 @@ public class VillageSpreader {
 			if (random.nextBoolean()) {
 				node.setHouse(houses.get(random.nextInt(houses.size())));
 			}
-			
+			area[z][x] = node;
 			steps++;
-			int chance = Math.round(steps * stepMultiplier);
+			int chance = Math.max(Math.round(steps * stepMultiplier), 1);
 			if (random.nextInt(chance) == 0) {
 				VillageNode n = generateVillageMap(random, area, x - 1, z, steps);
 				if (n != null) {
@@ -135,7 +130,6 @@ public class VillageSpreader {
 					n.setTop(true);
 				}
 			}
-			area[z][x] = node;
 			return node;
 		}
 		return null;
