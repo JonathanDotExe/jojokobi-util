@@ -3,9 +3,7 @@ package at.jojokobi.mcutil.entity;
 import java.lang.reflect.Field;
 import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.TreeMap;
 
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftEntity;
@@ -16,10 +14,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.util.Vector;
 
-import net.minecraft.server.v1_16_R2.BehaviorController;
 import net.minecraft.server.v1_16_R2.EntityHuman;
 import net.minecraft.server.v1_16_R2.EntityInsentient;
-import net.minecraft.server.v1_16_R2.EntityLiving;
 import net.minecraft.server.v1_16_R2.EntityTNTPrimed;
 import net.minecraft.server.v1_16_R2.PathfinderGoal;
 import net.minecraft.server.v1_16_R2.PathfinderGoalLookAtPlayer;
@@ -67,6 +63,8 @@ public final class NMSEntityUtil {
 		PathfinderGoalSelector goalSelector = nmsEntity.goalSelector;
 		PathfinderGoalSelector targetSelector = nmsEntity.targetSelector;
 		
+		//TODO check if it works with villagers
+		/*
 		try {
 			Field brField = EntityLiving.class.getDeclaredField("bo");
 			brField.setAccessible(true);
@@ -89,6 +87,7 @@ public final class NMSEntityUtil {
 			bField.setAccessible(true);
 			bField.set(controller, new LinkedHashMap<>());
 			*/
+		/*
 			
 			Field sensorsField = BehaviorController.class.getDeclaredField("sensors");
 			sensorsField.setAccessible(true);
@@ -99,7 +98,7 @@ public final class NMSEntityUtil {
 			cField.set(controller, new TreeMap<>());
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 		
 		try {
