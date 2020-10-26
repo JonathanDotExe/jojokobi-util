@@ -189,8 +189,12 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 		velocity.normalize();
 		velocity.multiply(getGeneralSpeedMultiplier());
 		NMSEntityUtil.rotateVehicle(entity, velocity);
+		//Ride
+		if (getEntity().getVehicle() != null) {
+			velocity.multiply(0);
+		}
 		//Teleport
-		if (teleportToGoal && time - tempTime > MAX_TEMP_TIME) {
+		else if (teleportToGoal && time - tempTime > MAX_TEMP_TIME) {
 			getEntity().teleport(goal.getLocation());
 		}
 		//Fly
