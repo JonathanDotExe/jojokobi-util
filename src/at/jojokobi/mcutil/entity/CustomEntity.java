@@ -190,52 +190,51 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 		velocity.multiply(getGeneralSpeedMultiplier());
 		NMSEntityUtil.rotateVehicle(entity, velocity);
 		//Ride
-		if (getEntity().getVehicle() != null) {
-			velocity.multiply(0);
-		}
-		//Teleport
-		else if (teleportToGoal && time - tempTime > MAX_TEMP_TIME) {
-			getEntity().teleport(goal.getLocation());
-		}
-		//Fly
-		else if (canFly()) {
-			velocity.multiply(getFlySpeed() * getFlySpeedModifier(velocity));
-			if (entity.getPassengers().size() > 0 && entity.getPassengers().get(0) instanceof Player) {
-				Player player = (Player) entity.getPassengers().get(0);
-				player.playSound(player.getLocation(), Sound.ITEM_ELYTRA_FLYING, 1, 1);
+		if (getEntity().getVehicle() == null) {
+			//Teleport
+			if (teleportToGoal && time - tempTime > MAX_TEMP_TIME) {
+				getEntity().teleport(goal.getLocation());
 			}
-		}
-		//Swim
-		else if ((place.getBlock().getType() == Material.WATER) && canSwim()) {
-			velocity.multiply(getSwimSpeed());
-			velocity.setY(velocity.getY() >= 0 ? 0.2 : -0.2);
-		}
-		//Lava Swim
-		else if ((place.getBlock().getType() == Material.LAVA) && canLavaSwim()) {
-			velocity.multiply(getLavaSwimSpeed());
-			velocity.setY(velocity.getY() >= 0 ? 0.1 : -0.1);
-		}
-		//Walk
-		else {
-			double speed = selectedTask != null && selectedTask.isSprint() ? getSprintSpeed() : getWalkSpeed();
-			velocity.multiply(speed);
-			double distanceX = (getEntity().getWidth()/2.0 + 0.2) * (velocity.getX() < 0 ? -1 : 1);
-			double distanceZ = (getEntity().getWidth()/2.0 + 0.2) * (velocity.getZ() < 0 ? -1 : 1);
-			if (place.clone().add(distanceX, 0, distanceZ).getBlock().getType().isSolid() || place.clone().add(distanceX, 0, 0).getBlock().getType().isSolid() || place.clone().add(0, 0, distanceZ).getBlock().getType().isSolid()) {
-				//Jump
-//				if ((canJump() && place.clone().add(0, -0.1, 0).getBlock().getType().isSolid())) {
-//					velocity.setY(getJumpSpeed());
-//				}
-				//Climb
-				if (!jump(velocity) && canClimb()) {
-					velocity.setY(getClimbSpeed());
+			//Fly
+			else if (canFly()) {
+				velocity.multiply(getFlySpeed() * getFlySpeedModifier(velocity));
+				if (entity.getPassengers().size() > 0 && entity.getPassengers().get(0) instanceof Player) {
+					Player player = (Player) entity.getPassengers().get(0);
+					player.playSound(player.getLocation(), Sound.ITEM_ELYTRA_FLYING, 1, 1);
 				}
 			}
-			else {
-				velocity.setY(entity.getVelocity().getY());
+			//Swim
+			else if ((place.getBlock().getType() == Material.WATER) && canSwim()) {
+				velocity.multiply(getSwimSpeed());
+				velocity.setY(velocity.getY() >= 0 ? 0.2 : -0.2);
 			}
+			//Lava Swim
+			else if ((place.getBlock().getType() == Material.LAVA) && canLavaSwim()) {
+				velocity.multiply(getLavaSwimSpeed());
+				velocity.setY(velocity.getY() >= 0 ? 0.1 : -0.1);
+			}
+			//Walk
+			else {
+				double speed = selectedTask != null && selectedTask.isSprint() ? getSprintSpeed() : getWalkSpeed();
+				velocity.multiply(speed);
+				double distanceX = (getEntity().getWidth()/2.0 + 0.2) * (velocity.getX() < 0 ? -1 : 1);
+				double distanceZ = (getEntity().getWidth()/2.0 + 0.2) * (velocity.getZ() < 0 ? -1 : 1);
+				if (place.clone().add(distanceX, 0, distanceZ).getBlock().getType().isSolid() || place.clone().add(distanceX, 0, 0).getBlock().getType().isSolid() || place.clone().add(0, 0, distanceZ).getBlock().getType().isSolid()) {
+					//Jump
+//					if ((canJump() && place.clone().add(0, -0.1, 0).getBlock().getType().isSolid())) {
+//						velocity.setY(getJumpSpeed());
+//					}
+					//Climb
+					if (!jump(velocity) && canClimb()) {
+						velocity.setY(getClimbSpeed());
+					}
+				}
+				else {
+					velocity.setY(entity.getVelocity().getY());
+				}
+			}
+			getEntity().setVelocity(velocity);
 		}
-		getEntity().setVelocity(velocity);
 	}
 	
 	public boolean jump (Vector velocity) {
