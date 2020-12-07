@@ -1,8 +1,8 @@
 package at.jojokobi.mcutil.entity;
 
 
-import net.minecraft.server.v1_16_R2.EntityZombie;
-import net.minecraft.server.v1_16_R2.World;
+import net.minecraft.server.v1_16_R3.EntityZombie;
+import net.minecraft.server.v1_16_R3.World;
 
 public class PeacefulZombie extends EntityZombie {
 	

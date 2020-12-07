@@ -6,21 +6,21 @@ import java.util.EnumSet;
 import java.util.LinkedHashSet;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftTNTPrimed;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.util.Vector;
 
-import net.minecraft.server.v1_16_R2.EntityHuman;
-import net.minecraft.server.v1_16_R2.EntityInsentient;
-import net.minecraft.server.v1_16_R2.EntityTNTPrimed;
-import net.minecraft.server.v1_16_R2.PathfinderGoal;
-import net.minecraft.server.v1_16_R2.PathfinderGoalLookAtPlayer;
-import net.minecraft.server.v1_16_R2.PathfinderGoalRandomLookaround;
-import net.minecraft.server.v1_16_R2.PathfinderGoalSelector;
+import net.minecraft.server.v1_16_R3.EntityHuman;
+import net.minecraft.server.v1_16_R3.EntityInsentient;
+import net.minecraft.server.v1_16_R3.EntityTNTPrimed;
+import net.minecraft.server.v1_16_R3.PathfinderGoal;
+import net.minecraft.server.v1_16_R3.PathfinderGoalLookAtPlayer;
+import net.minecraft.server.v1_16_R3.PathfinderGoalRandomLookaround;
+import net.minecraft.server.v1_16_R3.PathfinderGoalSelector;
 
 public final class NMSEntityUtil {
 	
