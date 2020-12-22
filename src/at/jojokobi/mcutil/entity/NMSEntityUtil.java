@@ -30,8 +30,8 @@ public final class NMSEntityUtil {
 	
 	public static void rotateVehicle (Entity entity, float yaw, float pitch) {
 		CraftEntity craftEntity = (CraftEntity) entity;
-		Location place = entity.getLocation();
-		craftEntity.getHandle().setPositionRotation(place.getX(), place.getY(), place.getZ(), yaw, pitch);
+		craftEntity.getHandle().yaw = yaw;
+		craftEntity.getHandle().pitch = pitch;
 	}
 	
 	public static void rotateVehicle (Entity entity, Vector rotation) {
