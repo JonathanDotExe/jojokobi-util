@@ -3,7 +3,11 @@ package at.jojokobi.mcutil.entity;
 import java.lang.reflect.Field;
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.TreeMap;
 
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
@@ -14,9 +18,11 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.util.Vector;
 
+import net.minecraft.server.v1_16_R3.BehaviorController;
 import net.minecraft.server.v1_16_R3.EntityHuman;
 import net.minecraft.server.v1_16_R3.EntityInsentient;
 import net.minecraft.server.v1_16_R3.EntityTNTPrimed;
+import net.minecraft.server.v1_16_R3.EntityVillager;
 import net.minecraft.server.v1_16_R3.PathfinderGoal;
 import net.minecraft.server.v1_16_R3.PathfinderGoalLookAtPlayer;
 import net.minecraft.server.v1_16_R3.PathfinderGoalRandomLookaround;
@@ -64,41 +70,57 @@ public final class NMSEntityUtil {
 		PathfinderGoalSelector targetSelector = nmsEntity.targetSelector;
 		
 		//TODO check if it works with villagers
-		/*
-		try {
-			Field brField = EntityLiving.class.getDeclaredField("bo");
-			brField.setAccessible(true);
-			BehaviorController<?> controller = (BehaviorController<?>) brField.get(nmsEntity);
+		
+		if (entity instanceof EntityVillager) {
+			try {
+				BehaviorController<?> controller = ((EntityVillager) entity).getBehaviorController();
+				
+				/*
+				Replace memoriesField with this in 1.14
+				Field aField = BehaviorController.class.getDeclaredField("a");
+				aField.setAccessible(true);
+				aField.set(controller, new HashMap<>());
+				*/
+				
+	//			Field memoriesField = BehaviorController.class.getDeclaredField("memories");
+	//			memoriesField.setAccessible(true);
+	//			memoriesField.set(controller, new HashMap<>());
+				
+				/*
+				Replace sensors field with this in 1.14.1
+				Field bField = BehaviorController.class.getDeclaredField("b");
+				bField.setAccessible(true);
+				bField.set(controller, new LinkedHashMap<>());
+				*/
 			
-			/*
-			Replace memoriesField with this in 1.14
-			Field aField = BehaviorController.class.getDeclaredField("a");
-			aField.setAccessible(true);
-			aField.set(controller, new HashMap<>());
-			*/
-			
-//			Field memoriesField = BehaviorController.class.getDeclaredField("memories");
-//			memoriesField.setAccessible(true);
-//			memoriesField.set(controller, new HashMap<>());
-			
-			/*
-			Replace sensors field with this in 1.14.1
-			Field bField = BehaviorController.class.getDeclaredField("b");
-			bField.setAccessible(true);
-			bField.set(controller, new LinkedHashMap<>());
-			*/
-		/*
-			
-			Field sensorsField = BehaviorController.class.getDeclaredField("sensors");
-			sensorsField.setAccessible(true);
-			sensorsField.set(controller, new LinkedHashMap<>());
-			
-			Field cField = BehaviorController.class.getDeclaredField("c");
-			cField.setAccessible(true);
-			cField.set(controller, new TreeMap<>());
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
-		}*/
+				
+				Field sensorsField = BehaviorController.class.getDeclaredField("sensors");
+				sensorsField.setAccessible(true);
+				sensorsField.set(controller, new LinkedHashMap<>());
+				
+				Field cField = BehaviorController.class.getDeclaredField("c");
+				cField.setAccessible(true);
+				cField.set(controller, new TreeMap<>());
+				
+				Field memoriesField = BehaviorController.class.getDeclaredField("memories");
+				memoriesField.setAccessible(true);
+				memoriesField.set(controller, new HashMap<>());
+				
+				Field eField = BehaviorController.class.getDeclaredField("e");
+				eField.setAccessible(true);
+				eField.set(controller, new HashMap<>());
+				
+				Field fField = BehaviorController.class.getDeclaredField("f");
+				fField.setAccessible(true);
+				fField.set(controller, new HashSet<>());
+				
+				Field gField = BehaviorController.class.getDeclaredField("g");
+				gField.setAccessible(true);
+				gField.set(controller, new HashSet<>());
+			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		
 		try {
