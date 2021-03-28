@@ -22,30 +22,29 @@ import net.minecraft.server.v1_16_R3.BehaviorController;
 import net.minecraft.server.v1_16_R3.EntityHuman;
 import net.minecraft.server.v1_16_R3.EntityInsentient;
 import net.minecraft.server.v1_16_R3.EntityTNTPrimed;
-import net.minecraft.server.v1_16_R3.EntityVillager;
 import net.minecraft.server.v1_16_R3.PathfinderGoal;
 import net.minecraft.server.v1_16_R3.PathfinderGoalLookAtPlayer;
 import net.minecraft.server.v1_16_R3.PathfinderGoalRandomLookaround;
 import net.minecraft.server.v1_16_R3.PathfinderGoalSelector;
 
 public final class NMSEntityUtil {
-	
-	private NMSEntityUtil () {
-		
+
+	private NMSEntityUtil() {
+
 	}
-	
-	public static void rotateVehicle (Entity entity, float yaw, float pitch) {
+
+	public static void rotateVehicle(Entity entity, float yaw, float pitch) {
 		CraftEntity craftEntity = (CraftEntity) entity;
 		craftEntity.getHandle().yaw = yaw;
 		craftEntity.getHandle().pitch = pitch;
 	}
-	
-	public static void rotateVehicle (Entity entity, Vector rotation) {
+
+	public static void rotateVehicle(Entity entity, Vector rotation) {
 		Location place = entity.getLocation().setDirection(rotation);
 		rotateVehicle(entity, place.getYaw(), place.getPitch());
 	}
-	
-	public static void setTNTSource (TNTPrimed tnt, LivingEntity source) {
+
+	public static void setTNTSource(TNTPrimed tnt, LivingEntity source) {
 		EntityTNTPrimed nmsTNT = ((CraftTNTPrimed) tnt).getHandle();
 		try {
 			Field field = nmsTNT.getClass().getDeclaredField("source");
@@ -54,88 +53,80 @@ public final class NMSEntityUtil {
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 //	public static void setBoundingBox (Entity entity, float width, float length) {
 //		((CraftEntity) entity).getHandle().width = width;
 //		((CraftEntity) entity).getHandle().length = length;
 //	}
-	
-	public static void clearGoals (LivingEntity entity) {
+
+	public static void clearGoals(LivingEntity entity) {
 		EntityInsentient nmsEntity = (EntityInsentient) ((CraftEntity) entity).getHandle();
 //		nmsEntity.goalSelector = new PathfinderGoalSelector(((CraftWorld) entity.getWorld()).getHandle().getMethodProfiler());
 //		nmsEntity.targetSelector = new PathfinderGoalSelector(((CraftWorld) entity.getWorld()).getHandle().getMethodProfiler());
 		PathfinderGoalSelector goalSelector = nmsEntity.goalSelector;
 		PathfinderGoalSelector targetSelector = nmsEntity.targetSelector;
-		
-		//TODO check if it works with villagers
-		
-		if (entity instanceof EntityVillager) {
-			try {
-				BehaviorController<?> controller = ((EntityVillager) entity).getBehaviorController();
-				
-				/*
-				Replace memoriesField with this in 1.14
-				Field aField = BehaviorController.class.getDeclaredField("a");
-				aField.setAccessible(true);
-				aField.set(controller, new HashMap<>());
-				*/
-				
-	//			Field memoriesField = BehaviorController.class.getDeclaredField("memories");
-	//			memoriesField.setAccessible(true);
-	//			memoriesField.set(controller, new HashMap<>());
-				
-				/*
-				Replace sensors field with this in 1.14.1
-				Field bField = BehaviorController.class.getDeclaredField("b");
-				bField.setAccessible(true);
-				bField.set(controller, new LinkedHashMap<>());
-				*/
-			
-				
-				Field sensorsField = BehaviorController.class.getDeclaredField("sensors");
-				sensorsField.setAccessible(true);
-				sensorsField.set(controller, new LinkedHashMap<>());
-				
-				Field cField = BehaviorController.class.getDeclaredField("c");
-				cField.setAccessible(true);
-				cField.set(controller, new TreeMap<>());
-				
-				Field memoriesField = BehaviorController.class.getDeclaredField("memories");
-				memoriesField.setAccessible(true);
-				memoriesField.set(controller, new HashMap<>());
-				
-				Field eField = BehaviorController.class.getDeclaredField("e");
-				eField.setAccessible(true);
-				eField.set(controller, new HashMap<>());
-				
-				Field fField = BehaviorController.class.getDeclaredField("f");
-				fField.setAccessible(true);
-				fField.set(controller, new HashSet<>());
-				
-				Field gField = BehaviorController.class.getDeclaredField("g");
-				gField.setAccessible(true);
-				gField.set(controller, new HashSet<>());
-			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
+
+		try {
+			BehaviorController<?> controller = nmsEntity.getBehaviorController();
+
+			/*
+			 * Replace memoriesField with this in 1.14 Field aField =
+			 * BehaviorController.class.getDeclaredField("a"); aField.setAccessible(true);
+			 * aField.set(controller, new HashMap<>());
+			 */
+
+			// Field memoriesField = BehaviorController.class.getDeclaredField("memories");
+			// memoriesField.setAccessible(true);
+			// memoriesField.set(controller, new HashMap<>());
+
+			/*
+			 * Replace sensors field with this in 1.14.1 Field bField =
+			 * BehaviorController.class.getDeclaredField("b"); bField.setAccessible(true);
+			 * bField.set(controller, new LinkedHashMap<>());
+			 */
+
+			Field sensorsField = BehaviorController.class.getDeclaredField("sensors");
+			sensorsField.setAccessible(true);
+			sensorsField.set(controller, new LinkedHashMap<>());
+
+			Field cField = BehaviorController.class.getDeclaredField("c");
+			cField.setAccessible(true);
+			cField.set(controller, new TreeMap<>());
+
+			Field memoriesField = BehaviorController.class.getDeclaredField("memories");
+			memoriesField.setAccessible(true);
+			memoriesField.set(controller, new HashMap<>());
+
+			Field eField = BehaviorController.class.getDeclaredField("e");
+			eField.setAccessible(true);
+			eField.set(controller, new HashMap<>());
+
+			Field fField = BehaviorController.class.getDeclaredField("f");
+			fField.setAccessible(true);
+			fField.set(controller, new HashSet<>());
+
+			Field gField = BehaviorController.class.getDeclaredField("g");
+			gField.setAccessible(true);
+			gField.set(controller, new HashSet<>());
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
 		}
-		
-		
+
 		try {
 			Field dField;
 			dField = PathfinderGoalSelector.class.getDeclaredField("d");
 			dField.setAccessible(true);
 			dField.set(goalSelector, new LinkedHashSet<>());
 			dField.set(targetSelector, new LinkedHashSet<>());
-			
+
 			Field cField;
 			cField = PathfinderGoalSelector.class.getDeclaredField("c");
 			cField.setAccessible(true);
 			dField.set(goalSelector, new LinkedHashSet<>());
 			cField.set(targetSelector, new EnumMap<>(PathfinderGoal.Type.class));
-			
+
 			Field fField;
 			fField = PathfinderGoalSelector.class.getDeclaredField("f");
 			fField.setAccessible(true);
@@ -144,11 +135,11 @@ public final class NMSEntityUtil {
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		
+
 		nmsEntity.targetSelector.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
 		nmsEntity.targetSelector.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));
 	}
-	
+
 //	public static void test (org.bukkit.World w) {
 //		World world = ((CraftWorld) w).getHandle();
 //		
@@ -162,5 +153,5 @@ public final class NMSEntityUtil {
 //			e.printStackTrace();
 //		}
 //	}
-	
+
 }
