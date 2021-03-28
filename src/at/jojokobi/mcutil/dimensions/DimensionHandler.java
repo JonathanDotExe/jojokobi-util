@@ -43,6 +43,15 @@ public class DimensionHandler implements Listener {
 		});
 	}
 	
+	public void unloadWorlds(CustomDimension dimension) {
+		System.out.println("Unloading dimension worlds of dimension " + dimension.getName());
+		for (World world : Bukkit.getWorlds()) {
+			if (dimension.isDimension(world)) {
+				Bukkit.unloadWorld(world, true);
+			}
+		}
+	}
+	
 	/**
 	 * 
 	 * Registers a dimension type
