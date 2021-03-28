@@ -90,26 +90,31 @@ public final class NMSEntityUtil {
 			Field sensorsField = BehaviorController.class.getDeclaredField("sensors");
 			sensorsField.setAccessible(true);
 			sensorsField.set(controller, new LinkedHashMap<>());
-
-			Field cField = BehaviorController.class.getDeclaredField("c");
-			cField.setAccessible(true);
-			cField.set(controller, new TreeMap<>());
-
+			
 			Field memoriesField = BehaviorController.class.getDeclaredField("memories");
 			memoriesField.setAccessible(true);
 			memoriesField.set(controller, new HashMap<>());
-
+			
 			Field eField = BehaviorController.class.getDeclaredField("e");
 			eField.setAccessible(true);
-			eField.set(controller, new HashMap<>());
-
-			Field fField = BehaviorController.class.getDeclaredField("f");
-			fField.setAccessible(true);
-			fField.set(controller, new HashSet<>());
-
+			eField.set(controller, new TreeMap<>());
+			
 			Field gField = BehaviorController.class.getDeclaredField("g");
 			gField.setAccessible(true);
-			gField.set(controller, new HashSet<>());
+			gField.set(controller, new HashMap<>());
+
+			Field hField = BehaviorController.class.getDeclaredField("h");
+			hField.setAccessible(true);
+			hField.set(controller, new HashMap<>());
+
+			Field iField = BehaviorController.class.getDeclaredField("i");
+			iField.setAccessible(true);
+			iField.set(controller, new HashSet<>());
+			
+			Field jField = BehaviorController.class.getDeclaredField("j");
+			jField.setAccessible(true);
+			jField.set(controller, new HashSet<>());
+
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
@@ -124,13 +129,13 @@ public final class NMSEntityUtil {
 			Field cField;
 			cField = PathfinderGoalSelector.class.getDeclaredField("c");
 			cField.setAccessible(true);
-			dField.set(goalSelector, new LinkedHashSet<>());
+			cField.set(goalSelector, new EnumMap<>(PathfinderGoal.Type.class));
 			cField.set(targetSelector, new EnumMap<>(PathfinderGoal.Type.class));
 
 			Field fField;
 			fField = PathfinderGoalSelector.class.getDeclaredField("f");
 			fField.setAccessible(true);
-			dField.set(goalSelector, new LinkedHashSet<>());
+			fField.set(goalSelector, EnumSet.noneOf(PathfinderGoal.Type.class));
 			fField.set(targetSelector, EnumSet.noneOf(PathfinderGoal.Type.class));
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
