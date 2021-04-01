@@ -337,6 +337,7 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 	 * @param event
 	 */
 	protected void onInteract (PlayerInteractEntityEvent event) {
+		event.setCancelled(true);
 		for (EntityTask task : tasks) {
 			task.onInteract(this, event);
 		}
