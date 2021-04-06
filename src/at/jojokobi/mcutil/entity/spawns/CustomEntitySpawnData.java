@@ -3,39 +3,82 @@ package at.jojokobi.mcutil.entity.spawns;
 public class CustomEntitySpawnData {
 	
 	private CustomSpawn spawn;
-	private int minPlayerDistance;
-	private int maxPlayerDistance;
-	private int spawnGroupSize;
-	private int maxEntitiesAround;
+	private double chance;
+	private int tries;
+
+	private int spawnGroupSize = 1;
+	private int maxEntitiesAround = 8;
+	private int minPlayerDistance = 24;
+	private int maxPlayerDistance = 64;
 	
-	public CustomEntitySpawnData(CustomSpawn spawn, int minPlayerDistance, int maxPlayerDistance, int spawnGroupSize,
-			int maxEntitiesAround) {
+	public CustomEntitySpawnData(CustomSpawn spawn, double chance, int tries) {
 		super();
 		this.spawn = spawn;
-		this.minPlayerDistance = minPlayerDistance;
-		this.maxPlayerDistance = maxPlayerDistance;
-		this.spawnGroupSize = spawnGroupSize;
-		this.maxEntitiesAround = maxEntitiesAround;
+		this.chance = chance;
+		this.tries = tries;
 	}
 
 	public CustomSpawn getSpawn() {
 		return spawn;
 	}
 
-	public int getMinPlayerDistance() {
-		return minPlayerDistance;
+	public CustomEntitySpawnData setSpawn(CustomSpawn spawn) {
+		this.spawn = spawn;
+		return this;
 	}
 
-	public int getMaxPlayerDistance() {
-		return maxPlayerDistance;
+	public double getChance() {
+		return chance;
+	}
+
+	public CustomEntitySpawnData setChance(double chance) {
+		this.chance = chance;
+		return this;
+	}
+
+	public int getTries() {
+		return tries;
+	}
+
+	public CustomEntitySpawnData setTries(int tries) {
+		this.tries = tries;
+		return this;
 	}
 
 	public int getSpawnGroupSize() {
 		return spawnGroupSize;
 	}
 
+	public CustomEntitySpawnData setSpawnGroupSize(int spawnGroupSize) {
+		this.spawnGroupSize = spawnGroupSize;
+		return this;
+	}
+
 	public int getMaxEntitiesAround() {
 		return maxEntitiesAround;
+	}
+
+	public CustomEntitySpawnData setMaxEntitiesAround(int maxEntitiesAround) {
+		this.maxEntitiesAround = maxEntitiesAround;
+		return this;
+	}
+
+	public int getMinPlayerDistance() {
+		return minPlayerDistance;
+	}
+
+	public CustomEntitySpawnData setMinPlayerDistance(int minPlayerDistance) {
+		this.minPlayerDistance = minPlayerDistance;
+		return this;
+	}
+
+	public int getMaxPlayerDistance() {
+		return maxPlayerDistance;
+	}
+
+	public CustomEntitySpawnData setMaxPlayerDistance(int maxPlayerDistance) {
+		this.maxPlayerDistance = maxPlayerDistance;
+		return this;
 	}
 
 }
