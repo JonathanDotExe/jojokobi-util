@@ -1,5 +1,9 @@
 package at.jojokobi.mcutil.entity.spawns;
 
+import java.util.function.Predicate;
+
+import org.bukkit.entity.Player;
+
 public class CustomEntitySpawnData {
 	
 	private CustomSpawn spawn;
@@ -10,6 +14,7 @@ public class CustomEntitySpawnData {
 	private int maxEntitiesAround = 8;
 	private int minPlayerDistance = 24;
 	private int maxPlayerDistance = 64;
+	private Predicate<Player> canSpawn;
 	
 	public CustomEntitySpawnData(CustomSpawn spawn, double chance, int tries) {
 		super();
@@ -79,6 +84,19 @@ public class CustomEntitySpawnData {
 	public CustomEntitySpawnData setMaxPlayerDistance(int maxPlayerDistance) {
 		this.maxPlayerDistance = maxPlayerDistance;
 		return this;
+	}
+
+	public Predicate<Player> getCanSpawn() {
+		return canSpawn;
+	}
+
+	public CustomEntitySpawnData setCanSpawn(Predicate<Player> canSpawn) {
+		this.canSpawn = canSpawn;
+		return this;
+	}
+	
+	public boolean canSpawn(Player player) {
+		return canSpawn == null || canSpawn.test(player);
 	}
 
 }

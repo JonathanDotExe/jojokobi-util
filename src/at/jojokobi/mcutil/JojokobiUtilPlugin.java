@@ -16,6 +16,7 @@ import at.jojokobi.mcutil.entity.ComponentData;
 import at.jojokobi.mcutil.entity.EntityHandler;
 import at.jojokobi.mcutil.entity.EntityMapData;
 import at.jojokobi.mcutil.entity.RemovalHandler;
+import at.jojokobi.mcutil.entity.spawns.CustomEntitySpawner;
 import at.jojokobi.mcutil.entity.spawns.CustomEntitySpawnerHandler;
 import at.jojokobi.mcutil.entity.spawns.CustomSpawnsHandler;
 import at.jojokobi.mcutil.generation.GenerationHandler;
@@ -35,6 +36,7 @@ public class JojokobiUtilPlugin extends JavaPlugin{
 	private MusicHandler musicHandler;
 	private EntityHandler entityHandler;
 	private CustomEntitySpawnerHandler spawnerHandler;
+	private CustomEntitySpawner entitySpawner;
 	
 	@Override
 	public void onLoad() {
@@ -77,6 +79,8 @@ public class JojokobiUtilPlugin extends JavaPlugin{
 		spawnerHandler = new CustomEntitySpawnerHandler(entityHandler, this);
 		Bukkit.getPluginManager().registerEvents(spawnerHandler, this);
 		
+		entitySpawner = new CustomEntitySpawner(this);		
+		
 		GenerateCommand generateCmd = new GenerateCommand(generationHandler);
 		getCommand(GenerateCommand.COMMAND_NAME).setExecutor(generateCmd);
 		getCommand(RemoveStructureCommand.COMMAND_NAME).setExecutor(new RemoveStructureCommand(generationHandler));
@@ -117,6 +121,10 @@ public class JojokobiUtilPlugin extends JavaPlugin{
 
 	public CustomEntitySpawnerHandler getSpawnerHandler() {
 		return spawnerHandler;
+	}
+
+	public CustomEntitySpawner getEntitySpawner() {
+		return entitySpawner;
 	}
 	
 }

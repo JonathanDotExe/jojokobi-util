@@ -22,7 +22,7 @@ public class CustomEntitySpawner {
 					int count = (int) player.getNearbyEntities(data.getMaxPlayerDistance(), 512, data.getMaxPlayerDistance()).stream().filter(e -> e instanceof LivingEntity).count();
 					//Spawn
 					for (int i = 0; i < data.getTries(); i++) {
-						if (count < data.getMaxEntitiesAround() && Math.random() < data.getChance()) {
+						if (count < data.getMaxEntitiesAround() && Math.random() < data.getChance() && data.canSpawn(player)) {
 							double x = Math.random() * (data.getMaxPlayerDistance() - data.getMinPlayerDistance()) * Math.signum(Math.random() - 0.5);
 							double z = Math.random() * (data.getMaxPlayerDistance() - data.getMinPlayerDistance()) * Math.signum(Math.random() - 0.5);
 							
