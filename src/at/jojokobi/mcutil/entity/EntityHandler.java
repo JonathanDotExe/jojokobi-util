@@ -43,6 +43,7 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.plugin.Plugin;
 import org.spigotmc.event.entity.EntityDismountEvent;
@@ -240,6 +241,13 @@ public class EntityHandler implements Listener {
 //			System.out.println("No File for Chunk " + chunk.getX() + "/" + chunk.getZ() + " found!");
 		} catch (ParserConfigurationException | IOException | SAXException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	@EventHandler
+	public void onSave(WorldSaveEvent event) {
+		for (Chunk chunk : event.getWorld().getLoadedChunks()) {
+			save(chunk);
 		}
 	}
 

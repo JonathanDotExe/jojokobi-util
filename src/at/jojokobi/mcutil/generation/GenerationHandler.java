@@ -30,6 +30,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.plugin.Plugin;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -117,6 +118,13 @@ public class GenerationHandler implements Listener {
 			for (Chunk chunk : world.getLoadedChunks()) {
 				save(chunk);
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onSave(WorldSaveEvent event) {
+		for (Chunk chunk : event.getWorld().getLoadedChunks()) {
+			save(chunk);
 		}
 	}
 
