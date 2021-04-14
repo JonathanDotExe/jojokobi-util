@@ -91,10 +91,6 @@ public final class NMSEntityUtil {
 			sensorsField.setAccessible(true);
 			sensorsField.set(controller, new LinkedHashMap<>());
 			
-			Field memoriesField = BehaviorController.class.getDeclaredField("memories");
-			memoriesField.setAccessible(true);
-			memoriesField.set(controller, new HashMap<>());
-			
 			Field eField = BehaviorController.class.getDeclaredField("e");
 			eField.setAccessible(true);
 			eField.set(controller, new TreeMap<>());
