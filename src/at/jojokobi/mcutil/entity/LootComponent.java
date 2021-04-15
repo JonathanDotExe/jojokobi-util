@@ -30,7 +30,7 @@ public class LootComponent implements EntityComponent {
 	public void onDamage(CustomEntity<?> entity, EntityDamageEvent event) {
 		EntityComponent.super.onDamage(entity, event);
 		HealthComponent health = entity.getComponent(HealthComponent.class);
-		if (health.getHealth(entity) - event.getFinalDamage() <= 0.5) {
+		if (health.getHealth(entity) - event.getFinalDamage() < 0.5) {
 			for (ItemStack stack : loot.populateLoot(new Random(), null)) {
 				entity.getEntity().getWorld().dropItemNaturally(entity.getEntity().getLocation(), stack);
 			}
