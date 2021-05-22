@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -51,6 +53,7 @@ public class GenerationHandler implements Listener {
 	private String saveFolder = "mcutil" + File.separator + "structures";
 
 	private List<String> legacySaveFolders = new ArrayList<>();
+	private Map<String, GeneratorWorldConfig> configs = new HashMap<>();
 
 	private Plugin plugin;
 
@@ -98,8 +101,10 @@ public class GenerationHandler implements Listener {
 	public void onChunkPopulate(ChunkPopulateEvent event) {
 		Chunk chunk = event.getChunk();
 //		if (!load(chunk) && event.isNewChunk()) {
+		//Generate
 		for (Structure structure : structures) {
-			if (structure.canGenerate(chunk, chunk.getWorld().getSeed())) {
+			GeneratorWorldConfig config = getWorldConfig(event.getWorld().getName());
+			if ((config == null || (config.isGenerateStructures() && !config.getDontGenerate().contains(structure.getIdentifier()))) && structure.canGenerate(chunk, chunk.getWorld().getSeed())) {
 				Bukkit.getScheduler().runTask(plugin, () -> {
 					instances.addAll(structure.generate(chunk, chunk.getWorld().getSeed()));
 				});
@@ -284,5 +289,13 @@ public class GenerationHandler implements Listener {
 	public void addLegacySaveFolder(String folder) {
 		legacySaveFolders.add(folder);
 	}
+	
+	public GeneratorWorldConfig getWorldConfig(String name) {
+		return configs.get(name);
+	}
 
+	public void setWorldConfig(String name, GeneratorWorldConfig config) {
+		configs.put(name, config);
+	}
+	
 }
