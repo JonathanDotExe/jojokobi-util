@@ -3,8 +3,12 @@ package at.jojokobi.mcutil;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,6 +24,7 @@ import at.jojokobi.mcutil.entity.spawns.CustomEntitySpawner;
 import at.jojokobi.mcutil.entity.spawns.CustomEntitySpawnerHandler;
 import at.jojokobi.mcutil.entity.spawns.CustomSpawnsHandler;
 import at.jojokobi.mcutil.generation.GenerationHandler;
+import at.jojokobi.mcutil.generation.GeneratorWorldConfig;
 import at.jojokobi.mcutil.gui.InventoryGUIHandler;
 import at.jojokobi.mcutil.loot.LootInventory;
 import at.jojokobi.mcutil.loot.LootItem;
@@ -62,6 +67,7 @@ public class JojokobiUtilPlugin extends JavaPlugin{
 	@Override
 	public void onEnable() {
 		super.onEnable();
+		//Handlers
 		musicHandler = new MusicHandler(this);
 		removalHandler = new RemovalHandler();
 		Bukkit.getPluginManager().registerEvents(removalHandler, this);
@@ -81,12 +87,29 @@ public class JojokobiUtilPlugin extends JavaPlugin{
 		
 		entitySpawner = new CustomEntitySpawner(this);		
 		
+		//Commands
 		GenerateCommand generateCmd = new GenerateCommand(generationHandler);
 		getCommand(GenerateCommand.COMMAND_NAME).setExecutor(generateCmd);
 		getCommand(RemoveStructureCommand.COMMAND_NAME).setExecutor(new RemoveStructureCommand(generationHandler));
 		SpawnCustomCommand spawnCmd = new SpawnCustomCommand(entityHandler, CustomSpawnsHandler.getInstance());
 		getCommand(SpawnCustomCommand.COMMAND_NAME).setExecutor(spawnCmd);
 		getCommand(SpawnCustomCommand.COMMAND_NAME).setTabCompleter(spawnCmd);
+		
+		//Generator config
+		FileConfiguration config = getConfig();
+		saveDefaultConfig();
+		ConfigurationSection section = config.getConfigurationSection("generator.worlds");
+		for (String key : section.getKeys(false)) {
+			GeneratorWorldConfig cfg = new GeneratorWorldConfig();
+			//Config
+			cfg.setGenerateStructures(section.getBoolean(key + ".generateStructures"));
+			for (String dont : section.getStringList(key + ".dontGenerate")) {
+				cfg.getDontGenerate().add(dont);
+			}
+			//Add
+			generationHandler.setWorldConfig(key, cfg);
+		}
+		
 	}
 	
 	@Override
