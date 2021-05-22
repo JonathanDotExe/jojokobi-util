@@ -97,17 +97,18 @@ public class JojokobiUtilPlugin extends JavaPlugin{
 		FileConfiguration config = getConfig();
 		saveDefaultConfig();
 		ConfigurationSection section = config.getConfigurationSection("generator.worlds");
-		for (String key : section.getKeys(false)) {
-			GeneratorWorldConfig cfg = new GeneratorWorldConfig();
-			//Config
-			cfg.setGenerateStructures(section.getBoolean(key + ".generateStructures", true));
-			for (String dont : section.getStringList(key + ".dontGenerate")) {
-				cfg.getDontGenerate().add(dont);
+		if (section != null) {
+			for (String key : section.getKeys(false)) {
+				GeneratorWorldConfig cfg = new GeneratorWorldConfig();
+				//Config
+				cfg.setGenerateStructures(section.getBoolean(key + ".generateStructures", true));
+				for (String dont : section.getStringList(key + ".dontGenerate")) {
+					cfg.getDontGenerate().add(dont);
+				}
+				//Add
+				generationHandler.setWorldConfig(key, cfg);
 			}
-			//Add
-			generationHandler.setWorldConfig(key, cfg);
-		}
-		
+		}		
 	}
 	
 	@Override
