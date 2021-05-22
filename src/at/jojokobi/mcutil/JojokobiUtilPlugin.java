@@ -3,10 +3,8 @@ package at.jojokobi.mcutil;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -102,7 +100,7 @@ public class JojokobiUtilPlugin extends JavaPlugin{
 		for (String key : section.getKeys(false)) {
 			GeneratorWorldConfig cfg = new GeneratorWorldConfig();
 			//Config
-			cfg.setGenerateStructures(section.getBoolean(key + ".generateStructures"));
+			cfg.setGenerateStructures(section.getBoolean(key + ".generateStructures", true));
 			for (String dont : section.getStringList(key + ".dontGenerate")) {
 				cfg.getDontGenerate().add(dont);
 			}
