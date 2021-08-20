@@ -1,10 +1,8 @@
 package at.jojokobi.mcutil.entity;
 
+import net.minecraft.world.level.World;
 
-import net.minecraft.server.v1_16_R3.EntityZombie;
-import net.minecraft.server.v1_16_R3.World;
-
-public class PeacefulZombie extends EntityZombie {
+public class PeacefulZombie extends net.minecraft.world.entity.monster.EntityZombie {
 	
 //	public static void register () {
 //		Map<Object, Type<?>> types = Data

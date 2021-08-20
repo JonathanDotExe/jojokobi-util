@@ -10,22 +10,22 @@ import java.util.LinkedHashSet;
 import java.util.TreeMap;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftTNTPrimed;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.util.Vector;
 
-import net.minecraft.server.v1_16_R3.BehaviorController;
-import net.minecraft.server.v1_16_R3.EntityHuman;
-import net.minecraft.server.v1_16_R3.EntityInsentient;
-import net.minecraft.server.v1_16_R3.EntityTNTPrimed;
-import net.minecraft.server.v1_16_R3.PathfinderGoal;
-import net.minecraft.server.v1_16_R3.PathfinderGoalLookAtPlayer;
-import net.minecraft.server.v1_16_R3.PathfinderGoalRandomLookaround;
-import net.minecraft.server.v1_16_R3.PathfinderGoalSelector;
+import net.minecraft.world.entity.EntityInsentient;
+import net.minecraft.world.entity.ai.BehaviorController;
+import net.minecraft.world.entity.ai.goal.PathfinderGoal;
+import net.minecraft.world.entity.ai.goal.PathfinderGoalLookAtPlayer;
+import net.minecraft.world.entity.ai.goal.PathfinderGoalRandomLookaround;
+import net.minecraft.world.entity.ai.goal.PathfinderGoalSelector;
+import net.minecraft.world.entity.item.EntityTNTPrimed;
+import net.minecraft.world.entity.player.EntityHuman;
 
 public final class NMSEntityUtil {
 
@@ -65,8 +65,8 @@ public final class NMSEntityUtil {
 		EntityInsentient nmsEntity = (EntityInsentient) ((CraftEntity) entity).getHandle();
 //		nmsEntity.goalSelector = new PathfinderGoalSelector(((CraftWorld) entity.getWorld()).getHandle().getMethodProfiler());
 //		nmsEntity.targetSelector = new PathfinderGoalSelector(((CraftWorld) entity.getWorld()).getHandle().getMethodProfiler());
-		PathfinderGoalSelector goalSelector = nmsEntity.goalSelector;
-		PathfinderGoalSelector targetSelector = nmsEntity.targetSelector;
+		PathfinderGoalSelector goalSelector = nmsEntity.bP;
+		PathfinderGoalSelector targetSelector = nmsEntity.bQ;
 
 		try {
 			BehaviorController<?> controller = nmsEntity.getBehaviorController();
@@ -137,8 +137,10 @@ public final class NMSEntityUtil {
 			e.printStackTrace();
 		}
 
-		nmsEntity.targetSelector.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
-		nmsEntity.targetSelector.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));
+		nmsEntity.bP.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
+		nmsEntity.bP.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));
+		nmsEntity.bQ.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
+		nmsEntity.bQ.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));
 	}
 
 //	public static void test (org.bukkit.World w) {

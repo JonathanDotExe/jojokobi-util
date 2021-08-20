@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -15,8 +15,9 @@ import org.w3c.dom.NodeList;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import net.minecraft.server.v1_16_R3.MojangsonParser;
-import net.minecraft.server.v1_16_R3.NBTTagCompound;
+import net.minecraft.nbt.MojangsonParser;
+import net.minecraft.nbt.NBTTagCompound;
+
 
 public final class XMLUtil {
 
@@ -102,7 +103,7 @@ public final class XMLUtil {
 				//NBT
 				NodeList nbtNodes = element.getElementsByTagName(NBT_TAG);
 				if (nbtNodes.getLength() > 0) {
-					net.minecraft.server.v1_16_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+					net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 						try {
 							item = CraftItemStack.asBukkitCopy(nmsItem);
 							nmsItem.setTag(MojangsonParser.parse(nbtNodes.item(0).getTextContent()));
