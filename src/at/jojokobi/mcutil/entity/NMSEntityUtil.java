@@ -21,11 +21,8 @@ import org.bukkit.util.Vector;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.ai.BehaviorController;
 import net.minecraft.world.entity.ai.goal.PathfinderGoal;
-import net.minecraft.world.entity.ai.goal.PathfinderGoalLookAtPlayer;
-import net.minecraft.world.entity.ai.goal.PathfinderGoalRandomLookaround;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalSelector;
 import net.minecraft.world.entity.item.EntityTNTPrimed;
-import net.minecraft.world.entity.player.EntityHuman;
 
 public final class NMSEntityUtil {
 
@@ -88,29 +85,29 @@ public final class NMSEntityUtil {
 			 * bField.set(controller, new LinkedHashMap<>());
 			 */
 
-			Field sensorsField = BehaviorController.class.getDeclaredField("sensors");
-			sensorsField.setAccessible(true);
-			sensorsField.set(controller, new LinkedHashMap<>());
-			
 			Field eField = BehaviorController.class.getDeclaredField("e");
 			eField.setAccessible(true);
-			eField.set(controller, new TreeMap<>());
+			eField.set(controller, new LinkedHashMap<>());
 			
-			Field gField = BehaviorController.class.getDeclaredField("g");
+			Field gField = BehaviorController.class.getDeclaredField("f");
 			gField.setAccessible(true);
-			gField.set(controller, new HashMap<>());
-
+			gField.set(controller, new TreeMap<>());
+			
 			Field hField = BehaviorController.class.getDeclaredField("h");
 			hField.setAccessible(true);
 			hField.set(controller, new HashMap<>());
 
 			Field iField = BehaviorController.class.getDeclaredField("i");
 			iField.setAccessible(true);
-			iField.set(controller, new HashSet<>());
-			
+			iField.set(controller, new HashMap<>());
+
 			Field jField = BehaviorController.class.getDeclaredField("j");
 			jField.setAccessible(true);
 			jField.set(controller, new HashSet<>());
+			
+			Field kField = BehaviorController.class.getDeclaredField("k");
+			kField.setAccessible(true);
+			kField.set(controller, new HashSet<>());
 
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
@@ -138,10 +135,10 @@ public final class NMSEntityUtil {
 			e.printStackTrace();
 		}
 
-		nmsEntity.bP.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
-		nmsEntity.bP.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));
-		nmsEntity.bQ.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
-		nmsEntity.bQ.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));
+		/*nmsEntity.bP.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
+		nmsEntity.bP.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));*/
+		/*nmsEntity.bQ.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
+		nmsEntity.bQ.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));*/
 	}
 
 //	public static void test (org.bukkit.World w) {
