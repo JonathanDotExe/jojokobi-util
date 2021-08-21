@@ -35,8 +35,9 @@ public final class NMSEntityUtil {
 
 	public static void rotateVehicle(Entity entity, float yaw, float pitch) {
 		CraftEntity craftEntity = (CraftEntity) entity;
-		craftEntity.getHandle().yaw = yaw;
-		craftEntity.getHandle().pitch = pitch;
+		net.minecraft.world.entity.Entity e = craftEntity.getHandle();
+		e.setXRot(yaw);
+		e.setYRot(pitch);
 	}
 
 	public static void rotateVehicle(Entity entity, Vector rotation) {
