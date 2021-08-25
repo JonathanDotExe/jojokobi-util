@@ -21,8 +21,11 @@ import org.bukkit.util.Vector;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.ai.BehaviorController;
 import net.minecraft.world.entity.ai.goal.PathfinderGoal;
+import net.minecraft.world.entity.ai.goal.PathfinderGoalLookAtPlayer;
+import net.minecraft.world.entity.ai.goal.PathfinderGoalRandomLookaround;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalSelector;
 import net.minecraft.world.entity.item.EntityTNTPrimed;
+import net.minecraft.world.entity.player.EntityHuman;
 
 public final class NMSEntityUtil {
 
@@ -33,8 +36,8 @@ public final class NMSEntityUtil {
 	public static void rotateVehicle(Entity entity, float yaw, float pitch) {
 		CraftEntity craftEntity = (CraftEntity) entity;
 		net.minecraft.world.entity.Entity e = craftEntity.getHandle();
-		e.setXRot(yaw);
-		e.setYRot(pitch);
+		e.setXRot(pitch);
+		e.setYRot(yaw);
 	}
 
 	public static void rotateVehicle(Entity entity, Vector rotation) {
@@ -135,8 +138,8 @@ public final class NMSEntityUtil {
 			e.printStackTrace();
 		}
 
-		/*nmsEntity.bP.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
-		nmsEntity.bP.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));*/
+		nmsEntity.bP.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
+		nmsEntity.bP.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));
 		/*nmsEntity.bQ.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
 		nmsEntity.bQ.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));*/
 	}
