@@ -3,7 +3,7 @@ main: at.jojokobi.mcutil.JojokobiUtilPlugin
 version: 1.0
 author: jojokobi
 load: STARTUP
-api-version: 1.16
+api-version: 1.17
 commands:
   generate:
     description: Generates a custom structure from the plugins using JojokobiUtil
