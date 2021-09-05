@@ -51,7 +51,7 @@ public abstract class Structure {
 	}
 	
 	public boolean canGenerate (Chunk chunk, long seed) {
-		Random random = new Random (generateValueBasedSeed(seed, chunk.getX() * CHUNK_WIDTH + getxModifier(), 1, chunk.getZ() * CHUNK_LENGTH + getzModifier(), scaleFactor));
+		Random random = new Random (generateValueBasedSeed(seed, chunk.getX() * CHUNK_WIDTH + getxModifier(), 1, chunk.getZ() * CHUNK_LENGTH + getzModifier())); //FIXME scale factor
 		return chance > 0 && random.nextInt(chance) == 0 && (dimension == null || dimension == chunk.getWorld().getEnvironment());
 	}
 	
@@ -120,7 +120,7 @@ public abstract class Structure {
 	}
 	
 	protected long generateValueBeasedSeed (Location loc, long seed) {
-		return TerrainGenUtil.generateValueBasedSeed(seed, loc.getBlockX() + getxModifier(), 1, loc.getBlockZ() + getzModifier(), 1);
+		return TerrainGenUtil.generateValueBasedSeed(seed, loc.getBlockX() + getxModifier(), 1, loc.getBlockZ() + getzModifier());
 	}
 	
 	public StructureInstance<? extends Structure> getStandardInstance (World world) {

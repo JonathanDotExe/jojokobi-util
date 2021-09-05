@@ -57,11 +57,11 @@ public final class TerrainGenUtil {
 	}
 	
 	public static void generateTrees (Location place, int width, int length, int tries, int spotsize, long seed, TreeType tree) {
-		Random random = new Random (generateValueBasedSeed(seed, place.getBlockX(), 1, place.getBlockZ(), spotsize));
+		Random random = new Random (generateValueBasedSeed(seed, place.getBlockX(), 1, place.getBlockZ())); //FIXME spotsize
 		int chance = CHUNK_LENGTH * CHUNK_WIDTH / tries;
 		for (int x = 0; x < width; x++) {
 			for (int z = 0; z < length; z++) {
-				random.setSeed(generateValueBasedSeed(seed, place.getBlockX() + x, 1, place.getBlockZ() + z, spotsize));
+				random.setSeed(generateValueBasedSeed(seed, place.getBlockX() + x, 1, place.getBlockZ() + z));
 				if (random.nextInt (chance) == 0) {
 					Location treeplace = new Location (place.getWorld(), place.getBlockX() + x, 0, place.getBlockZ() + z);
 					treeplace.setY(treeplace.getWorld().getHighestBlockYAt(treeplace));
@@ -75,14 +75,14 @@ public final class TerrainGenUtil {
 	}
 	
 	public static void bonemealSpots(Location place, int width, int length, int tries, int spotsize, long seed) {
-		Random random = new Random (generateValueBasedSeed(seed, place.getBlockX(), 1, place.getBlockZ(), spotsize));
+		Random random = new Random (generateValueBasedSeed(seed, place.getBlockX(), 1, place.getBlockZ())); //FIXME spotsize
 		int chance = CHUNK_LENGTH * CHUNK_WIDTH / tries;
 		for (int x = 0; x < width; x++) {
 			for (int z = 0; z < length; z++) {
-				random.setSeed(generateValueBasedSeed(seed, place.getBlockX() + x, 1, place.getBlockZ() + z, spotsize));
+				random.setSeed(generateValueBasedSeed(seed, place.getBlockX() + x, 1, place.getBlockZ() + z));
 				if (random.nextInt (chance) == 0) {
 					Location mealplace = new Location (place.getWorld (), place.getX() + x, 1, place.getZ() + z);
-					bonemealPlace (mealplace, generateValueBasedSeed(seed, mealplace.getBlockX(), 1, mealplace.getBlockZ(), spotsize));
+					bonemealPlace (mealplace, generateValueBasedSeed(seed, mealplace.getBlockX(), 1, mealplace.getBlockZ()));
 				}
 			}
 		}
@@ -136,10 +136,17 @@ public final class TerrainGenUtil {
 		}
 	}
 	
-	public static long generateValueBasedSeed (long seed, int x, int y, int z, double dividor) {
-		long randseed = Math.round((seed * x * y * z)/dividor);
-		return randseed;
+	public static long generateValueBasedSeed (long seed, int x, int y, int z) {
+		final long prime = 31;
+		long result = 1;
+		result = prime * result + (int) (seed ^ (seed >>> 32));
+		result = prime * result + x;
+		result = prime * result + y;
+		result = prime * result + z;
+		return result;
 	}
+	
+	
 	
 	public static int getTerrainHeight (Location loc) {
 		Location place = loc.clone();
@@ -152,3 +159,4 @@ public final class TerrainGenUtil {
 		return y;
 	}
 }
+

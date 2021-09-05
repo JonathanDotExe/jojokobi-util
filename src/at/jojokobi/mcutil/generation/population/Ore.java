@@ -51,7 +51,7 @@ public class Ore {
 	
 	public void generateOre (BlockState state, long seed) {
 		Location place = state.getLocation();
-		long randseed = generateValueBasedSeed(seed, place.getBlockX(), place.getBlockY(), place.getBlockZ(), size * 100);
+		long randseed = generateValueBasedSeed(seed, place.getBlockX(), place.getBlockY(), place.getBlockZ()); //FIXME size
 		Random random = new Random (randseed);
 		int chance = CHUNK_WIDTH*CHUNK_LENGTH/tries;
 		if (randseed != 0 && random.nextInt(chance) == 0 && place.getBlockY() <= maxHeight && place.getBlockY() >= minHeight) {
@@ -68,5 +68,31 @@ public class Ore {
 			System.out.println("Erz platziert!");
 		}*/
 	}
+
+	public Material getMaterial() {
+		return material;
+	}
+
+	public BlockModifier getModifier() {
+		return modifier;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public int getTries() {
+		return tries;
+	}
+
+	public int getMinHeight() {
+		return minHeight;
+	}
+
+	public int getMaxHeight() {
+		return maxHeight;
+	}
+	
+	
 
 }
