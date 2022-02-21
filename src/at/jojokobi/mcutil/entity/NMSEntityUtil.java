@@ -10,9 +10,9 @@ import java.util.LinkedHashSet;
 import java.util.TreeMap;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftTNTPrimed;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.TNTPrimed;
@@ -36,7 +36,7 @@ public final class NMSEntityUtil {
 	public static void rotateVehicle(Entity entity, float yaw, float pitch) {
 		CraftEntity craftEntity = (CraftEntity) entity;
 		net.minecraft.world.entity.Entity e = craftEntity.getHandle();
-		e.setXRot(pitch);
+		e.;
 		e.setYRot(yaw);
 	}
 
