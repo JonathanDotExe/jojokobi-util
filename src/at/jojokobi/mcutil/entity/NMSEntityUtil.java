@@ -36,7 +36,7 @@ public final class NMSEntityUtil {
 	public static void rotateVehicle(Entity entity, float yaw, float pitch) {
 		CraftEntity craftEntity = (CraftEntity) entity;
 		net.minecraft.world.entity.Entity e = craftEntity.getHandle();
-		e.;
+		e.setXRot(pitch);
 		e.setYRot(yaw);
 	}
 
@@ -66,8 +66,8 @@ public final class NMSEntityUtil {
 		EntityInsentient nmsEntity = (EntityInsentient) ((CraftEntity) entity).getHandle();
 //		nmsEntity.goalSelector = new PathfinderGoalSelector(((CraftWorld) entity.getWorld()).getHandle().getMethodProfiler());
 //		nmsEntity.targetSelector = new PathfinderGoalSelector(((CraftWorld) entity.getWorld()).getHandle().getMethodProfiler());
-		PathfinderGoalSelector goalSelector = nmsEntity.bP;
-		PathfinderGoalSelector targetSelector = nmsEntity.bQ;
+		PathfinderGoalSelector goalSelector = nmsEntity.goalSelector;
+		PathfinderGoalSelector targetSelector = nmsEntity.targetSelector;
 
 		try {
 			BehaviorController<?> controller = nmsEntity.getBehaviorController();
@@ -138,8 +138,8 @@ public final class NMSEntityUtil {
 			e.printStackTrace();
 		}
 
-		nmsEntity.bP.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
-		nmsEntity.bP.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));
+		nmsEntity.goalSelector.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
+		nmsEntity.goalSelector.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));
 		/*nmsEntity.bQ.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
 		nmsEntity.bQ.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));*/
 	}

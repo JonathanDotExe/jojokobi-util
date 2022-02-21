@@ -1,6 +1,6 @@
 package at.jojokobi.mcutil.item;
 
-import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -33,7 +33,7 @@ public final class ItemUtil {
 	public static void setNBTTag (ItemStack item, String key, NBTBase value) {
 		net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound root = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
-		root.set (key, value);
+		root.put (key, value);
 		item.setItemMeta(CraftItemStack.getItemMeta(nmsItem));
 	}
 	
@@ -55,7 +55,7 @@ public final class ItemUtil {
 	}
 	
 	public static void setNBTString (ItemStack item, String key, String value) {
-		setNBTTag(item, key, NBTTagString.a(value));
+		setNBTTag(item, key, NBTTagString.valueOf(value));
 	}
 	
 	public static String getNBTString (ItemStack item, String key) {
@@ -69,7 +69,7 @@ public final class ItemUtil {
 	}
 	
 	public static void setNBTInt (ItemStack item, String key, int value) {
-		setNBTTag(item, key, NBTTagInt.a(value));
+		setNBTTag(item, key, NBTTagInt.valueOf(value));
 	}
 	
 	public static int getNBTInt (ItemStack item, String key) {
@@ -83,7 +83,7 @@ public final class ItemUtil {
 	}
 	
 	public static void setNBTByte (ItemStack item, String key, byte value) {
-		setNBTTag(item, key, NBTTagByte.a(value));
+		setNBTTag(item, key, NBTTagByte.valueOf(value));
 	}
 	
 	public static byte getNBTByte (ItemStack item, String key) {
@@ -97,7 +97,7 @@ public final class ItemUtil {
 	}
 	
 	public static void setNBTBoolean (ItemStack item, String key, boolean value) {
-		setNBTTag(item, key, NBTTagByte.a(value ? (byte) 1 : (byte) 0));
+		setNBTTag(item, key, NBTTagByte.valueOf(value ? (byte) 1 : (byte) 0));
 	}
 	
 	public static boolean getNBTBoolean (ItemStack item, String key) {

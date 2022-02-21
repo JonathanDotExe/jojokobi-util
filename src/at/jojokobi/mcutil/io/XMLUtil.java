@@ -2,21 +2,10 @@ package at.jojokobi.mcutil.io;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import net.minecraft.nbt.MojangsonParser;
-import net.minecraft.nbt.NBTTagCompound;
 
 
 public final class XMLUtil {
@@ -37,83 +26,6 @@ public final class XMLUtil {
 
 	private XMLUtil() {
 
-	}
-	
-	public static Element itemToXML (Document document, ItemStack item) {
-		Element element = document.createElement(ITEM_TAG);
-		//Material
-		Element material = document.createElement(MATERIAL_TAG);
-		material.setTextContent(item.getType() + "");
-		//Damage
-		Element damage = document.createElement(DAMAGE_TAG);
-		ItemMeta meta = item.getItemMeta();
-		if (meta instanceof Damageable) {
-			damage.setTextContent("" + ((Damageable) meta).getDamage());
-		}
-		else {
-			damage.setTextContent("0");
-		}
-		//Amount
-		Element amount = document.createElement(AMOUNT_TAG);
-		amount.setTextContent(item.getAmount() + "");
-		
-		element.appendChild(material);
-		element.appendChild(damage);
-		element.appendChild(amount);
-		
-		//NBT
-		NBTTagCompound tag = CraftItemStack.asNMSCopy(item).getTag();
-		if (tag != null) {
-			Element nbt = document.createElement(NBT_TAG);
-			nbt.setTextContent(tag.toString());
-			element.appendChild(nbt);
-		}
-		return element;
-	}
-	
-	public static ItemStack xmlToItem (Element element) {
-		ItemStack item = null;
-		//Material
-		NodeList materialNodes = element.getElementsByTagName(MATERIAL_TAG);
-		if (materialNodes.getLength() > 0) {
-			Material material = Material.valueOf(materialNodes.item(0).getTextContent().toUpperCase());
-			if (material != null) {
-				item = new ItemStack(material);
-				//Damage
-				NodeList damageNodes = element.getElementsByTagName(DAMAGE_TAG);
-				if (damageNodes.getLength() > 0) {
-					ItemMeta meta = item.getItemMeta();
-					if (meta instanceof Damageable) {
-						try {
-							((Damageable) meta).setDamage(Short.parseShort(damageNodes.item(0).getTextContent()));
-						} catch (NumberFormatException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-				//Amount
-				NodeList amountNodes = element.getElementsByTagName(AMOUNT_TAG);
-				if (amountNodes.getLength() > 0) {
-					try {
-						item.setAmount(Integer.parseInt(amountNodes.item(0).getTextContent()));
-					} catch (NumberFormatException e) {
-						e.printStackTrace();
-					}
-				}
-				//NBT
-				NodeList nbtNodes = element.getElementsByTagName(NBT_TAG);
-				if (nbtNodes.getLength() > 0) {
-					net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
-						try {
-							item = CraftItemStack.asBukkitCopy(nmsItem);
-							nmsItem.setTag(MojangsonParser.parse(nbtNodes.item(0).getTextContent()));
-						} catch (DOMException | CommandSyntaxException e) {
-							e.printStackTrace();
-						}
-				}
-			}
-		}
-		return item;
 	}
 
 	public static Element locationToXML(Document document, Location location, String tagName) {
