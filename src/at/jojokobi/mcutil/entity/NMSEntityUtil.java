@@ -1,13 +1,6 @@
 package at.jojokobi.mcutil.entity;
 
 import java.lang.reflect.Field;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.TreeMap;
 
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
@@ -20,7 +13,6 @@ import org.bukkit.util.Vector;
 
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.ai.BehaviorController;
-import net.minecraft.world.entity.ai.goal.PathfinderGoal;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalLookAtPlayer;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalRandomLookaround;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalSelector;
@@ -69,8 +61,12 @@ public final class NMSEntityUtil {
 		PathfinderGoalSelector goalSelector = nmsEntity.goalSelector;
 		PathfinderGoalSelector targetSelector = nmsEntity.targetSelector;
 
-		try {
-			BehaviorController<?> controller = nmsEntity.getBehaviorController();
+		//Clear brain
+		BehaviorController<?> controller = nmsEntity.getBrain();
+		controller.removeAllBehaviors();
+
+		/*try {
+			
 
 			/*
 			 * Replace memoriesField with this in 1.14 Field aField =
@@ -86,8 +82,8 @@ public final class NMSEntityUtil {
 			 * Replace sensors field with this in 1.14.1 Field bField =
 			 * BehaviorController.class.getDeclaredField("b"); bField.setAccessible(true);
 			 * bField.set(controller, new LinkedHashMap<>());
-			 */
-
+			 *
+			
 			Field eField = BehaviorController.class.getDeclaredField("e");
 			eField.setAccessible(true);
 			eField.set(controller, new LinkedHashMap<>());
@@ -114,9 +110,9 @@ public final class NMSEntityUtil {
 
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
-		}
+		}*/
 
-		try {
+		/*try {
 			Field dField;
 			dField = PathfinderGoalSelector.class.getDeclaredField("d");
 			dField.setAccessible(true);
@@ -134,12 +130,17 @@ public final class NMSEntityUtil {
 			fField.setAccessible(true);
 			fField.set(goalSelector, EnumSet.noneOf(PathfinderGoal.Type.class));
 			fField.set(targetSelector, EnumSet.noneOf(PathfinderGoal.Type.class));
+			
+			
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
-		}
+		}*/
+		//Clear goal selector
+		goalSelector.removeAllGoals();
+		targetSelector.removeAllGoals();
 
-		nmsEntity.goalSelector.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
-		nmsEntity.goalSelector.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));
+		nmsEntity.goalSelector.addGoal(0, new PathfinderGoalRandomLookaround(nmsEntity));
+		nmsEntity.goalSelector.addGoal(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));
 		/*nmsEntity.bQ.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
 		nmsEntity.bQ.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));*/
 	}
