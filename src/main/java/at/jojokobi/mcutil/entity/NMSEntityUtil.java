@@ -3,21 +3,20 @@ package at.jojokobi.mcutil.entity;
 import java.lang.reflect.Field;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftTNTPrimed;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.util.Vector;
 
-import net.minecraft.world.entity.EntityInsentient;
-import net.minecraft.world.entity.ai.BehaviorController;
-import net.minecraft.world.entity.ai.goal.PathfinderGoalLookAtPlayer;
-import net.minecraft.world.entity.ai.goal.PathfinderGoalRandomLookaround;
-import net.minecraft.world.entity.ai.goal.PathfinderGoalSelector;
-import net.minecraft.world.entity.item.EntityTNTPrimed;
-import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.item.PrimedTnt;;
 
 public final class NMSEntityUtil {
 
@@ -38,7 +37,7 @@ public final class NMSEntityUtil {
 	}
 
 	public static void setTNTSource(TNTPrimed tnt, LivingEntity source) {
-		EntityTNTPrimed nmsTNT = ((CraftTNTPrimed) tnt).getHandle();
+		PrimedTnt nmsTNT = ((CraftTNTPrimed) tnt).getHandle();
 		try {
 			Field field = nmsTNT.getClass().getDeclaredField("source");
 			field.setAccessible(true);
@@ -55,14 +54,14 @@ public final class NMSEntityUtil {
 //	}
 
 	public static void clearGoals(LivingEntity entity) {
-		EntityInsentient nmsEntity = (EntityInsentient) ((CraftEntity) entity).getHandle();
+		Mob nmsEntity = (Mob) ((CraftEntity) entity).getHandle();
 //		nmsEntity.goalSelector = new PathfinderGoalSelector(((CraftWorld) entity.getWorld()).getHandle().getMethodProfiler());
 //		nmsEntity.targetSelector = new PathfinderGoalSelector(((CraftWorld) entity.getWorld()).getHandle().getMethodProfiler());
-		PathfinderGoalSelector goalSelector = nmsEntity.goalSelector;
-		PathfinderGoalSelector targetSelector = nmsEntity.targetSelector;
+		GoalSelector goalSelector = nmsEntity.goalSelector;
+		GoalSelector targetSelector = nmsEntity.targetSelector;
 
 		//Clear brain
-		BehaviorController<?> controller = nmsEntity.getBrain();
+		Brain<?> controller = nmsEntity.getBrain();
 		controller.removeAllBehaviors();
 
 		/*try {
@@ -139,8 +138,8 @@ public final class NMSEntityUtil {
 		goalSelector.removeAllGoals();
 		targetSelector.removeAllGoals();
 
-		nmsEntity.goalSelector.addGoal(0, new PathfinderGoalRandomLookaround(nmsEntity));
-		nmsEntity.goalSelector.addGoal(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));
+		nmsEntity.goalSelector.addGoal(0, new RandomLookAroundGoal(nmsEntity));
+		nmsEntity.goalSelector.addGoal(1, new LookAtPlayerGoal(nmsEntity, Mob.class, 0.0f));
 		/*nmsEntity.bQ.a(0, new PathfinderGoalRandomLookaround(nmsEntity));
 		nmsEntity.bQ.a(1, new PathfinderGoalLookAtPlayer(nmsEntity, EntityHuman.class, 0.0f));*/
 	}
