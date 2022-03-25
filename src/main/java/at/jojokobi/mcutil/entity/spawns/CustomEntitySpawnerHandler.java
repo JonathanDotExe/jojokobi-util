@@ -36,7 +36,6 @@ public class CustomEntitySpawnerHandler implements Listener {
 			CustomSpawn spawn = CustomSpawnsHandler.getInstance().getItem(new NamespacedEntry(namespace, key));
 			if (spawn != null) {
 				event.setCancelled(true);
-				System.out.println("Spawning");
 				for (CustomEntity<?> entity : spawn.spawn(event.getLocation())) {
 					handler.addEntity(entity);
 				}

@@ -11,7 +11,7 @@ public class CustomEntitySpawnData {
 	private int tries;
 
 	private int spawnGroupSize = 1;
-	private int maxEntitiesAround = 8;
+	private int maxEntitiesAround = 48;
 	private int minPlayerDistance = 24;
 	private int maxPlayerDistance = 64;
 	private Predicate<Player> canSpawn;

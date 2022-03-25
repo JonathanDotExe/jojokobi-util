@@ -30,16 +30,23 @@ public class CustomEntitySpawner {
 							Location loc = player.getLocation().add(vec);
 							loc.setY(loc.getWorld().getHighestBlockYAt(loc));
 							
+							//Spawn in air
+							if (loc.getY() <= 0) {
+								loc.setY(100);
+							}
+							
 							int c = (int) (Math.random() * data.getSpawnGroupSize() + 1);
 							for (int j = 0; j < c; j++) {
 								data.getSpawn().spawn(loc);
+								System.out.println("Spawned at " + loc);
 							}
+							
 							count += c;
 						}
 					}
 				}
 			}
-		}, 20 * 30, 20 * 30);
+		}, 20 * 20, 20 * 20);
 	}
 	
 	public void addSpawn(CustomEntitySpawnData d) {
