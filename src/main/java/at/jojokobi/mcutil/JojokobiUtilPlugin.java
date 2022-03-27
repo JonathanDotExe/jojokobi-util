@@ -83,7 +83,7 @@ public class JojokobiUtilPlugin extends JavaPlugin{
 		spawnerHandler = new CustomEntitySpawnerHandler(entityHandler, this);
 		Bukkit.getPluginManager().registerEvents(spawnerHandler, this);
 		
-		entitySpawner = new CustomEntitySpawner(this);		
+		entitySpawner = new CustomEntitySpawner(this, entityHandler);		
 		
 		//Commands
 		GenerateCommand generateCmd = new GenerateCommand(generationHandler);
