@@ -18,19 +18,15 @@ public class CustomEntitySpawner {
 
 	public CustomEntitySpawner(Plugin plugin, EntityHandler handler) {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-			System.out.println("Spawn loop");
 			//Spawn algorithm
 			for (Player player : Bukkit.getOnlinePlayers()) {
-				System.out.println("Player " + player);
 				for (CustomEntitySpawnData data : entities) {
 					int count = (int) player.getNearbyEntities(data.getMaxPlayerDistance(), 512, data.getMaxPlayerDistance()).stream().filter(e -> {
 						CustomEntity<?> c = handler.getCustomEntityForEntity(e);
 						return c != null && !c.isSave();
 					}).count();
-					System.out.println("Custom Entitiy " + data.getSpawn().getIdentifier() + ", Count " + count);
 					//Spawn
 					for (int i = 0; i < data.getTries(); i++) {
-						System.out.println("Try");
 						if (count < data.getMaxEntitiesAround() && Math.random() < data.getChance() && data.canSpawn(player)) {
 							double x = (Math.random() * (data.getMaxPlayerDistance() - data.getMinPlayerDistance()) + data.getMinPlayerDistance()) * Math.signum(Math.random() - 0.5);
 							double z = (Math.random() * (data.getMaxPlayerDistance() - data.getMinPlayerDistance()) + data.getMinPlayerDistance()) * Math.signum(Math.random() - 0.5);
@@ -46,8 +42,9 @@ public class CustomEntitySpawner {
 							
 							int c = (int) (Math.random() * data.getSpawnGroupSize() + 1);
 							for (int j = 0; j < c; j++) {
-								data.getSpawn().spawn(loc);
-								System.out.println("Spawned at " + loc);
+								for (CustomEntity<?> entity : data.getSpawn().spawn(loc)) {
+									handler.addEntity(entity);
+								}
 							}
 							
 							count += c;
