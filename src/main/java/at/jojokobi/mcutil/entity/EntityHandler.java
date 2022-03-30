@@ -64,7 +64,8 @@ public class EntityHandler implements Listener {
 
 	public static final String ENTITIES_ELEMENT = "entities";
 
-	private Map<UUID, CustomEntity<?>> entities = new HashMap<>();
+	private Map<UUID, CustomEntity<?>> entities;
+	private Map<Entity, CustomEntity<?>> entitiesByEntity;
 	private EntityTypeHandler<CustomEntity<?>> handler = new EntityTypeHandler<>();
 	private UUIDGenerator uuidGenerator = new TimeUUIDGenerator();
 	private InventoryGUIHandler guiHandler;
@@ -75,6 +76,11 @@ public class EntityHandler implements Listener {
 
 	@Deprecated
 	public EntityHandler(Plugin plugin, InventoryGUIHandler guiHandler, String savefile) {
+		//Maps
+		MultiIndexMap<UUID, CustomEntity<?>> index = new MultiIndexMap<UUID, CustomEntity<?>>();
+		this.entities = index;
+		this.entitiesByEntity = index.addIndex(e -> e.getEntity());
+		
 		this.plugin = plugin;
 		this.guiHandler = guiHandler;
 		this.savefile = savefile;
@@ -94,18 +100,12 @@ public class EntityHandler implements Listener {
 	}
 
 	public <T extends CustomEntity<?>> T getCustomEntityForEntity(Entity e, Class<T> clazz) {
-		T entity = null;
-		for (Iterator<CustomEntity<?>> iterator = getEntities().iterator(); iterator.hasNext() && entity == null;) {
-			CustomEntity<?> temp = iterator.next();
-			if (temp.getEntity() == e && clazz.isInstance(temp)) {
-				entity = clazz.cast(temp);
-			}
-		}
-		return entity;
+		CustomEntity<?> entity = entitiesByEntity.get(e);
+		return clazz.isInstance(entity) ? clazz.cast(entity) : null;
 	}
 
 	public CustomEntity<?> getCustomEntityForEntity(Entity e) {
-		return getCustomEntityForEntity(e, CustomEntity.class);
+		return entitiesByEntity.get(e);
 	}
 
 	public <T extends CustomEntity<?>> T getEntity(EntityCriteria<T> crit) {
@@ -298,34 +298,6 @@ public class EntityHandler implements Listener {
 		Chunk chunk = world.getChunkAt(x, z);
 		return chunk;
 	}
-
-	/*
-	 * @Deprecated private void legacySave (Chunk chunk) { File folder = new
-	 * File(Bukkit.getWorldContainer(), chunk.getWorld().getName() + File.separator
-	 * + savefile); folder.mkdirs(); File file = new File(folder,
-	 * GenerationHandler.getSaveName(chunk)+ ".xml"); List<CustomEntity<?>> toSave =
-	 * getEntitiesInChunk(chunk); if (toSave.stream().anyMatch((e) -> e.isSave())) {
-	 * try (FileOutputStream output = new FileOutputStream(file)){ //Initialization
-	 * DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	 * factory.setNamespaceAware(true); DocumentBuilder builder =
-	 * factory.newDocumentBuilder(); Document document = builder.newDocument();
-	 * //Root-Element Element element = document.createElement(ENTITIES_ELEMENT);
-	 * element.setAttribute("xmlns", "https://jojokobi.lima-city.de/mcutil");
-	 * element.setAttribute("xmlns:xsi",
-	 * "http://www.w3.org/2001/XMLSchema-instance");
-	 * element.setAttribute("xsi:schemaLocation",
-	 * "https://jojokobi.lima-city.de/mcutil https://jojokobi.lima-city.de/mcutil/entities"
-	 * ); document.appendChild(element); //Entities for (CustomEntity<?> entity :
-	 * getEntitiesInChunk(chunk)) { if (entity.isSave()) {
-	 * element.appendChild(entity.legacySaveToXML(document)); } } //Save to File
-	 * TransformerFactory transformerFactory = TransformerFactory.newInstance();
-	 * Transformer transformer = transformerFactory.newTransformer();
-	 * transformer.setOutputProperty(OutputKeys.INDENT, "yes"); DOMSource source =
-	 * new DOMSource(document); StreamResult result = new StreamResult(output);
-	 * transformer.transform(source, result); } catch (ParserConfigurationException
-	 * | TransformerException | IOException e) { e.printStackTrace(); } } else if
-	 * (file.exists() && file.isFile()){ file.delete(); } }
-	 */
 
 	@EventHandler
 	public void onEntityMount(EntityMountEvent event) {
