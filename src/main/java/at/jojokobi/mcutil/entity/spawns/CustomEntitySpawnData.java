@@ -1,7 +1,8 @@
 package at.jojokobi.mcutil.entity.spawns;
 
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class CustomEntitySpawnData {
@@ -14,7 +15,7 @@ public class CustomEntitySpawnData {
 	private int maxEntitiesAround = 48;
 	private int minPlayerDistance = 24;
 	private int maxPlayerDistance = 64;
-	private Predicate<Player> canSpawn;
+	private BiPredicate<Location, Player> canSpawn;
 	
 	public CustomEntitySpawnData(CustomSpawn spawn, double chance, int tries) {
 		super();
@@ -86,17 +87,17 @@ public class CustomEntitySpawnData {
 		return this;
 	}
 
-	public Predicate<Player> getCanSpawn() {
+	public BiPredicate<Location, Player> getCanSpawn() {
 		return canSpawn;
 	}
 
-	public CustomEntitySpawnData setCanSpawn(Predicate<Player> canSpawn) {
+	public CustomEntitySpawnData setCanSpawn(BiPredicate<Location, Player> canSpawn) {
 		this.canSpawn = canSpawn;
 		return this;
 	}
 	
-	public boolean canSpawn(Player player) {
-		return canSpawn == null || canSpawn.test(player);
+	public boolean canSpawn(Location loc, Player player) {
+		return canSpawn == null || canSpawn.test(loc, player);
 	}
 
 }
