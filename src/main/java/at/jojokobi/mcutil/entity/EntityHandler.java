@@ -31,6 +31,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityTransformEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -563,6 +564,14 @@ public class EntityHandler implements Listener {
 		CustomEntity<?> entity = getCustomEntityForEntity(event.getEntity());
 		if (entity != null) {
 			entity.onTransform(event);
+		}
+	}
+	
+	@EventHandler
+	public void onEntityPortal(EntityPortalEvent event) {
+		CustomEntity<?> entity = getCustomEntityForEntity(event.getEntity());
+		if (entity != null) {
+			entity.onPortalTeleport(event);
 		}
 	}
 

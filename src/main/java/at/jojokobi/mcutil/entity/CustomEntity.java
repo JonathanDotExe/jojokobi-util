@@ -15,6 +15,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityTransformEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -379,6 +380,19 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 			task.onTranform(this, event);
 		}
 		getComponents().forEach(c -> c.onTransform(this, event));
+	}
+	
+	/**
+	 * Event passed by the handler
+	 * 
+	 * @param event
+	 */
+	protected void onPortalTeleport (EntityPortalEvent event) {
+		event.setCancelled(true);
+		for (EntityTask task : tasks) {
+			task.onPortalTeleport(this, event);
+		}
+		getComponents().forEach(c -> c.onPortalTeleport(this, event));
 	}
 	
 //	public boolean isLoaded () {

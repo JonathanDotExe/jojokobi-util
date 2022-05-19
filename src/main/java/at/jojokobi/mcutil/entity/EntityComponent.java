@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityTransformEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -59,6 +60,11 @@ public interface EntityComponent {
 	public default void onTransform (CustomEntity<?> entity, EntityTransformEvent event) {
 		
 	}
+	
+	public default void onPortalTeleport (CustomEntity<?> entity, EntityPortalEvent event) {
+		
+	}
+	
 	
 	public Map<String, Object> serialize (CustomEntity<?> entity);
 	

@@ -3,6 +3,7 @@ package at.jojokobi.mcutil.entity.ai;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.entity.EntityTransformEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -60,6 +61,10 @@ public interface EntityTask {
 	}
 
 	public default void onTranform(CustomEntity<?> entity, EntityTransformEvent event) {
+		
+	}
+	
+	public default void onPortalTeleport(CustomEntity<?> entity, EntityTeleportEvent event) {
 		
 	}
 	
