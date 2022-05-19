@@ -20,9 +20,7 @@ public interface Attacker{
 		}
 	}
 	
-	public default double getAttackRange () {
-		return 3;
-	}
+	public default double getAttackRange ();
 	
 	public default boolean chaseWhenInRange () {
 		return true;
