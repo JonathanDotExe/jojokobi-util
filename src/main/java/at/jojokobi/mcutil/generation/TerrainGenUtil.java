@@ -152,7 +152,7 @@ public final class TerrainGenUtil {
 		Location place = loc.clone();
 		place.setY(loc.getWorld().getSeaLevel() - 1);
 		int y = loc.getWorld().getSeaLevel() - 1;
-		while (place.getBlock().getType().isSolid() || place.getBlock().getType() == Material.WATER || place.getBlock().getType() == Material.LAVA || place.getBlock().getType() == Material.CAVE_AIR) {
+		while (place.getBlock().getType().isSolid() || place.getBlock().getType() == Material.WATER || place.getBlock().getType() == Material.LAVA || place.getBlock().getType() == Material.CAVE_AIR || place.getBlock().getType().isBurnable() /*ignore trees*/) {
 			y++;
 			place.setY(y);
 		}

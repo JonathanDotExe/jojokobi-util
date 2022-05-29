@@ -71,7 +71,6 @@ public class VillageSpreader {
 				VillageNode node = area[z][x];
 				if (node != null) {
 					Location housePlace = place.clone().add(x * unitWidth, 0, z * unitHeight);
-//					pathGenerator.generatePath(housePlace, unitWidth, unitHeight, z > 0 && area[z-1][x] != null, x < area[z].length - 1 && area[z][x+1] != null, z < area.length - 1 && area[z+1][x] != null, x > 0 && area[z][x-1] != null, blockFunction);
 					pathGenerator.generatePath(housePlace, unitWidth, unitHeight, node.isTop(), node.isRight(), node.isBottom(), node.isLeft(), blockFunction);
 					if (node.getHouse() != null) {
 						housePlace.add(unitWidth/2 - node.getHouse().getWidth()/2, 0, unitHeight/2 - node.getHouse().getLength()/2);
