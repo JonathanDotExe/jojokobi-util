@@ -78,7 +78,7 @@ public class VillageSpreader {
 						if (!forceHeight) {
 							housePlace.setY(node.getHouse().calculatePlacementY(node.getHouse().getWidth(), node.getHouse().getLength(), housePlace));
 						}
-						strucs.addAll(node.getHouse().generate(housePlace, seed));
+						strucs.addAll(node.getHouse().generateNaturally(housePlace, seed));
 					}
 				}
 			}

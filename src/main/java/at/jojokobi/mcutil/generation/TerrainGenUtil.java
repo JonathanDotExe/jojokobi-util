@@ -159,7 +159,7 @@ public final class TerrainGenUtil {
 		return y;
 	}
 	
-	public void buildGroundBelow(Location loc, int width, int length, Consumer<Block> modifier) {
+	public static void buildGroundBelow(Location loc, int width, int length, Consumer<Block> modifier) {
 		for (int x = 0; x < width; x++) {
 			for (int z = 0; z < length; z++) {
 				Location place = loc.clone().add(x, 0, z);

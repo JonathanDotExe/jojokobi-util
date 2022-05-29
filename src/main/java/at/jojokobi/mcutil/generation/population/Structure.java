@@ -40,6 +40,10 @@ public abstract class Structure {
 	public List<StructureInstance<? extends Structure>> generateNaturally(Chunk chunk, long seed) {
 		Location place = new Location(chunk.getWorld(), chunk.getX() * CHUNK_WIDTH, 1, chunk.getZ() * CHUNK_LENGTH);
 		place.setY(calculatePlacementY(getWidth(), getLength(), place));
+		return generateNaturally(place, seed);
+	}
+	
+	public List<StructureInstance<? extends Structure>> generateNaturally(Location place, long seed) {
 		return generate(place, seed);
 	}
 	
