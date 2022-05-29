@@ -18,17 +18,15 @@ public abstract class Structure {
 	private int length = 0;
 	private int height = 0;
 	private int chance = 4;
-	private double scaleFactor = 1;
 	private int xModifier = 1;
 	private int zModifier = 1;
 	private Environment dimension = null;
 	
-	public Structure(int width, int length, int height, int chance, double scaleFactor) {
+	public Structure(int width, int length, int height, int chance) {
 		this.width = width;
 		this.length = length;
 		this.height = height;
 		this.chance = chance;
-		this.scaleFactor = scaleFactor;
 	}
 
 	public int calculatePlacementY (int width, int length, Location place) {
@@ -39,14 +37,14 @@ public abstract class Structure {
 	
 	public abstract String getIdentifier ();
 	
-	public List<StructureInstance<? extends Structure>> generate (Chunk chunk, long seed) {
+	public List<StructureInstance<? extends Structure>> generateNaturally(Chunk chunk, long seed) {
 		Location place = new Location(chunk.getWorld(), chunk.getX() * CHUNK_WIDTH, 1, chunk.getZ() * CHUNK_LENGTH);
 		place.setY(calculatePlacementY(getWidth(), getLength(), place));
 		return generate(place, seed);
 	}
 	
 	public boolean canGenerate (Chunk chunk, long seed) {
-		Random random = new Random (generateValueBasedSeed(seed, chunk.getX() * CHUNK_WIDTH + getxModifier(), 1, chunk.getZ() * CHUNK_LENGTH + getzModifier())); //FIXME scale factor
+		Random random = new Random (generateValueBasedSeed(seed, chunk.getX() * CHUNK_WIDTH + getxModifier(), 1, chunk.getZ() * CHUNK_LENGTH + getzModifier()));
 		return chance > 0 && random.nextInt(chance) == 0 && (dimension == null || dimension == chunk.getWorld().getEnvironment());
 	}
 	
@@ -93,15 +91,7 @@ public abstract class Structure {
 	public void setChance(int chance) {
 		this.chance = chance;
 	}
-
-	public double getScaleFactor() {
-		return scaleFactor;
-	}
-
-	public void setScaleFactor(double scaleFactor) {
-		this.scaleFactor = scaleFactor;
-	}
-
+	
 	public Environment getDimension() {
 		return dimension;
 	}
@@ -114,14 +104,14 @@ public abstract class Structure {
 		this.xModifier = xModifier;
 	}
 	
-	protected long generateValueBeasedSeed (Location loc, long seed) {
-		return TerrainGenUtil.generateValueBasedSeed(seed, loc.getBlockX() + getxModifier(), 1, loc.getBlockZ() + getzModifier());
-	}
-	
 	public StructureInstance<? extends Structure> getStandardInstance (World world) {
 		return getStandardInstance(new Location(world, 0, 0, 0));
 	}
 	
 	public abstract StructureInstance<? extends Structure> getStandardInstance (Location location);
+	
+	protected long generateValueBeasedSeed (Location loc, long seed) {
+		return TerrainGenUtil.generateValueBasedSeed(seed, loc.getBlockX() + getxModifier(), 1, loc.getBlockZ() + getzModifier());
+	}
 
 }

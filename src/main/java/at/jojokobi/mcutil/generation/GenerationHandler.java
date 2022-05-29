@@ -86,31 +86,20 @@ public class GenerationHandler implements Listener {
 	public void onChunkLoad(ChunkLoadEvent event) {
 		Chunk chunk = event.getChunk();
 		load(chunk);
-//		if (!load(chunk) && event.isNewChunk()) {
-//			for (Structure structure : structures) {
-//				if (structure.canGenerate(chunk, chunk.getWorld().getSeed())) {
-//					Bukkit.getScheduler().runTask(plugin, () -> {
-//						instances.addAll(structure.generate(chunk, chunk.getWorld().getSeed()));
-//					});
-//				}
-//			}
-//		}
 	}
 
 	@EventHandler
 	public void onChunkPopulate(ChunkPopulateEvent event) {
 		Chunk chunk = event.getChunk();
-//		if (!load(chunk) && event.isNewChunk()) {
 		//Generate
 		for (Structure structure : structures) {
 			GeneratorWorldConfig config = getWorldConfig(event.getWorld().getName());
 			if ((config == null || (config.isGenerateStructures() && !config.getDontGenerate().contains(structure.getIdentifier()))) && structure.canGenerate(chunk, chunk.getWorld().getSeed())) {
 				Bukkit.getScheduler().runTask(plugin, () -> {
-					instances.addAll(structure.generate(chunk, chunk.getWorld().getSeed()));
+					instances.addAll(structure.generateNaturally(chunk, chunk.getWorld().getSeed()));
 				});
 			}
 		}
-//		}
 	}
 
 	@EventHandler

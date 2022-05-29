@@ -3,12 +3,14 @@ package at.jojokobi.mcutil.generation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.TreeType;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -95,7 +97,7 @@ public final class TerrainGenUtil {
 			for (int z = 0; z < length/CHUNK_LENGTH; z++) {
 				Chunk chunk = place.getWorld().getChunkAt(startX + x, startZ + z);
 				if (structure.canGenerate(chunk, seed)) {
-					structure.generate(chunk, seed);
+					structure.generateNaturally(chunk, seed);
 				}
 			}
 		}
@@ -146,8 +148,6 @@ public final class TerrainGenUtil {
 		return result;
 	}
 	
-	
-	
 	public static int getTerrainHeight (Location loc) {
 		Location place = loc.clone();
 		place.setY(loc.getWorld().getSeaLevel() - 1);
@@ -157,6 +157,18 @@ public final class TerrainGenUtil {
 			place.setY(y);
 		}
 		return y;
+	}
+	
+	public void buildGroundBelow(Location loc, int width, int length, Consumer<Block> modifier) {
+		for (int x = 0; x < width; x++) {
+			for (int z = 0; z < length; z++) {
+				Location place = loc.clone().add(x, 0, z);
+				while (!place.getBlock().getType().isSolid() && place.getBlockY() >= place.getWorld().getMinHeight()) {
+					modifier.accept(place.getBlock());
+					place.add(0, -1, 0);
+				}
+			}
+		}
 	}
 }
 
