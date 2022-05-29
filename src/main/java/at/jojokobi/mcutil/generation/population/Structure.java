@@ -32,12 +32,7 @@ public abstract class Structure {
 	}
 
 	public int calculatePlacementY (int width, int length, Location place) {
-/*		int startY = place.getWorld().getHighestBlockYAt(place);
-		Location endplace = place.clone();
-		endplace.add(new Vector (endplace.getX() + width, 0, endplace.getZ() + length));
-		int endY = endplace.getWorld().getHighestBlockYAt(endplace);
-		return Math.round((startY + endY)/2.0f);*/
-		return getTerrainHeight(place);
+		return (getTerrainHeight(place) + getTerrainHeight(place.clone().add(width, 0, 0)) + getTerrainHeight(place.clone().add(width, 0, length)) + getTerrainHeight(place.clone().add(0, 0, length)))/4;
 	}
 	
 	public abstract List<StructureInstance<? extends Structure>> generate(Location loc, long seed);
