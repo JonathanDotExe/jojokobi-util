@@ -10,6 +10,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import at.jojokobi.mcutil.building.Building;
+import at.jojokobi.mcutil.building.BuildingBlock;
+import at.jojokobi.mcutil.building.BuildingMark;
 import at.jojokobi.mcutil.commands.GenerateCommand;
 import at.jojokobi.mcutil.commands.RemoveStructureCommand;
 import at.jojokobi.mcutil.commands.SpawnCustomCommand;
@@ -44,16 +47,11 @@ public class JojokobiUtilPlugin extends JavaPlugin{
 	@Override
 	public void onLoad() {
 		super.onLoad();
-//		ConfigurationSerialization.registerClass(EntityMapData.class);
-//		ConfigurationSerialization.registerClass(NamespacedEntry.class);
-//		ConfigurationSerialization.registerClass(SerializableMap.class);
-//		ConfigurationSerialization.registerClass(ComponentData.class);
-		
 		registerSerializables();
 	}
 	
 	public static List<Class<? extends ConfigurationSerializable>> getConfigurationSerializables () {
-		return Arrays.asList(EntityMapData.class, NamespacedEntry.class, SerializableMap.class, ComponentData.class, LootInventory.class, LootItem.class);
+		return Arrays.asList(EntityMapData.class, NamespacedEntry.class, SerializableMap.class, ComponentData.class, LootInventory.class, LootItem.class, BuildingBlock.class, BuildingMark.class, Building.class);
 	}
 	
 	public static void registerSerializables () {
