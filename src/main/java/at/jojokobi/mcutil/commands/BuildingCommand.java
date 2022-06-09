@@ -2,8 +2,8 @@ package at.jojokobi.mcutil.commands;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.io.FilenameUtils;
 import org.bukkit.Location;
@@ -13,12 +13,9 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import at.jojokobi.mcutil.CommandUtil;
 import at.jojokobi.mcutil.building.Building;
-import at.jojokobi.mcutil.generation.GenerationHandler;
-import at.jojokobi.mcutil.generation.population.Structure;
 
 public class BuildingCommand implements TabExecutor{
 	
@@ -163,17 +160,31 @@ public class BuildingCommand implements TabExecutor{
 			//List
 			for (File file : folder.listFiles()) {
 				if (file.getName().endsWith(".yml")) {
-					sender.sendMessage(FilenameUtils.removeExtension(file.getName()));
+					sender.sendMessage(getBuildings() + "");
 				}
 			}
 		}
 		return success;
 	}
 
+	private List<String> getBuildings() {
+		List<String> buildings = new ArrayList<String>();
+		for (File file : folder.listFiles()) {
+			if (file.getName().endsWith(".yml")) {
+				buildings.add(FilenameUtils.removeExtension(file.getName()));
+			}
+		}
+		return buildings;
+	}
+	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
-		String lastArg = args[args.length - 1];
-		return genHandler.getStructures().stream().map(spawn -> spawn.getIdentifier()).filter(s -> s.contains(lastArg)).collect(Collectors.toList());
+		switch (args.length) {
+		case 0:
+			return getBuildings();
+		default:
+			return new ArrayList<>();
+		}
 	}
 
 }

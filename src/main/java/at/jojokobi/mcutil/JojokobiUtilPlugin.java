@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import at.jojokobi.mcutil.building.Building;
 import at.jojokobi.mcutil.building.BuildingBlock;
 import at.jojokobi.mcutil.building.BuildingMark;
+import at.jojokobi.mcutil.commands.BuildingCommand;
 import at.jojokobi.mcutil.commands.GenerateCommand;
 import at.jojokobi.mcutil.commands.RemoveStructureCommand;
 import at.jojokobi.mcutil.commands.SpawnCustomCommand;
@@ -90,6 +91,9 @@ public class JojokobiUtilPlugin extends JavaPlugin{
 		SpawnCustomCommand spawnCmd = new SpawnCustomCommand(entityHandler, CustomSpawnsHandler.getInstance());
 		getCommand(SpawnCustomCommand.COMMAND_NAME).setExecutor(spawnCmd);
 		getCommand(SpawnCustomCommand.COMMAND_NAME).setTabCompleter(spawnCmd);
+		BuildingCommand buildingCmd = new BuildingCommand(new File(getDataFolder(), "buildings"));
+		getCommand(BuildingCommand.COMMAND_NAME).setExecutor(buildingCmd);
+		getCommand(BuildingCommand.COMMAND_NAME).setTabCompleter(buildingCmd);
 		
 		//Generator config
 		FileConfiguration config = getConfig();
