@@ -42,9 +42,21 @@ public class BuildingCommand implements TabExecutor{
 		}
 		return building;
 	}
+	
+	private boolean saveBuilding(String name, Building building) {
+		FileConfiguration config = new YamlConfiguration();
+		try {
+			config.set("building", building);
+			config.save(new File(folder, name + ".yml"));
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
+
 
 	@Override
-	///building <create|overwrite|place> <name> <x> <y> <z> [width] [height]
+	///building <create|overwrite|place> <name> <x> <y> <z> [width] [height] [length]
 	public boolean onCommand(CommandSender sender, Command command, String text, String[] args) {
 		boolean success = true;
 		if (text.equalsIgnoreCase(COMMAND_NAME)) {
@@ -74,22 +86,30 @@ public class BuildingCommand implements TabExecutor{
 							//Width and height
 							int width = 0;
 							int height = 0;
-							if (args.length >= 7) {
+							int length = 0;
+							if (args.length >= 8) {
 								try {
 									width = Integer.parseInt(args[5]);
 									height = Integer.parseInt(args[6]);
+									length = Integer.parseInt(args[7]);
 								}
 								catch (NumberFormatException e) {
-									sender.sendMessage("You need to specify a width and height for this action!");
+									sender.sendMessage("You need to specify a width, height and length for this action!");
 									break;
 								}
 							}
 							//Check if it exists
 							if (loadBuilding(name) != null) {
-								sender.sendMessage("You need to specify a width and height for this action!");
+								sender.sendMessage("The building " + name + " already exists!");
 							}
 							else {
-								
+								Building build = Building.createBuilding(loc, width, height, length);
+								if (saveBuilding(name, build)) {
+									sender.sendMessage("The building " + name + " was sucessfully created!");
+								}
+								else {
+									sender.sendMessage("Failed to save building!");
+								}
 							}
 						}
 							break;
