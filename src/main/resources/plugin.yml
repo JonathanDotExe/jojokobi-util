@@ -17,3 +17,6 @@ commands:
   dumpheap:
     description: Writes a heap dump into a log file
     usage: /dumpheap
+  building:
+  	description: Is used for storing buildings in files (and placing them) at the server
+    usage: /building <create|overwrite|place> <name> [x] [y] [z] [width] [height]
