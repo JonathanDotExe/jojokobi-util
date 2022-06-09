@@ -2,7 +2,9 @@ package at.jojokobi.mcutil;
 
 import java.util.function.Function;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -54,6 +56,20 @@ public class CommandUtil {
 	
 	public static int parseZCoordinate(CommandSender sender, String string) throws Exception {
 		return parseCoordinate(sender, string, l -> l.getBlockZ());
+	}
+	
+	public static World getWorld(CommandSender sender) {
+		World world = null;
+		if (sender instanceof Entity) {
+			world = ((Entity) sender).getWorld();
+		}
+		else if (sender instanceof BlockCommandSender) {
+			world = ((BlockCommandSender) sender).getBlock().getWorld();
+		}
+		else {
+			world = Bukkit.getWorlds().get(0);
+		}
+		return world;
 	}
 	
 }

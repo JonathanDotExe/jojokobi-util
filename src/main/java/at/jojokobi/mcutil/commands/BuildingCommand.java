@@ -1,15 +1,21 @@
 package at.jojokobi.mcutil.commands;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import at.jojokobi.mcutil.CommandUtil;
+import at.jojokobi.mcutil.building.Building;
 import at.jojokobi.mcutil.generation.GenerationHandler;
 import at.jojokobi.mcutil.generation.population.Structure;
 
@@ -22,6 +28,19 @@ public class BuildingCommand implements TabExecutor{
 	public BuildingCommand(File folder) {
 		super();
 		this.folder = folder;
+		folder.mkdirs();
+	}
+	
+	private Building loadBuilding(String name) {
+		Building building = null;
+		FileConfiguration config = new YamlConfiguration();
+		try {
+			config.load(new File(folder, name + ".yml"));
+			building = config.getSerializable("building", Building.class);
+		} catch (IOException | InvalidConfigurationException e) {
+			
+		}
+		return building;
 	}
 
 	@Override
@@ -46,10 +65,49 @@ public class BuildingCommand implements TabExecutor{
 						sender.sendMessage(e.getMessage());
 						success = false;
 					}
+					Location loc = new Location(CommandUtil.getWorld(sender), x, y, z);
 					//Execute
 					if (success) {
 						switch (action.toLowerCase()) {
-						case 
+						case "create":
+						{
+							//Width and height
+							int width = 0;
+							int height = 0;
+							if (args.length >= 7) {
+								try {
+									width = Integer.parseInt(args[5]);
+									height = Integer.parseInt(args[6]);
+								}
+								catch (NumberFormatException e) {
+									sender.sendMessage("You need to specify a width and height for this action!");
+									break;
+								}
+							}
+							//Check if it exists
+							if (loadBuilding(name) != null) {
+								sender.sendMessage("You need to specify a width and height for this action!");
+							}
+							else {
+								
+							}
+						}
+							break;
+						case "overwrite":
+							break;
+						case "place":
+						{
+							Building building = loadBuilding(name);
+							if (building == null) {
+								sender.sendMessage("The building " + name + " does not exist!");
+							}
+							else {
+								building.buildWithMarkSigns(loc, true);
+							}
+						}
+							break;
+						default:
+							success = false;
 						}
 					}
 				}
