@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FilenameUtils;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -56,7 +57,7 @@ public class BuildingCommand implements TabExecutor{
 
 
 	@Override
-	///building <create|overwrite|place> <name> <x> <y> <z> [width] [height] [length]
+	///building <create|overwrite|place> [name] [x] [y] [z] [width] [height] [length]
 	public boolean onCommand(CommandSender sender, Command command, String text, String[] args) {
 		boolean success = true;
 		if (text.equalsIgnoreCase(COMMAND_NAME)) {
@@ -114,6 +115,31 @@ public class BuildingCommand implements TabExecutor{
 						}
 							break;
 						case "overwrite":
+						{
+							//Width and height
+							int width = 0;
+							int height = 0;
+							int length = 0;
+							if (args.length >= 8) {
+								try {
+									width = Integer.parseInt(args[5]);
+									height = Integer.parseInt(args[6]);
+									length = Integer.parseInt(args[7]);
+								}
+								catch (NumberFormatException e) {
+									sender.sendMessage("You need to specify a width, height and length for this action!");
+									break;
+								}
+							}
+							//Check if it exists
+							Building build = Building.createBuilding(loc, width, height, length);
+							if (saveBuilding(name, build)) {
+								sender.sendMessage("The building " + name + " was sucessfully saved!");
+							}
+							else {
+								sender.sendMessage("Failed to save building!");
+							}
+						}
 							break;
 						case "place":
 						{
@@ -134,7 +160,12 @@ public class BuildingCommand implements TabExecutor{
 			}
 		}
 		else {
-			success = false;
+			//List
+			for (File file : folder.listFiles()) {
+				if (file.getName().endsWith(".yml")) {
+					sender.sendMessage(FilenameUtils.removeExtension(file.getName()));
+				}
+			}
 		}
 		return success;
 	}
