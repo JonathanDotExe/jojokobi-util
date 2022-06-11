@@ -3,6 +3,7 @@ package at.jojokobi.mcutil.commands;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
@@ -96,6 +97,10 @@ public class BuildingCommand implements TabExecutor{
 									break;
 								}
 							}
+							else {
+								sender.sendMessage("You need to specify a width, height and length for this action!");
+								break;
+							}
 							//Check if it exists
 							if (loadBuilding(name) != null) {
 								sender.sendMessage("The building " + name + " already exists!");
@@ -127,6 +132,10 @@ public class BuildingCommand implements TabExecutor{
 									sender.sendMessage("You need to specify a width, height and length for this action!");
 									break;
 								}
+							}
+							else {
+								sender.sendMessage("You need to specify a width, height and length for this action!");
+								break;
 							}
 							//Check if it exists
 							Building build = Building.createBuilding(loc, width, height, length);
@@ -160,7 +169,7 @@ public class BuildingCommand implements TabExecutor{
 			//List
 			for (File file : folder.listFiles()) {
 				if (file.getName().endsWith(".yml")) {
-					sender.sendMessage(getBuildings() + "");
+					sender.sendMessage("Buildings: " + getBuildings() + "");
 				}
 			}
 		}
@@ -180,7 +189,9 @@ public class BuildingCommand implements TabExecutor{
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
 		switch (args.length) {
-		case 0:
+		case 1:
+			return Arrays.asList("place", "create", "overwrite", "list");
+		case 2:
 			return getBuildings();
 		default:
 			return new ArrayList<>();

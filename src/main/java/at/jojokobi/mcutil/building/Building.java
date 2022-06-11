@@ -8,6 +8,7 @@ import java.util.function.BiConsumer;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
@@ -30,8 +31,9 @@ public class Building implements ConfigurationSerializable{
 			for (int y = 0; y < height; y++) {
 				for (int z = 0; z < length; z++) {
 					boolean isBlock = true;
-					if (loc.getBlock().getState() instanceof Sign) {
-						Sign sign = (Sign) loc.getBlock().getState();
+					Block block = loc.getBlock().getRelative(x, y, z);
+					if (block.getState() instanceof Sign) {
+						Sign sign = (Sign) block.getState();
 						//Mark
 						if ("####".equals(sign.getLine(0)) && "####".equals(sign.getLine(3))) {
 							building.marks.add(new BuildingMark(x, y, z, sign.getLine(1)));
@@ -39,8 +41,8 @@ public class Building implements ConfigurationSerializable{
 						}
 					}
 					//Block
-					if (isBlock && loc.getBlock().getType() != Material.AIR && loc.getBlock().getType() != Material.CAVE_AIR) {
-						building.blocks.add(new BuildingBlock(x, y, z, loc.getBlock().getBlockData()));
+					if (isBlock && block.getType() != Material.AIR && block.getType() != Material.CAVE_AIR) {
+						building.blocks.add(new BuildingBlock(x, y, z, block.getBlockData()));
 					}
 				}
 			}
