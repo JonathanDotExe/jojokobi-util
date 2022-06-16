@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 import org.bukkit.Chunk;
+import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.TreeType;
@@ -149,14 +150,7 @@ public final class TerrainGenUtil {
 	}
 	
 	public static int getTerrainHeight (Location loc) {
-		Location place = loc.clone();
-		place.setY(loc.getWorld().getSeaLevel() - 1);
-		int y = loc.getWorld().getSeaLevel() - 1;
-		while (place.getBlock().getType().isSolid() || place.getBlock().getType() == Material.WATER || place.getBlock().getType() == Material.LAVA || place.getBlock().getType() == Material.CAVE_AIR || place.getBlock().getType().isBurnable() /*ignore trees*/) {
-			y++;
-			place.setY(y);
-		}
-		return y;
+		return loc.getWorld().getHighestBlockYAt(loc, HeightMap.WORLD_SURFACE_WG);
 	}
 	
 	public static void buildGroundBelow(Location loc, int width, int length, Consumer<Block> modifier) {
