@@ -21,7 +21,7 @@ public class MultiNoiseGenerator extends NoiseGenerator {
 		for (int i = 0; i < generators.length; i++) {
 			double multiplier = (1.0/(1 + i));
 			multipliers += multiplier;
-			noise += generators[i].noise(x*(1+i), z*(1+i)) * multiplier;
+			noise += generators[i].noise(x*(1+i), y*(1+i), z*(1+i)) * multiplier;
 		}
 		
 		return noise/multipliers;
