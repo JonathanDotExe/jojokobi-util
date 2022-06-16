@@ -13,6 +13,8 @@ public interface CustomDimension {
 
 	public ChunkGenerator createGenerator ();
 	
+	public long getSeedOffset();
+	
 	public default boolean isDimension (World world) {
 		return world.getName().endsWith(getSaveName());
 	}

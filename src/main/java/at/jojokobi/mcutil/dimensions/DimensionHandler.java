@@ -82,7 +82,7 @@ public class DimensionHandler implements Listener {
 	public World getDimensionWorld (World world, CustomDimension dim) {
 		World dimWorld = null;
 		if (world.getEnvironment() == Environment.NORMAL && getDimension(world) == null) {
-			dimWorld = Bukkit.createWorld(new WorldCreator(world.getName() + "_" + dim.getSaveName()).generator(dim.createGenerator()).seed(world.getSeed() - 50));
+			dimWorld = Bukkit.createWorld(new WorldCreator(world.getName() + "_" + dim.getSaveName()).generator(dim.createGenerator()).seed(world.getSeed() + dim.getSeedOffset()));
 		}
 			
 		return dimWorld;
