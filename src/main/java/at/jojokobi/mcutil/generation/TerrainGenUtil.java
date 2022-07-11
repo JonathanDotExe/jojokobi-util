@@ -150,7 +150,11 @@ public final class TerrainGenUtil {
 	}
 	
 	public static int getTerrainHeight (Location loc) {
-		return loc.getWorld().getHighestBlockYAt(loc, HeightMap.WORLD_SURFACE_WG);
+		return getTerrainHeight(loc);
+	}
+	
+	public static int getTerrainHeight (Location loc, HeightMap heightMap) {
+		return loc.getWorld().getHighestBlockYAt(loc, heightMap);
 	}
 	
 	public static void buildGroundBelow(Location loc, int width, int length, Consumer<Block> modifier) {

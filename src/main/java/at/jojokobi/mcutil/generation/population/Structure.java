@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Chunk;
+import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -29,8 +30,12 @@ public abstract class Structure {
 		this.chance = chance;
 	}
 
+	public int calculatePlacementY (int width, int length, Location place, HeightMap map) {
+		return (getTerrainHeight(place, map) + getTerrainHeight(place.clone().add(width, 0, 0), map) + getTerrainHeight(place.clone().add(width, 0, length), map) + getTerrainHeight(place.clone().add(0, 0, length), map))/4;
+	}
+	
 	public int calculatePlacementY (int width, int length, Location place) {
-		return (getTerrainHeight(place) + getTerrainHeight(place.clone().add(width, 0, 0)) + getTerrainHeight(place.clone().add(width, 0, length)) + getTerrainHeight(place.clone().add(0, 0, length)))/4;
+		return calculatePlacementY(width, length, place, HeightMap.WORLD_SURFACE);
 	}
 	
 	public abstract List<StructureInstance<? extends Structure>> generate(Location loc, long seed);
