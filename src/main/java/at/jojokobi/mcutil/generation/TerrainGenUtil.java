@@ -150,7 +150,7 @@ public final class TerrainGenUtil {
 	}
 	
 	public static int getTerrainHeight (Location loc) {
-		return getTerrainHeight(loc);
+		return getTerrainHeight(loc, HeightMap.WORLD_SURFACE);
 	}
 	
 	public static int getTerrainHeight (Location loc, HeightMap heightMap) {
