@@ -10,9 +10,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public abstract class ListGUI extends InventoryGUI {
+public abstract class ListGUI<T extends ListGUIEntry> extends InventoryGUI {
 	
-	private List<ItemStack> items = new ArrayList<>();
+	private List<T> items = new ArrayList<>();
 	private ItemStack backButton = generateBackItem();
 	private ItemStack nextButton = generateNextItem();
 	private int page = 0;
@@ -28,12 +28,12 @@ public abstract class ListGUI extends InventoryGUI {
 		super.initGUI();
 		//List
 		for (int i = 0; i < Math.min(items.size() - itemsPerPage * page, itemsPerPage); i++) {
-			addButton(items.get(itemsPerPage * page + i), startIndex + i, (item, index, click) -> {
+			addButton(items.get(itemsPerPage * page + i).getIcon(), startIndex + i, (item, index, click) -> {
 				int pageIndex = index - startIndex;
 				if (pageIndex < getItemsPerPage() && pageIndex >= 0) {
 					int listIndex = getPage() * getItemsPerPage() + pageIndex;
 					if (listIndex >= 0 && listIndex < items.size()) {
-						clickItem(item, listIndex, click);
+						clickItem(items.get(listIndex), listIndex, click);
 					}
 				}
 			});
@@ -56,7 +56,7 @@ public abstract class ListGUI extends InventoryGUI {
 		return item;
 	}
 	
-	protected abstract void clickItem(ItemStack item, int index, ClickType click);
+	protected abstract void clickItem(T item, int index, ClickType click);
 	
 	public static ItemStack generateNextItem () {
 		ItemStack item = new ItemStack(Material.GOLD_INGOT);
@@ -66,11 +66,11 @@ public abstract class ListGUI extends InventoryGUI {
 		return item;
 	}
 	
-	protected List<ItemStack> getItems() {
+	protected List<T> getItems() {
 		return items;
 	}
 
-	protected void setItems(List<ItemStack> items) {
+	protected void setItems(List<T> items) {
 		this.items = items;
 	}
 
