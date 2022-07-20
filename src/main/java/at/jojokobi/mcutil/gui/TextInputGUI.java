@@ -19,11 +19,12 @@ public abstract class TextInputGUI extends InventoryGUI{
 
 	@Override
 	protected void initGUI() {
-		addButton(item, 0);
+		super.initGUI();
+		addButton(item, 0, null);
 	}
 
 	@Override
-	protected void onButtonPress(ItemStack button, ClickType click) {
+	protected void onButtonPress(ItemStack button, int slot, ClickType click) {
 		close();
 	}
 

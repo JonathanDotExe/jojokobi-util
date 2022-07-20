@@ -5,11 +5,12 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public abstract class ListGUI extends InventoryGUI{
+public abstract class ListGUI extends InventoryGUI {
 	
 	private List<ItemStack> items = new ArrayList<>();
 	private ItemStack backButton = generateBackItem();
@@ -24,27 +25,27 @@ public abstract class ListGUI extends InventoryGUI{
 
 	@Override
 	protected void initGUI() {
+		super.initGUI();
 		//List
 		for (int i = 0; i < Math.min(items.size() - itemsPerPage * page, itemsPerPage); i++) {
-			addButton(items.get(itemsPerPage * page + i), startIndex + i);
+			addButton(items.get(itemsPerPage * page + i), startIndex + i, (item, index, click) -> {
+				int pageIndex = index - startIndex;
+				if (pageIndex < getItemsPerPage() && pageIndex >= 0) {
+					int listIndex = getPage() * getItemsPerPage() + pageIndex;
+					if (listIndex >= 0 && listIndex < items.size()) {
+						clickItem(item, listIndex, click);
+					}
+				}
+			});
 		}
-		//Back Button
-		addButton(backButton, getInventory().getSize() - INV_ROW);
-		//Next Button
-		addButton(nextButton, getInventory().getSize() - 1);
-	}
-	
-	public boolean checkPageButton (ItemStack button) {
-		boolean isButton = false;
-		if (backButton.equals(button)) {
-			setPage(page - 1); 
-			isButton = true;
+		if (page > 0) {
+			//Back Button
+			addButton(backButton, getInventory().getSize() - INV_ROW, (item, index, click) -> setPage(page - 1));
 		}
-		else if (nextButton.equals(button)) {
-			setPage(page + 1); 
-			isButton = true;
+		if (itemsPerPage * (page + 1) < items.size()) {
+			//Next Button
+			addButton(nextButton, getInventory().getSize() - 1, (item, index, click) -> setPage(page + 1));
 		}
-		return isButton;
 	}
 	
 	public static ItemStack generateBackItem () {
@@ -54,6 +55,8 @@ public abstract class ListGUI extends InventoryGUI{
 		item.setItemMeta(meta);
 		return item;
 	}
+	
+	protected abstract void clickItem(ItemStack item, int index, ClickType click);
 	
 	public static ItemStack generateNextItem () {
 		ItemStack item = new ItemStack(Material.GOLD_INGOT);

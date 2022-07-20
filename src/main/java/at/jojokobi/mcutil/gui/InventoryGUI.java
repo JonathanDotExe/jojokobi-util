@@ -1,5 +1,8 @@
 package at.jojokobi.mcutil.gui;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -16,6 +19,8 @@ public abstract class InventoryGUI {
 	private Inventory inventory;
 	private InventoryGUI next;
 	
+	private Map<Integer, InventoryGUIListener> events = new HashMap<Integer, InventoryGUIListener>();
+	
 	public static final String FILLER_NAME = " # # # ";
 	public static final int INV_ROW = 9;
 	
@@ -24,10 +29,19 @@ public abstract class InventoryGUI {
 		this.inventory = inventory;
 	}
 	
-	protected abstract void initGUI ();
+	protected void initGUI () {
+		inventory.clear();
+		events.clear();
+	}
 	
-	protected void addButton (ItemStack button, int index) {
+	protected void addButton (ItemStack button, int index, InventoryGUIListener action) {
 		inventory.setItem(index, button);
+		if (action == null) {
+			events.remove(index);
+		}
+		else {
+			events.put(index, action);
+		}
 	}
 	
 	protected void fillEmpty (ItemStack fill) {
@@ -46,8 +60,6 @@ public abstract class InventoryGUI {
 		owner.closeInventory();
 	}
 	
-	protected abstract void onButtonPress (ItemStack button, ClickType click);
-
 	public Player getOwner() {
 		return owner;
 	}
@@ -70,13 +82,22 @@ public abstract class InventoryGUI {
 	
 	protected void onInventoryClick (InventoryClickEvent event) {
 		if (inventory.contains(event.getCurrentItem())) {
-			onButtonPress(event.getCurrentItem(), event.getClick());
+			InventoryGUIListener l = events.get(event.getSlot());
+			if (l != null) {
+				l.onClick(event.getCurrentItem(), event.getSlot(), event.getClick());
+			}
+			onButtonPress(event.getCurrentItem(), event.getSlot(), event.getClick());
+			
 		}
 		event.setCancelled(true);
 	}
 	
 	protected InventoryGUI onInventoryClose (InventoryCloseEvent event) {
 		return getNext();
+	}
+	
+	protected void onButtonPress(ItemStack button, int slot, ClickType click) {
+		
 	}
 	
 	public static ItemStack getFiller () {
