@@ -43,7 +43,7 @@ public class CleanPathGenerator implements VillagePathGenerator{
 				if ((x >= startX && x < thickness + startX && ((up && z < length/2) || (bottom && z > length/2) || (z >= startZ && z < thickness + startZ))) ||
 						(z >= startZ && z < thickness + startZ && ((left && x < width/2) || (right && x > width/2)))) {
 					Location blockPlace = place.clone().add(x, 0, z);
-					blockPlace.setY(Math.max(0, TerrainGenUtil.getTerrainHeight(blockPlace) - 1));
+					blockPlace.setY(Math.max(blockPlace.getWorld().getSeaLevel(), TerrainGenUtil.getTerrainHeight(blockPlace) - 1));
 					blockPlace.getBlock().setType(blockFunction.apply(blockPlace.getBlock().getType()));
 				}
 			}

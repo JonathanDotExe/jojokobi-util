@@ -154,7 +154,7 @@ public final class TerrainGenUtil {
 	}
 	
 	public static int getTerrainHeight (Location loc, HeightMap heightMap) {
-		return loc.getWorld().getHighestBlockYAt(loc, heightMap);
+		return loc.getWorld().getHighestBlockYAt(loc, heightMap) + 1;
 	}
 	
 	public static void buildGroundBelow(Location loc, int width, int length, Consumer<Block> modifier) {
