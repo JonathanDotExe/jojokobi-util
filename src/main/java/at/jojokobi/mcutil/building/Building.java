@@ -57,6 +57,7 @@ public class Building implements ConfigurationSerializable{
 			sign.setLine(0, "####");
 			sign.setLine(1, str);
 			sign.setLine(3, "####");
+			sign.update(false, false);
 		}, physicsUpdate);
 	}
 	
