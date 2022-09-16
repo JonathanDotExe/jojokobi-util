@@ -29,9 +29,17 @@ public abstract class Structure {
 		this.height = height;
 		this.chance = chance;
 	}
+	
+	public int calculateMidPlacementY(int width, int length, Location place, HeightMap map) {
+		return (getTerrainHeight(place, map) + getTerrainHeight(place.clone().add(width, 0, 0), map) + getTerrainHeight(place.clone().add(width, 0, length), map) + getTerrainHeight(place.clone().add(0, 0, length), map))/4;
+	}
+	
+	public int calculateMaxPlacementY(int width, int length, Location place, HeightMap map) {
+		return Math.max(Math.max(getTerrainHeight(place, map), getTerrainHeight(place.clone().add(width, 0, 0), map)), Math.max(getTerrainHeight(place.clone().add(width, 0, length), map), getTerrainHeight(place.clone().add(0, 0, length), map)));
+	}
 
 	public int calculatePlacementY (int width, int length, Location place, HeightMap map) {
-		return (getTerrainHeight(place, map) + getTerrainHeight(place.clone().add(width, 0, 0), map) + getTerrainHeight(place.clone().add(width, 0, length), map) + getTerrainHeight(place.clone().add(0, 0, length), map))/4;
+		return calculateMaxPlacementY(width, length, place, map);
 	}
 	
 	public int calculatePlacementY (int width, int length, Location place) {
