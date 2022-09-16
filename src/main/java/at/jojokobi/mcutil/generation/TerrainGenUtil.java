@@ -6,7 +6,6 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 import org.bukkit.Chunk;
-import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.TreeType;
@@ -149,12 +148,30 @@ public final class TerrainGenUtil {
 		return result;
 	}
 	
-	public static int getTerrainHeight (Location loc) {
-		return getTerrainHeight(loc, HeightMap.WORLD_SURFACE);
+	public static int getUnderwaterHeight (Location loc) {
+		Location place = loc.clone();
+		place.setY(loc.getWorld().getMinHeight());
+		int y = place.getBlockY();
+		while (place.getBlock().getType().isSolid() || place.getBlock().getType() == Material.CAVE_AIR) {
+			y++;
+			place.setY(y);
+		}
+		return y;
 	}
 	
-	public static int getTerrainHeight (Location loc, HeightMap heightMap) {
-		return loc.getWorld().getHighestBlockYAt(loc, heightMap) + 1;
+	public static int getTerrainHeight (Location loc) {
+		Location place = loc.clone();
+		place.setY(loc.getWorld().getSeaLevel() - 1);
+		int y = loc.getWorld().getSeaLevel() - 1;
+		while ((place.getBlock().getType().isSolid() && place.getBlock().getType() != Material.DARK_OAK_LOG && place.getBlock().getType() != Material.OAK_LOG && place.getBlock().getType() != Material.ACACIA_LOG
+				 && place.getBlock().getType() != Material.JUNGLE_LOG  && place.getBlock().getType() != Material.BIRCH_LOG  && place.getBlock().getType() != Material.SPRUCE_LEAVES
+				 && place.getBlock().getType() != Material.DARK_OAK_LEAVES && place.getBlock().getType() != Material.OAK_LEAVES && place.getBlock().getType() != Material.ACACIA_LEAVES
+				 && place.getBlock().getType() != Material.JUNGLE_LEAVES  && place.getBlock().getType() != Material.BIRCH_LEAVES  && place.getBlock().getType() != Material.SPRUCE_LEAVES)
+				|| place.getBlock().getType() == Material.WATER || place.getBlock().getType() == Material.LAVA || place.getBlock().getType() == Material.CAVE_AIR) {
+			y++;
+			place.setY(y);
+		}
+		return y;
 	}
 	
 	public static void buildGroundBelow(Location loc, int width, int length, Consumer<Block> modifier) {
@@ -168,5 +185,6 @@ public final class TerrainGenUtil {
 			}
 		}
 	}
+	
 }
 

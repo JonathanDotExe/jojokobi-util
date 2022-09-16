@@ -1,17 +1,14 @@
 package at.jojokobi.mcutil.generation.population;
 
-import static at.jojokobi.mcutil.generation.TerrainGenUtil.*;
+import at.jojokobi.mcutil.generation.TerrainGenUtil;
 
 import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Chunk;
-import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
-
-import at.jojokobi.mcutil.generation.TerrainGenUtil;
 
 public abstract class Structure {
 	
@@ -30,28 +27,29 @@ public abstract class Structure {
 		this.chance = chance;
 	}
 	
-	public int calculateMidPlacementY(int width, int length, Location place, HeightMap map) {
-		return (getTerrainHeight(place, map) + getTerrainHeight(place.clone().add(width, 0, 0), map) + getTerrainHeight(place.clone().add(width, 0, length), map) + getTerrainHeight(place.clone().add(0, 0, length), map))/4;
+	public int getTerrainHeight(Location place) {
+		return TerrainGenUtil.getTerrainHeight(place);
 	}
 	
-	public int calculateMaxPlacementY(int width, int length, Location place, HeightMap map) {
-		return Math.max(Math.max(getTerrainHeight(place, map), getTerrainHeight(place.clone().add(width, 0, 0), map)), Math.max(getTerrainHeight(place.clone().add(width, 0, length), map), getTerrainHeight(place.clone().add(0, 0, length), map)));
+	public int calculateMidPlacementY(int width, int length, Location place) {
+		return (this.getTerrainHeight(place) + this.getTerrainHeight(place.clone().add(width, 0, 0)) + this.getTerrainHeight(place.clone().add(width, 0, length)) + this.getTerrainHeight(place.clone().add(0, 0, length)))/4;
+	}
+	
+	public int calculateMaxPlacementY(int width, int length, Location place) {
+		return Math.max(Math.max(this.getTerrainHeight(place), this.getTerrainHeight(place.clone().add(width, 0, 0))), Math.max(this.getTerrainHeight(place.clone().add(width, 0, length)), this.getTerrainHeight(place.clone().add(0, 0, length))));
 	}
 
-	public int calculatePlacementY (int width, int length, Location place, HeightMap map) {
-		return calculateMaxPlacementY(width, length, place, map);
-	}
-	
 	public int calculatePlacementY (int width, int length, Location place) {
-		return calculatePlacementY(width, length, place, HeightMap.WORLD_SURFACE);
+		return calculateMaxPlacementY(width, length, place);
 	}
+
 	
 	public abstract List<StructureInstance<? extends Structure>> generate(Location loc, long seed);
 	
 	public abstract String getIdentifier ();
 	
 	public List<StructureInstance<? extends Structure>> generateNaturally(Chunk chunk, long seed) {
-		Location place = new Location(chunk.getWorld(), chunk.getX() * CHUNK_WIDTH, 1, chunk.getZ() * CHUNK_LENGTH);
+		Location place = new Location(chunk.getWorld(), chunk.getX() * TerrainGenUtil.CHUNK_WIDTH, 1, chunk.getZ() * TerrainGenUtil.CHUNK_LENGTH);
 		place.setY(calculatePlacementY(getWidth(), getLength(), place));
 		return generateNaturally(place, seed);
 	}
@@ -61,7 +59,7 @@ public abstract class Structure {
 	}
 	
 	public boolean canGenerate (Chunk chunk, long seed) {
-		Random random = new Random (generateValueBasedSeed(seed, chunk.getX() * CHUNK_WIDTH + getxModifier(), 1, chunk.getZ() * CHUNK_LENGTH + getzModifier()));
+		Random random = new Random (TerrainGenUtil.generateValueBasedSeed(seed, chunk.getX() * TerrainGenUtil.CHUNK_WIDTH + getxModifier(), 1, chunk.getZ() * TerrainGenUtil.CHUNK_LENGTH + getzModifier()));
 		return chance > 0 && random.nextInt(chance) == 0 && (dimension == null || dimension == chunk.getWorld().getEnvironment());
 	}
 	
