@@ -13,6 +13,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import at.jojokobi.mcutil.TypedMap;
+import at.jojokobi.mcutil.generation.BasicGenUtil;
 
 public class Building implements ConfigurationSerializable{
 
@@ -50,7 +51,7 @@ public class Building implements ConfigurationSerializable{
 		return building;
 	}
 	
-	public void buildWithMarkSigns(Location loc, boolean physicsUpdate) {
+	public void buildWithMarkSigns(Location loc, int rotations, boolean physicsUpdate) {
 		build(loc, (place, str) -> {
 			place.getBlock().setType(Material.OAK_SIGN);
 			Sign sign = (Sign) place.getBlock().getState();
@@ -58,17 +59,18 @@ public class Building implements ConfigurationSerializable{
 			sign.setLine(1, str);
 			sign.setLine(3, "####");
 			sign.update(false, false);
-		}, physicsUpdate);
+		}, rotations, physicsUpdate);
 	}
 	
-	public void build(Location loc, BiConsumer<Location, String> markInterpreter, boolean physicsUpdate) {
+	public void build(Location loc, BiConsumer<Location, String> markInterpreter, int rotations, boolean physicsUpdate) {
+		//rotations = how many 90 degree rotations should be applied
 		//Blocks
 		for (BuildingBlock block : blocks) {
-			loc.getBlock().getRelative(block.getX(), block.getY(), block.getZ()).setBlockData(block.getBlock(), physicsUpdate);
+			BasicGenUtil.getRotatedRelative(loc.getBlock(), block.getX(), block.getY(), block.getZ(), width, length, rotations).setBlockData(block.getBlock(), physicsUpdate);
 		}
 		//Marks
 		for (BuildingMark mark : marks) {
-			markInterpreter.accept(loc.clone().add(mark.getX(), mark.getY(), mark.getZ()), mark.getMark());
+			markInterpreter.accept(BasicGenUtil.getRotatedRelative(loc, mark.getX(), mark.getY(), mark.getZ(), width, length, rotations), mark.getMark());
 		}
 	}
 

@@ -57,4 +57,56 @@ public final class BasicGenUtil {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param root
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param width
+	 * @param height
+	 * @param length
+	 * @param rotation how many 90 degree rotations on the xz axis
+	 * @return
+	 */
+	public static Block getRotatedRelative(Block root, int x, int y, int z, int width, int length, int rotation) {
+		switch (rotation % 4) {
+		case 0:
+			return root.getRelative(x, y, z);
+		case 1:
+			return root.getRelative(length - z - 1, y, x);
+		case 2:
+			return root.getRelative(width - x - 1, y, length - z - 1);
+		case 3:
+			return root.getRelative(length - z - 1, y, width - x - 1);
+		}
+		return root.getRelative(x, y, z);
+	}
+	
+	/**
+	 * 
+	 * @param root
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param width
+	 * @param height
+	 * @param length
+	 * @param rotation how many 90 degree rotations on the xz axis
+	 * @return
+	 */
+	public static Location getRotatedRelative(Location root, int x, int y, int z, int width, int length, int rotation) {
+		switch (rotation % 4) {
+		case 0:
+			return root.clone().add(x, y, z);
+		case 1:
+			return root.clone().add(length - z - 1, y, x);
+		case 2:
+			return root.clone().add(width - x - 1, y, length - z - 1);
+		case 3:
+			return root.clone().add(length - z - 1, y, width - x - 1);
+		}
+		return root.clone().add(x, y, z);
+	}
+	
 }
