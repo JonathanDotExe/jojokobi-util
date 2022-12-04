@@ -36,7 +36,7 @@ public class Building implements ConfigurationSerializable{
 					if (block.getState() instanceof Sign) {
 						Sign sign = (Sign) block.getState();
 						//Mark
-						if ("####".equals(sign.getLine(0)) && "####".equals(sign.getLine(3))) {
+						if (sign.getLine(0).length() > 0 && sign.getLine(3).length() > 0 && sign.getLine(0).chars().allMatch(c -> c == '#') && sign.getLine(3).chars().allMatch(c -> c == '#')) {
 							building.marks.add(new BuildingMark(x, y, z, sign.getLine(1)));
 							isBlock = false;
 						}
@@ -49,6 +49,10 @@ public class Building implements ConfigurationSerializable{
 			}
 		}
 		return building;
+	}
+	
+	public void buildWithMarkSigns(Location loc, boolean physicsUpdate) {
+		buildWithMarkSigns(loc, physicsUpdate);
 	}
 	
 	public void buildWithMarkSigns(Location loc, int rotations, boolean physicsUpdate) {
