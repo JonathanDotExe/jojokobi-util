@@ -1,5 +1,8 @@
 package at.jojokobi.mcutil.building;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +13,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import at.jojokobi.mcutil.TypedMap;
@@ -51,8 +56,21 @@ public class Building implements ConfigurationSerializable{
 		return building;
 	}
 	
+	public static Building loadBuilding(InputStream stream) {
+		Building building = null;
+		YamlConfiguration config = new YamlConfiguration();
+		try (InputStreamReader reader = new InputStreamReader(stream)){
+			config.load(reader);
+			building = config.getSerializable("building", Building.class);
+		} catch (IOException | InvalidConfigurationException e) {
+			e.printStackTrace();
+			building = new Building();
+		}
+		return building;
+	}
+	
 	public void buildWithMarkSigns(Location loc, boolean physicsUpdate) {
-		buildWithMarkSigns(loc, physicsUpdate);
+		buildWithMarkSigns(loc, 0, physicsUpdate);
 	}
 	
 	public void buildWithMarkSigns(Location loc, int rotations, boolean physicsUpdate) {
