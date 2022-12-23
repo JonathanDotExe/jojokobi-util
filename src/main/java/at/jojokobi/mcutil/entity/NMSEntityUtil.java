@@ -3,9 +3,9 @@ package at.jojokobi.mcutil.entity;
 import java.lang.reflect.Field;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_19_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_19_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_19_R2.entity.CraftTNTPrimed;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.TNTPrimed;
@@ -135,8 +135,8 @@ public final class NMSEntityUtil {
 			e.printStackTrace();
 		}*/
 		//Clear goal selector
-		goalSelector.removeAllGoals();
-		targetSelector.removeAllGoals();
+		goalSelector.removeAllGoals(g -> true);
+		targetSelector.removeAllGoals(g -> true);
 
 		nmsEntity.goalSelector.addGoal(0, new RandomLookAroundGoal(nmsEntity));
 		nmsEntity.goalSelector.addGoal(1, new LookAtPlayerGoal(nmsEntity, Mob.class, 0.0f));
