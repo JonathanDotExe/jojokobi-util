@@ -13,6 +13,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Rotatable;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -88,7 +90,11 @@ public class Building implements ConfigurationSerializable{
 		//rotations = how many 90 degree rotations should be applied
 		//Blocks
 		for (BuildingBlock block : blocks) {
-			BasicGenUtil.getRotatedRelative(loc.getBlock(), block.getX(), block.getY(), block.getZ(), width, length, rotations).setBlockData(block.getBlock(), physicsUpdate);
+			BlockData data = block.getBlock().clone();
+			if (data instanceof Rotatable) {
+				((Rotatable) data).setRotation(BasicGenUtil.rotateBlockface90Degerees(((Rotatable) data).getRotation(), rotations));
+			}
+			BasicGenUtil.getRotatedRelative(loc.getBlock(), block.getX(), block.getY(), block.getZ(), width, length, rotations).setBlockData(data, physicsUpdate);
 		}
 		//Marks
 		for (BuildingMark mark : marks) {

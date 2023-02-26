@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 
 import at.jojokobi.mcutil.generation.population.BlockModifier;;
@@ -49,6 +50,58 @@ public final class BasicGenUtil {
 				}
 			}
 		}
+	}
+	
+	public static BlockFace rotateBlockface90Degerees(BlockFace face) {
+		switch (face) {
+		case DOWN:
+			return BlockFace.DOWN;
+		case EAST:
+			return BlockFace.SOUTH;
+		case EAST_NORTH_EAST:
+			return BlockFace.SOUTH_SOUTH_EAST;
+		case EAST_SOUTH_EAST:
+			return BlockFace.SOUTH_SOUTH_WEST;
+		case NORTH:
+			return BlockFace.EAST;
+		case NORTH_EAST:
+			return BlockFace.SOUTH_EAST;
+		case NORTH_NORTH_EAST:
+			return BlockFace.EAST_SOUTH_EAST;
+		case NORTH_NORTH_WEST:
+			return BlockFace.EAST_NORTH_EAST;
+		case NORTH_WEST:
+			return BlockFace.NORTH_EAST;
+		case SELF:
+			return BlockFace.SELF;
+		case SOUTH:
+			return BlockFace.WEST;
+		case SOUTH_EAST:
+			return BlockFace.SOUTH_WEST;
+		case SOUTH_SOUTH_EAST:
+			return BlockFace.WEST_SOUTH_WEST;
+		case SOUTH_SOUTH_WEST:
+			return BlockFace.WEST_NORTH_WEST;
+		case SOUTH_WEST:
+			return BlockFace.NORTH_WEST;
+		case UP:
+			return BlockFace.UP;
+		case WEST:
+			return BlockFace.NORTH;
+		case WEST_NORTH_WEST:
+			return BlockFace.NORTH_NORTH_EAST;
+		case WEST_SOUTH_WEST:
+			return BlockFace.NORTH_NORTH_WEST;
+		}
+		return face;
+	}
+	
+	public static BlockFace rotateBlockface90Degerees(BlockFace face, int rotation) {
+		rotation = rotation % 4;
+		for (int i = 0; i < rotation; i++) {
+			face = rotateBlockface90Degerees(face);
+		}
+		return face;
 	}
 	
 	public static void updateBlocks (List<BlockState> states) {
