@@ -116,7 +116,7 @@ public class Building implements ConfigurationSerializable{
 				//Rotate
 				for (BlockFace face : faces) {
 					BlockFace f = BasicGenUtil.rotateBlockface90Degerees(face, rotations);
-					facing.setFace(f, false);
+					facing.setFace(f, true);
 					System.out.println(face + "/" + f + "/" + rotations);
 				}
 			}
