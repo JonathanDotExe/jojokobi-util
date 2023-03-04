@@ -7,13 +7,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -92,7 +96,29 @@ public class Building implements ConfigurationSerializable{
 		for (BuildingBlock block : blocks) {
 			BlockData data = block.getBlock().clone();
 			if (data instanceof Rotatable) {
-				((Rotatable) data).setRotation(BasicGenUtil.rotateBlockface90Degerees(((Rotatable) data).getRotation(), rotations));
+				BlockFace face = BasicGenUtil.rotateBlockface90Degerees(((Rotatable) data).getRotation(), rotations);
+				System.out.println("Rotatable: " + ((Rotatable) data).getRotation() + "/" + face + "/" + rotations);
+				((Rotatable) data).setRotation(face);
+			}
+			if (data instanceof Directional) {
+				BlockFace face = BasicGenUtil.rotateBlockface90Degerees(((Directional) data).getFacing(), rotations);
+				System.out.println("Rotatable: " + ((Directional) data).getFacing() + "/" + face + "/" + rotations);
+				((Directional) data).setFacing(face);
+			}
+			if (data instanceof MultipleFacing) {
+				MultipleFacing facing = (MultipleFacing) data;
+				Set<BlockFace> faces = facing.getFaces();
+				System.out.println("Multiple Facing:");
+				//Deactivate all
+				for (BlockFace face : faces) {
+					facing.setFace(face, false);
+				}
+				//Rotate
+				for (BlockFace face : faces) {
+					BlockFace f = BasicGenUtil.rotateBlockface90Degerees(face, rotations);
+					facing.setFace(f, false);
+					System.out.println(face + "/" + f + "/" + rotations);
+				}
 			}
 			BasicGenUtil.getRotatedRelative(loc.getBlock(), block.getX(), block.getY(), block.getZ(), width, length, rotations).setBlockData(data, physicsUpdate);
 		}
