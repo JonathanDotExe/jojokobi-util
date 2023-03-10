@@ -20,14 +20,15 @@ public class RandomAroundPlaceTask implements EntityTask{
 	private int timeout = 0;
 	private boolean raytrace = false;
 	private boolean yMove = true;
+	private int goalChangeInterval = 24; //in ticks
 	
 	public RandomAroundPlaceTask(Function<CustomEntity<?>, Location> place) {
-		this (place, 10, 10, 2, false, true);
+		this (place, 10, 10, 2, false, true, 24);
 	}
 
 
 	public RandomAroundPlaceTask(Function<CustomEntity<?>, Location> place, double goalRange, double maxDistance, 
-			double startDistance, boolean raytrace, boolean yMove) {
+			double startDistance, boolean raytrace, boolean yMove, int goalChangeInterval) {
 		super();
 		this.goalRange = goalRange;
 		this.maxDistance = maxDistance;
@@ -35,6 +36,7 @@ public class RandomAroundPlaceTask implements EntityTask{
 		this.place = place;
 		this.raytrace = raytrace;
 		this.yMove = yMove;
+		this.goalChangeInterval = goalChangeInterval;
 	}
 
 
@@ -47,6 +49,7 @@ public class RandomAroundPlaceTask implements EntityTask{
 	@Override
 	public Locatable apply(CustomEntity<?> entity) {
 		if (timeout <= 0) {
+			//new goal
 			Vector direction = new Vector(Math.random() - 0.5, yMove ? (Math.random() - 0.5) : 0, Math.random() - 0.5);
 			if (direction.length() != 0) {
 				direction.normalize();
@@ -61,7 +64,7 @@ public class RandomAroundPlaceTask implements EntityTask{
 				direction.multiply(range);
 			}
 			goal = entity.getEntity().getLocation().add(direction);
-			timeout = 24;
+			timeout = goalChangeInterval;
 		}
 		timeout--;
 		return new WrapperLocatable(goal);
