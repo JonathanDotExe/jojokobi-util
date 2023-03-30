@@ -60,7 +60,7 @@ public class ExamineBlockTask implements EntityTask{
 		for (int x = loc.getBlockX() - range; x < loc.getBlockX() + range; x++) {
 			for (int z = loc.getBlockZ() - range; z < loc.getBlockZ() + range; z++) {
 				Location place = new Location(loc.getWorld(), x, 0, z);
-				place.setY(place.getWorld().getHighestBlockYAt(place) - 1);
+				place.setY(place.getWorld().getHighestBlockYAt(place));
 				if (verifier.test(place.getBlock())) {
 					return place.getBlock();
 				}
