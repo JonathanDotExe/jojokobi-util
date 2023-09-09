@@ -28,6 +28,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -42,6 +43,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkPopulateEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldSaveEvent;
@@ -59,6 +61,8 @@ import at.jojokobi.mcutil.SerializableMap;
 import at.jojokobi.mcutil.TimeUUIDGenerator;
 import at.jojokobi.mcutil.UUIDGenerator;
 import at.jojokobi.mcutil.generation.GenerationHandler;
+import at.jojokobi.mcutil.generation.GeneratorWorldConfig;
+import at.jojokobi.mcutil.generation.population.Structure;
 import at.jojokobi.mcutil.gui.InventoryGUIHandler;
 
 public class EntityHandler implements Listener {
@@ -123,6 +127,7 @@ public class EntityHandler implements Listener {
 
 	@EventHandler
 	public void onWorldLoad(WorldLoadEvent event) {
+		//Load legacy
 		Bukkit.getScheduler().runTask(plugin, () -> {
 			for (LegacySaveFolder folder : legacySaveFolders) {
 				File file = new File(Bukkit.getWorldContainer(),
@@ -153,7 +158,7 @@ public class EntityHandler implements Listener {
 			public void run() {
 				File folder = new File(Bukkit.getWorldContainer(),
 						chunk.getWorld().getName() + File.separator + savefile);
-				// Legacy File
+				// Load legacy files
 				File legacyFile = new File(folder, GenerationHandler.getSaveName(chunk) + ".yml");
 				loadFile(legacyFile);
 				legacyFile.renameTo(new File(folder, GenerationHandler.getSaveName(chunk) + "_old.yml"));
@@ -253,6 +258,36 @@ public class EntityHandler implements Listener {
 	}
 
 	private void save(Chunk chunk) {
+		File folder = new File(Bukkit.getWorldContainer(), chunk.getWorld().getName() + File.separator + savefile);
+		folder.mkdirs();
+//		File file = new File(folder, GenerationHandler.getSaveName(chunk) + ".yml");
+		List<CustomEntity<?>> entities = getEntitiesInChunk(chunk);
+		Map<UUID, CustomEntity<?>> save = new HashMap<UUID, CustomEntity<?>>();
+		for (CustomEntity<?> e : entities) {
+			if (e.isSave()) {
+				save.put(getUniqueID(e), e);
+			}
+		}
+		// Plugin Files
+		for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+			File pluginFolder = new File(folder, plugin.getName());
+			pluginFolder.mkdirs();
+			File file = new File(pluginFolder, GenerationHandler.getSaveName(chunk) + ".yml");
+			Map<String, CustomEntity<?>> pluginEntities = new HashMap<String, CustomEntity<?>>();
+			for (Map.Entry<UUID, CustomEntity<?>> e : save.entrySet()) {
+				if (e.getValue().getPlugin() == plugin.getClass()) {
+					pluginEntities.put(e.getKey() + "", e.getValue());
+				}
+			}
+			if (!pluginEntities.isEmpty()) {
+				saveFile(pluginEntities, file);
+			} else if (file.exists() && file.isFile()) {
+				file.delete();
+			}
+		}
+	}
+	
+	private void addEntityToSavedChunk(Chunk chunk) {
 		File folder = new File(Bukkit.getWorldContainer(), chunk.getWorld().getName() + File.separator + savefile);
 		folder.mkdirs();
 //		File file = new File(folder, GenerationHandler.getSaveName(chunk) + ".yml");
@@ -417,7 +452,11 @@ public class EntityHandler implements Listener {
 	public UUID addSavedEntity(CustomEntity<?> entity) {
 		entity.setSave(true);
 		entity.setDespawnTicks(-1);
-		return addEntity(entity);
+		UUID uuid = addEntity(entity);
+		Bukkit.getScheduler().runTask(plugin, () -> {
+			save(entity.getEntity().getLocation().getChunk());
+		});
+		return uuid;
 	}
 
 	public void addSavedEntity(CustomEntity<?> entity, UUID uuid) {
@@ -513,6 +552,14 @@ public class EntityHandler implements Listener {
 //				entity.spawn();
 //			}
 //		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onChunkPopulate(ChunkPopulateEvent event) {
+		Chunk chunk = event.getChunk();
+		Bukkit.getScheduler().runTask(plugin, () -> {
+			save(chunk);
+		});
 	}
 
 	@EventHandler
