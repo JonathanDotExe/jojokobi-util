@@ -61,8 +61,6 @@ import at.jojokobi.mcutil.SerializableMap;
 import at.jojokobi.mcutil.TimeUUIDGenerator;
 import at.jojokobi.mcutil.UUIDGenerator;
 import at.jojokobi.mcutil.generation.GenerationHandler;
-import at.jojokobi.mcutil.generation.GeneratorWorldConfig;
-import at.jojokobi.mcutil.generation.population.Structure;
 import at.jojokobi.mcutil.gui.InventoryGUIHandler;
 
 public class EntityHandler implements Listener {
@@ -258,36 +256,6 @@ public class EntityHandler implements Listener {
 	}
 
 	private void save(Chunk chunk) {
-		File folder = new File(Bukkit.getWorldContainer(), chunk.getWorld().getName() + File.separator + savefile);
-		folder.mkdirs();
-//		File file = new File(folder, GenerationHandler.getSaveName(chunk) + ".yml");
-		List<CustomEntity<?>> entities = getEntitiesInChunk(chunk);
-		Map<UUID, CustomEntity<?>> save = new HashMap<UUID, CustomEntity<?>>();
-		for (CustomEntity<?> e : entities) {
-			if (e.isSave()) {
-				save.put(getUniqueID(e), e);
-			}
-		}
-		// Plugin Files
-		for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
-			File pluginFolder = new File(folder, plugin.getName());
-			pluginFolder.mkdirs();
-			File file = new File(pluginFolder, GenerationHandler.getSaveName(chunk) + ".yml");
-			Map<String, CustomEntity<?>> pluginEntities = new HashMap<String, CustomEntity<?>>();
-			for (Map.Entry<UUID, CustomEntity<?>> e : save.entrySet()) {
-				if (e.getValue().getPlugin() == plugin.getClass()) {
-					pluginEntities.put(e.getKey() + "", e.getValue());
-				}
-			}
-			if (!pluginEntities.isEmpty()) {
-				saveFile(pluginEntities, file);
-			} else if (file.exists() && file.isFile()) {
-				file.delete();
-			}
-		}
-	}
-	
-	private void addEntityToSavedChunk(Chunk chunk) {
 		File folder = new File(Bukkit.getWorldContainer(), chunk.getWorld().getName() + File.separator + savefile);
 		folder.mkdirs();
 //		File file = new File(folder, GenerationHandler.getSaveName(chunk) + ".yml");
