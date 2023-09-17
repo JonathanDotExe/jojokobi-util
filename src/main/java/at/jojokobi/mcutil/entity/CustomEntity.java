@@ -61,7 +61,6 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 	private List<EntityTask> tasks = new ArrayList<>();
 	private EntityTask selectedTask = null;
 	private final CustomEntityType<?> type;
-	private boolean teleportToGoal = false;
 	private Location tempLocation = null;
 	private int tempTime = 0;
 	
@@ -193,8 +192,14 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 		//Ride
 		if (getEntity().getVehicle() == null) {
 			//Teleport
-			if (teleportToGoal && time - tempTime > MAX_TEMP_TIME) {
-				getEntity().teleport(goal.getLocation());
+			if (time - tempTime > MAX_TEMP_TIME) {
+				if (canTeleportToGoal()) {
+					getEntity().teleport(goal.getLocation());
+				}
+				else {
+					tempTime = time;
+					//Timeout because entity teleport check might be computing intensive
+				}
 			}
 			//Fly
 			else if (canFly()) {
@@ -436,7 +441,7 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 	}
 	
 	protected double getSprintSpeed () {
-		return 1;
+		return 0.6;
 	}
 	
 	protected double getWalkSpeed () {
@@ -444,7 +449,7 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 	}
 	
 	protected double getSwimSpeed () {
-		return 1;
+		return 0.2;
 	}
 	
 	protected double getFlySpeed () {
@@ -452,7 +457,7 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 	}
 	
 	protected double getLavaSwimSpeed () {
-		return 1;
+		return 0.1;
 	}
 	
 	protected double getClimbSpeed () {
@@ -735,12 +740,8 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 		return type;
 	}
 
-	public boolean isTeleportToGoal() {
-		return teleportToGoal;
-	}
-
-	public void setTeleportToGoal(boolean teleportToGoal) {
-		this.teleportToGoal = teleportToGoal;
+	public boolean canTeleportToGoal() {
+		return false;
 	}
 
 	void setHandler(EntityHandler handler) {
