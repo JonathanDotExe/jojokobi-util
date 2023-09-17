@@ -266,6 +266,8 @@ public abstract class CustomItem implements Listener, Identifiable {
 			ItemStack item = ((LivingEntity) event.getDamager()).getEquipment().getItemInMainHand();
 			if (isItem(item)) {
 				onHit(item, event);
+				//Update item in main hand to react to durability changes
+				((LivingEntity) event.getDamager()).getEquipment().setItemInMainHand(item);
 			}
 		}
 	}
