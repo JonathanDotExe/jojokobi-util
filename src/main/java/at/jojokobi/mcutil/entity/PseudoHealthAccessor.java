@@ -31,7 +31,7 @@ public class PseudoHealthAccessor implements HealthAccessor {
 	public void onDamage(CustomEntity<?> entity, EntityDamageEvent event) {
 		health -= event.getFinalDamage();
 		event.setCancelled(true);
-		if (health <= 0.5) {
+		if (health <= 0.0) {
 			entity.delete();
 		}
 	}
