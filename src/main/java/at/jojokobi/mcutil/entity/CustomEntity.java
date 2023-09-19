@@ -105,7 +105,10 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 	
 	public void loop () {
 //		spawnPoint = entity.getLocation();
-		if ((entity.isDead()) || entity.getLocation().getY() < 0) {
+		if (entity.getLocation().getY() < entity.getLocation().getWorld().getMinHeight() - 32) {
+			onBelowWorld();
+		}
+		if (entity.isDead()) {
 			delete();
 		}
 		else {
@@ -257,6 +260,13 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 		boolean jump = jump(velocity);
 		getEntity().setVelocity(velocity);
 		return jump;
+	}
+	
+	/**
+	 * Called when the entity is 32 blocks below the lower build limit
+	 */
+	public void onBelowWorld() {
+		delete();
 	}
 	
 	public void setSpawnPoint(Location spawnPoint) {
