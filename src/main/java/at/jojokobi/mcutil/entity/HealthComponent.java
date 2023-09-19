@@ -24,6 +24,7 @@ public class HealthComponent implements EntityComponent{
 	@Override
 	public void onDamage(CustomEntity<?> entity, EntityDamageEvent event) {
 		EntityComponent.super.onDamage(entity, event);
+		
 		accessor.onDamage(entity, event);
 	}
 

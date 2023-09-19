@@ -29,11 +29,14 @@ public class PseudoHealthAccessor implements HealthAccessor {
 
 	@Override
 	public void onDamage(CustomEntity<?> entity, EntityDamageEvent event) {
-		health -= event.getFinalDamage();
 		event.setCancelled(true);
-		if (health <= 0.0) {
-			entity.delete();
-		}
+		//Apply damage later so the entire processing cycle deals with the same values
+		entity.getHandler().runTaskLater(() -> {
+			health -= event.getFinalDamage();
+			if (health <= 0.0) {
+				entity.delete();
+			}
+		}, 0);
 	}
 
 }
