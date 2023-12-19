@@ -115,11 +115,11 @@ public final class TerrainGenUtil {
 	public static void bonemealPlace (Location place, long seed) {
 		Random random = new Random (seed);
 		place.setY(place.getWorld().getHighestBlockYAt(place) - 1);
-		if (place.getBlock().getType() == Material.GRASS) {
+		if (place.getBlock().getType() == Material.GRASS_BLOCK) {
 			place.setY(place.getY() + 1);
 			int nextInt = random.nextInt(20);
 			if (nextInt < 8) {
-				place.getBlock().setType (Material.GRASS);
+				place.getBlock().setType (Material.TALL_GRASS);
 			}
 			else if (nextInt < 12) {
 				place.getBlock().setType (Material.FERN);
