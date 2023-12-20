@@ -250,13 +250,12 @@ public class EntityHandler implements Listener {
 	
 	@EventHandler
 	public void onSave(WorldSaveEvent event) {
-		System.out.println("Saving entites on world save");
 		for (Chunk chunk : event.getWorld().getLoadedChunks()) {
 			save(chunk);
 		}
 	}
 
-	private void save(Chunk chunk) {
+	public void save(Chunk chunk) {
 		File folder = new File(Bukkit.getWorldContainer(), chunk.getWorld().getName() + File.separator + savefile);
 		folder.mkdirs();
 //		File file = new File(folder, GenerationHandler.getSaveName(chunk) + ".yml");
@@ -405,6 +404,11 @@ public class EntityHandler implements Listener {
 			RemovalHandler.markForRemoval(entity.getEntity());
 			uuid = uuidGenerator.nextUUID();
 			entities.put(uuid, entity);
+			if (entity.isSave()) {
+				Bukkit.getScheduler().runTask(plugin, () -> {
+					save(entity.getEntity().getLocation().getChunk());
+				});
+			}
 		}
 		return uuid;
 	}
@@ -415,6 +419,7 @@ public class EntityHandler implements Listener {
 			entity.spawn();
 			RemovalHandler.markForRemoval(entity.getEntity());
 			entities.put(uuid, entity);
+			//TODO maybe save here aswell
 		}
 	}
 
@@ -422,10 +427,6 @@ public class EntityHandler implements Listener {
 		entity.setSave(true);
 		entity.setDespawnTicks(-1);
 		UUID uuid = addEntity(entity);
-		Bukkit.getScheduler().runTask(plugin, () -> {
-			System.out.println("Saving entity chunk " + entity.getEntity().getLocation().getChunk().getX() + "/" + entity.getEntity().getLocation().getChunk().getZ());
-			save(entity.getEntity().getLocation().getChunk());
-		});
 		return uuid;
 	}
 
@@ -528,14 +529,12 @@ public class EntityHandler implements Listener {
 	public void onChunkPopulate(ChunkPopulateEvent event) {
 		Chunk chunk = event.getChunk();
 		Bukkit.getScheduler().runTask(plugin, () -> {
-			System.out.println("Saving entity chunk on populate: " + chunk.getX() + "/" + chunk.getZ());
 			save(chunk);
 		});
 	}
 
 	@EventHandler
 	public void onChunkUnload(ChunkUnloadEvent event) {
-		System.out.println("Saving entity chunk on unload: " + event.getChunk().getX() + "/" + event.getChunk().getZ());
 		save(event.getChunk());
 		removeEntities(Arrays.asList(event.getChunk().getEntities()), false);
 //		for (Entity entity : event.getChunk().getEntities()) {
@@ -566,7 +565,6 @@ public class EntityHandler implements Listener {
 		if (event.getPlugin().equals(this.plugin)) {
 //			saveEntities(savefile);
 			// Save all chunks
-			System.out.println("Saving all entites on shutdown");
 			for (World world : Bukkit.getWorlds()) {
 				for (Chunk chunk : world.getLoadedChunks()) {
 					save(chunk);

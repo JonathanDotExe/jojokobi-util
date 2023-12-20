@@ -540,6 +540,9 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 
 	public void setSave(boolean save) {
 		this.save = save;
+		if (save && handler != null && getEntity() != null) {
+			handler.save(getEntity().getLocation().getChunk());
+		}
 	}
 	
 	@Override
