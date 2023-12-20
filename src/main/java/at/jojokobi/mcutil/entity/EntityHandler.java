@@ -250,6 +250,7 @@ public class EntityHandler implements Listener {
 	
 	@EventHandler
 	public void onSave(WorldSaveEvent event) {
+		System.out.println("Saving entites on world save");
 		for (Chunk chunk : event.getWorld().getLoadedChunks()) {
 			save(chunk);
 		}
@@ -422,6 +423,7 @@ public class EntityHandler implements Listener {
 		entity.setDespawnTicks(-1);
 		UUID uuid = addEntity(entity);
 		Bukkit.getScheduler().runTask(plugin, () -> {
+			System.out.println("Saving entity chunk " + entity.getEntity().getLocation().getChunk().getX() + "/" + entity.getEntity().getLocation().getChunk().getZ());
 			save(entity.getEntity().getLocation().getChunk());
 		});
 		return uuid;
@@ -526,12 +528,14 @@ public class EntityHandler implements Listener {
 	public void onChunkPopulate(ChunkPopulateEvent event) {
 		Chunk chunk = event.getChunk();
 		Bukkit.getScheduler().runTask(plugin, () -> {
+			System.out.println("Saving entity chunk on populate: " + chunk.getX() + "/" + chunk.getZ());
 			save(chunk);
 		});
 	}
 
 	@EventHandler
 	public void onChunkUnload(ChunkUnloadEvent event) {
+		System.out.println("Saving entity chunk on unload: " + event.getChunk().getX() + "/" + event.getChunk().getZ());
 		save(event.getChunk());
 		removeEntities(Arrays.asList(event.getChunk().getEntities()), false);
 //		for (Entity entity : event.getChunk().getEntities()) {
@@ -562,6 +566,7 @@ public class EntityHandler implements Listener {
 		if (event.getPlugin().equals(this.plugin)) {
 //			saveEntities(savefile);
 			// Save all chunks
+			System.out.println("Saving all entites on shutdown");
 			for (World world : Bukkit.getWorlds()) {
 				for (Chunk chunk : world.getLoadedChunks()) {
 					save(chunk);
