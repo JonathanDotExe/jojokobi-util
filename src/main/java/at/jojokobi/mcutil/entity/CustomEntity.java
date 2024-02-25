@@ -176,6 +176,11 @@ public abstract class CustomEntity <E extends Entity> implements ConfigurationSe
 		}
 	}
 	
+	protected void resetAI() {
+		selectedTask = null;
+		goal = null;
+	}
+	
 	public List<EntityTask> getTasks() {
 		return new ArrayList<>(tasks);
 	}
