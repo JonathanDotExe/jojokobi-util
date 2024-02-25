@@ -42,9 +42,9 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.event.world.EntitiesLoadEvent;
+import org.bukkit.event.world.EntitiesUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
@@ -125,7 +125,7 @@ public class EntityHandler implements Listener {
 
 	@EventHandler
 	public void onWorldLoad(WorldLoadEvent event) {
-		//Load legacy
+		//Load legacy save files
 		Bukkit.getScheduler().runTask(plugin, () -> {
 			for (LegacySaveFolder folder : legacySaveFolders) {
 				File file = new File(Bukkit.getWorldContainer(),
@@ -139,8 +139,6 @@ public class EntityHandler implements Listener {
 					}
 					file.renameTo(new File(Bukkit.getWorldContainer(),
 							event.getWorld().getName() + File.separator + folder.getSaveFolder() + "_old"));
-				} else {
-					System.out.println("The save folder " + file.getAbsolutePath() + " does not exist!");
 				}
 			}
 		});
@@ -150,6 +148,9 @@ public class EntityHandler implements Listener {
 		legacySaveFolders.add(folder);
 	}
 
+	/**
+	 * Loads the custom entities for a specific chunk
+	 */
 	private void load(Chunk chunk) {
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
@@ -170,6 +171,10 @@ public class EntityHandler implements Listener {
 		}, 1L);
 	}
 
+	/**
+	 * Loads a specific file with store custom entities
+	 * @param file
+	 */
 	private void loadFile(File file) {
 		FileConfiguration config = new YamlConfiguration();
 		try {
@@ -250,6 +255,7 @@ public class EntityHandler implements Listener {
 	
 	@EventHandler
 	public void onSave(WorldSaveEvent event) {
+		System.out.println("Saving all entity chunks on world save");
 		for (Chunk chunk : event.getWorld().getLoadedChunks()) {
 			save(chunk);
 		}
@@ -516,7 +522,7 @@ public class EntityHandler implements Listener {
 	}
 
 	@EventHandler
-	public void onChunkLoad(ChunkLoadEvent event) {
+	public void onEntitiesLoad(EntitiesLoadEvent event) {
 		load(event.getChunk());
 //		for (T entity : entities) {
 //			if (!entity.isLoaded() && entity.getLocation().getChunk() == event.getChunk()) {
@@ -534,7 +540,7 @@ public class EntityHandler implements Listener {
 	}
 
 	@EventHandler
-	public void onChunkUnload(ChunkUnloadEvent event) {
+	public void onChunkUnload(EntitiesUnloadEvent event) {
 		save(event.getChunk());
 		removeEntities(Arrays.asList(event.getChunk().getEntities()), false);
 //		for (Entity entity : event.getChunk().getEntities()) {
