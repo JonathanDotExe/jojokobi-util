@@ -42,6 +42,7 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.event.world.EntitiesUnloadEvent;
@@ -257,19 +258,19 @@ public class EntityHandler implements Listener {
 	public void onSave(WorldSaveEvent event) {
 		System.out.println("Saving all entity chunks on world save");
 		for (Chunk chunk : event.getWorld().getLoadedChunks()) {
-			save(chunk);
+			save(chunk, Arrays.asList(chunk.getEntities()));
 		}
 	}
 
-	public void save(Chunk chunk) {
+	public void save(Chunk chunk, List<Entity> entities) {
 		File folder = new File(Bukkit.getWorldContainer(), chunk.getWorld().getName() + File.separator + savefile);
 		folder.mkdirs();
 //		File file = new File(folder, GenerationHandler.getSaveName(chunk) + ".yml");
-		List<CustomEntity<?>> entities = getEntitiesInChunk(chunk);
 		Map<UUID, CustomEntity<?>> save = new HashMap<UUID, CustomEntity<?>>();
-		for (CustomEntity<?> e : entities) {
-			if (e.isSave()) {
-				save.put(getUniqueID(e), e);
+		for (Entity e : entities) {
+			CustomEntity<?> c = getCustomEntityForEntity(e);
+			if (c != null && c.isSave()) {
+				save.put(getUniqueID(c), c); //TODO optimize getUniqueId
 			}
 		}
 		// Plugin Files
@@ -412,7 +413,7 @@ public class EntityHandler implements Listener {
 			entities.put(uuid, entity);
 			if (entity.isSave()) {
 				Bukkit.getScheduler().runTask(plugin, () -> {
-					save(entity.getEntity().getLocation().getChunk());
+					save(entity.getEntity().getLocation().getChunk(), Arrays.asList(entity.getEntity().getLocation().getChunk().getEntities()));
 				});
 			}
 		}
@@ -522,7 +523,7 @@ public class EntityHandler implements Listener {
 	}
 
 	@EventHandler
-	public void onEntitiesLoad(EntitiesLoadEvent event) {
+	public void onChunkLoad(ChunkLoadEvent event) {
 		load(event.getChunk());
 //		for (T entity : entities) {
 //			if (!entity.isLoaded() && entity.getLocation().getChunk() == event.getChunk()) {
@@ -535,14 +536,14 @@ public class EntityHandler implements Listener {
 	public void onChunkPopulate(ChunkPopulateEvent event) {
 		Chunk chunk = event.getChunk();
 		Bukkit.getScheduler().runTask(plugin, () -> {
-			save(chunk);
+			save(chunk, Arrays.asList(chunk.getEntities()));
 		});
 	}
 
 	@EventHandler
 	public void onChunkUnload(EntitiesUnloadEvent event) {
-		save(event.getChunk());
-		removeEntities(Arrays.asList(event.getChunk().getEntities()), false);
+		save(event.getChunk(), event.getEntities());
+		removeEntities(event.getEntities(), false);
 //		for (Entity entity : event.getChunk().getEntities()) {
 //			for (T e : getEntities()) {
 //				if (entity == e.getEntity() && !e.canDespawn()) {
@@ -573,7 +574,7 @@ public class EntityHandler implements Listener {
 			// Save all chunks
 			for (World world : Bukkit.getWorlds()) {
 				for (Chunk chunk : world.getLoadedChunks()) {
-					save(chunk);
+					save(chunk, Arrays.asList(chunk.getEntities()));
 				}
 			}
 			// Remove entities

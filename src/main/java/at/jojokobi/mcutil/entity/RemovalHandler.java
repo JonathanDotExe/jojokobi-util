@@ -3,7 +3,6 @@ package at.jojokobi.mcutil.entity;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
 
 public class RemovalHandler implements Listener{
@@ -17,7 +16,7 @@ public class RemovalHandler implements Listener{
 	
 	@EventHandler
 	public void onChunkLoad (EntitiesLoadEvent event) {
-		for (Entity entity : event.getChunk().getEntities()) {
+		for (Entity entity : event.getEntities()) {
 			if (entity.getScoreboardTags().contains(REMOVE_CUSTOM_ENTITY_TAG)) {
 				entity.eject();
 				entity.remove();
