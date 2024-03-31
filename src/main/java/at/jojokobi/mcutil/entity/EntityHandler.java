@@ -256,7 +256,6 @@ public class EntityHandler implements Listener {
 	
 	@EventHandler
 	public void onSave(WorldSaveEvent event) {
-		System.out.println("Saving all entity chunks on world save");
 		for (Chunk chunk : event.getWorld().getLoadedChunks()) {
 			save(chunk, Arrays.asList(chunk.getEntities()));
 		}
@@ -523,7 +522,7 @@ public class EntityHandler implements Listener {
 	}
 
 	@EventHandler
-	public void onChunkLoad(ChunkLoadEvent event) {
+	public void onEntitiesLoad(EntitiesLoadEvent event) {
 		load(event.getChunk());
 //		for (T entity : entities) {
 //			if (!entity.isLoaded() && entity.getLocation().getChunk() == event.getChunk()) {
@@ -542,8 +541,12 @@ public class EntityHandler implements Listener {
 
 	@EventHandler
 	public void onChunkUnload(EntitiesUnloadEvent event) {
+		if (!event.getEntities().isEmpty()) {
+			System.out.println("Saving entities in chunk: " + event.getChunk().getX() + "/" + event.getChunk().getZ());
+		}
 		save(event.getChunk(), event.getEntities());
-		removeEntities(event.getEntities(), false);
+		//removeEntities(event.getEntities(), false);
+		
 //		for (Entity entity : event.getChunk().getEntities()) {
 //			for (T e : getEntities()) {
 //				if (entity == e.getEntity() && !e.canDespawn()) {

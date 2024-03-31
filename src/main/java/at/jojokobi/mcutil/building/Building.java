@@ -97,18 +97,15 @@ public class Building implements ConfigurationSerializable{
 			BlockData data = block.getBlock().clone();
 			if (data instanceof Rotatable) {
 				BlockFace face = BasicGenUtil.rotateBlockface90Degerees(((Rotatable) data).getRotation(), rotations);
-				System.out.println("Rotatable: " + ((Rotatable) data).getRotation() + "/" + face + "/" + rotations);
 				((Rotatable) data).setRotation(face);
 			}
 			if (data instanceof Directional) {
 				BlockFace face = BasicGenUtil.rotateBlockface90Degerees(((Directional) data).getFacing(), rotations);
-				System.out.println("Rotatable: " + ((Directional) data).getFacing() + "/" + face + "/" + rotations);
 				((Directional) data).setFacing(face);
 			}
 			if (data instanceof MultipleFacing) {
 				MultipleFacing facing = (MultipleFacing) data;
 				Set<BlockFace> faces = facing.getFaces();
-				System.out.println("Multiple Facing:");
 				//Deactivate all
 				for (BlockFace face : faces) {
 					facing.setFace(face, false);
@@ -117,7 +114,6 @@ public class Building implements ConfigurationSerializable{
 				for (BlockFace face : faces) {
 					BlockFace f = BasicGenUtil.rotateBlockface90Degerees(face, rotations);
 					facing.setFace(f, true);
-					System.out.println(face + "/" + f + "/" + rotations);
 				}
 			}
 			BasicGenUtil.getRotatedRelative(loc.getBlock(), block.getX(), block.getY(), block.getZ(), width, length, rotations).setBlockData(data, physicsUpdate);
