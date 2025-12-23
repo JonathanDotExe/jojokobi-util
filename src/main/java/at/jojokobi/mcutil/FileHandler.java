@@ -17,7 +17,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import at.jojokobi.mcutil.Identifiable;
 
 @Deprecated
 public abstract class FileHandler<T extends Identifiable> extends Handler<T>{

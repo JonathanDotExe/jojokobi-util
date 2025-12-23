@@ -1,6 +1,6 @@
 package at.jojokobi.mcutil.item;
 
-import java.util.UUID;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -18,19 +18,19 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import at.jojokobi.mcutil.Identifiable;
 import at.jojokobi.mcutil.JojokobiUtilPlugin;
-import at.jojokobi.mcutil.NamespacedEntry;
 
 public abstract class CustomItem implements Listener, Identifiable {
 
@@ -51,6 +51,8 @@ public abstract class CustomItem implements Listener, Identifiable {
 
 	private final NamespacedKey identifierKey;
 	private final NamespacedKey namespaceKey;
+	private static final String ATTACK_DAMAGE_TAG = "attack_damage";
+	private static final String ATTACK_SPEED_TAG = "attack_speed";
 
 	public CustomItem(String namespace, String identifier) {
 		this.identifier = identifier;
@@ -70,17 +72,17 @@ public abstract class CustomItem implements Listener, Identifiable {
 	public ItemStack createItem() {
 		ItemStack item = new ItemStack(material);
 		ItemMeta meta = item.getItemMeta();
-		meta.setCustomModelData((int) this.meta);
+		CustomModelDataComponent modelData = meta.getCustomModelDataComponent();
+		modelData.setFloats(List.of((float) this.meta));
+		meta.setCustomModelDataComponent(modelData);
 		meta.setDisplayName(name);
 		meta.setUnbreakable(true);
 		if (hideFlags) {
 			meta.addItemFlags(ItemFlag.values());
 		}
 		// Modifier
-		meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(new UUID(13436, 894654),
-				"generic.attackDamage", damage, Operation.ADD_NUMBER, EquipmentSlot.HAND));
-		meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(new UUID(13436, 894655),
-				"generic.attackSpeed", speed, Operation.ADD_NUMBER, EquipmentSlot.HAND));
+		meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(createUtilKey(ATTACK_DAMAGE_TAG), damage, Operation.ADD_NUMBER, EquipmentSlotGroup.HAND));
+		meta.addAttributeModifier(Attribute.ATTACK_SPEED, new AttributeModifier(createUtilKey(ATTACK_SPEED_TAG), speed, Operation.ADD_NUMBER, EquipmentSlotGroup.HAND));
 		// Set meta
 		setItemDataString(meta, identifierKey, getIdentifier());
 		setItemDataString(meta, namespaceKey, getNamespace());
@@ -122,8 +124,9 @@ public abstract class CustomItem implements Listener, Identifiable {
 	public boolean isItem(ItemStack item) {
 		boolean isItem = item != null && item.hasItemMeta();
 		if (isItem) {
+			//TODO reintroduce compatibility stuff
 			// Identfier compatiblity check
-			if (ItemUtil.getNBTString(item, "identitfier").equals(getIdentifier())) {
+			/*if (ItemUtil.getNBTString(item, "identitfier").equals(getIdentifier())) {
 				ItemUtil.setNBTString(item, IDENTIFIER_TAG, getIdentifier());
 				ItemUtil.removeNBTTag(item, "identitfier");
 			}
@@ -134,7 +137,8 @@ public abstract class CustomItem implements Listener, Identifiable {
 			}
 			if (ItemUtil.getNBTString(item, IDENTIFIER_TAG).equals(getIdentifier()) && ItemUtil.getNBTString(item, NAMESPACE_TAG).equals(getNamespace())) {
 				fixItem(item);
-			}
+			}*/
+			
 			ItemMeta meta = item.getItemMeta();
 			PersistentDataContainer con = meta.getPersistentDataContainer();
 			isItem = con.has(identifierKey, PersistentDataType.STRING)
@@ -142,11 +146,13 @@ public abstract class CustomItem implements Listener, Identifiable {
 					&& con.has(namespaceKey, PersistentDataType.STRING)
 					&& getNamespace().equals(con.get(namespaceKey, PersistentDataType.STRING));
 			if (isItem) {
-				if (!meta.hasCustomModelData()) {
+				if (!meta.hasCustomModelDataComponent()) {
 					if (item.getType() != getMaterial()) {
 						item.setType(getMaterial());
 					}
-					meta.setCustomModelData((int) getMeta());
+					CustomModelDataComponent modelData = meta.getCustomModelDataComponent();
+					modelData.setFloats(List.of((float) this.meta));
+					meta.setCustomModelDataComponent(modelData);
 					if (meta instanceof Damageable) {
 						((Damageable) meta).setDamage(0);
 					}
@@ -158,14 +164,16 @@ public abstract class CustomItem implements Listener, Identifiable {
 	}
 
 	protected void fixItem(ItemStack item) {
+		/*
+		TODO reimplement
 		ItemUtil.removeNBTTag(item, IDENTIFIER_TAG);
 		setItemDataString(item, identifierKey, getIdentifier());
 		
 		ItemUtil.removeNBTTag(item, NAMESPACE_TAG);
-		setItemDataString(item, namespaceKey, getNamespace());
+		setItemDataString(item, namespaceKey, getNamespace());*/
 	}
 
-	protected NamespacedKey createUtilKey(String key) {
+	protected static NamespacedKey createUtilKey(String key) {
 		return new NamespacedKey(JavaPlugin.getPlugin(JojokobiUtilPlugin.class), key);
 	}
 

@@ -51,9 +51,10 @@ public abstract class CustomTool extends CustomItem{
 	@Override
 	protected void fixItem(ItemStack item) {
 		super.fixItem(item);
-		int durability = ItemUtil.getNBTInt(item, DURABILITY_TAG);
+		//TODO reimplement
+		/*int durability = ItemUtil.getNBTInt(item, DURABILITY_TAG);
 		ItemUtil.removeNBTTag(item, DURABILITY_TAG);
-		setDurability(item, durability);
+		setDurability(item, durability);*/
 	}
 	
 	@Override
@@ -100,7 +101,7 @@ public abstract class CustomTool extends CustomItem{
 		if (repairMaterial != null && isItem(event.getInventory().getItem(0)) && event.getInventory().getItem(1) != null && event.getInventory().getItem(1).getType() == repairMaterial) {
 			ItemStack result = event.getInventory().getItem(0).clone();
 			setDurability(result, Math.min(getMaxDurability(), getDurability(result) + getMaxDurability()/4 * event.getInventory().getItem(1).getAmount()));
-			event.getInventory().setRepairCost(event.getInventory().getItem(1).getAmount());
+			event.getView().setRepairCost(event.getInventory().getItem(1).getAmount());
 			event.getInventory().setItem(2, result);
 			event.setResult(result);
 		}

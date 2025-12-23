@@ -19,6 +19,8 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Rotatable;
+import org.bukkit.block.sign.Side;
+import org.bukkit.block.sign.SignSide;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -46,9 +48,10 @@ public class Building implements ConfigurationSerializable{
 					Block block = loc.getBlock().getRelative(x, y, z);
 					if (block.getState() instanceof Sign) {
 						Sign sign = (Sign) block.getState();
+						SignSide side = sign.getSide(Side.FRONT);
 						//Mark
-						if (sign.getLine(0).length() > 0 && sign.getLine(3).length() > 0 && sign.getLine(0).chars().allMatch(c -> c == '#') && sign.getLine(3).chars().allMatch(c -> c == '#')) {
-							building.marks.add(new BuildingMark(x, y, z, sign.getLine(1)));
+						if (side.getLine(0).length() > 0 && side.getLine(3).length() > 0 && side.getLine(0).chars().allMatch(c -> c == '#') && side.getLine(3).chars().allMatch(c -> c == '#')) {
+							building.marks.add(new BuildingMark(x, y, z, side.getLine(1)));
 							isBlock = false;
 						}
 					}
@@ -83,9 +86,10 @@ public class Building implements ConfigurationSerializable{
 		build(loc, (place, str) -> {
 			place.getBlock().setType(Material.OAK_SIGN);
 			Sign sign = (Sign) place.getBlock().getState();
-			sign.setLine(0, "####");
-			sign.setLine(1, str);
-			sign.setLine(3, "####");
+			SignSide side = sign.getSide(Side.FRONT);
+			side.setLine(0, "####");
+			side.setLine(1, str);
+			side.setLine(3, "####");
 			sign.update(false, false);
 		}, rotations, physicsUpdate);
 	}

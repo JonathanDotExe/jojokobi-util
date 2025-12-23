@@ -40,7 +40,7 @@ public class RealHealthAccessor implements HealthAccessor{
 
 	@Override
 	public double getMaxHealth(CustomEntity<?> entity) {
-		return ((Attributable) entity.getEntity()).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+		return ((Attributable) entity.getEntity()).getAttribute(Attribute.MAX_HEALTH).getValue();
 	}
 
 	@Override

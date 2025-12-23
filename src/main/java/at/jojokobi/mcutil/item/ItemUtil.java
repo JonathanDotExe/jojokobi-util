@@ -1,6 +1,6 @@
 package at.jojokobi.mcutil.item;
 
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+/*import org.bukkit.craftbukkit.v1_21_R6.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -8,7 +8,7 @@ import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.Tag;*/
 
 public final class ItemUtil {
 
@@ -16,7 +16,9 @@ public final class ItemUtil {
 		
 	}
 	
-	public static void printTagCompount (ItemStack item) {
+	/*
+	 * TODO reimplement
+	 * public static void printTagCompount (ItemStack item) {
 		net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 		CompoundTag root = nmsItem.hasTag() ? nmsItem.getTag() : new CompoundTag();
 		System.out.println(root);
@@ -107,6 +109,6 @@ public final class ItemUtil {
 			value = root.getBoolean(key);
 		}
 		return value;
-	}
+	}*/
 
 }

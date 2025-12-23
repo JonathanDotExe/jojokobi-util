@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -13,6 +14,8 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+
+import com.google.common.collect.Lists;
 
 import at.jojokobi.mcutil.TypedMap;
 import at.jojokobi.mcutil.item.CustomTool;
@@ -69,16 +72,17 @@ public class LootItem implements ConfigurationSerializable{
 				tool.setDurability(item, random.nextInt(tool.getMaxDurability()) + 1);
 			}
 			//Enchant
+			Enchantment[] enchantments = Lists.newArrayList(Registry.ENCHANTMENT).toArray(new Enchantment[0]);
 			if (enchant) {
 				if (item.getItemMeta() instanceof EnchantmentStorageMeta) {
-					Enchantment ench = Enchantment.values()[random.nextInt(Enchantment.values().length)];
+					Enchantment ench = enchantments[random.nextInt(enchantments.length)];
 					EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
 					meta.addStoredEnchant(ench, random.nextInt(ench.getMaxLevel()) + 1, true);
 					item.setItemMeta(meta);
 				}
 				else {
 					for (int i = 0; i < 3; i++) {
-						Enchantment ench = Enchantment.values()[random.nextInt(Enchantment.values().length)];
+						Enchantment ench = enchantments[random.nextInt(enchantments.length)];
 						
 						if (ench.canEnchantItem(item)) {
 							item.addEnchantment(ench, random.nextInt(ench.getMaxLevel()) + 1);

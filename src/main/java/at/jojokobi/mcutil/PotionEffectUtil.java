@@ -5,7 +5,18 @@ import org.bukkit.potion.PotionEffectType;
 
 public final class PotionEffectUtil {
 	
-	private static final PotionEffectType[] negativePotionEffects = {PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HARM, PotionEffectType.HUNGER, PotionEffectType.POISON, PotionEffectType.SLOW, PotionEffectType.SLOW_DIGGING, PotionEffectType.UNLUCK, PotionEffectType.WITHER, PotionEffectType.WEAKNESS};
+	private static final PotionEffectType[] negativePotionEffects = {
+			PotionEffectType.BLINDNESS,
+			PotionEffectType.NAUSEA,
+			PotionEffectType.INSTANT_DAMAGE,
+			PotionEffectType.HUNGER,
+			PotionEffectType.POISON,
+			PotionEffectType.SLOWNESS,
+			PotionEffectType.MINING_FATIGUE,
+			PotionEffectType.UNLUCK,
+			PotionEffectType.WITHER,
+			PotionEffectType.WEAKNESS
+		};
 	
 	private PotionEffectUtil() {
 		

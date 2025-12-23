@@ -93,10 +93,12 @@ public abstract class PlaceableItem extends CustomItem {
 		if (entity instanceof ArmorStand) {
 			ArmorStand stand = (ArmorStand) entity;
 			ItemStack stack = stand.getEquipment().getHelmet();
-			if (ItemUtil.getNBTString(stack, IDENTIFIER_TAG).equals(getIdentifier()) && ItemUtil.getNBTString(stack, NAMESPACE_TAG).equals(getNamespace())) {
+			/*
+			 TODO reimplement 
+			 if (ItemUtil.getNBTString(stack, IDENTIFIER_TAG).equals(getIdentifier()) && ItemUtil.getNBTString(stack, NAMESPACE_TAG).equals(getNamespace())) {
 				fixItem(stack);
 				stand.getEquipment().setHelmet(stack);
-			}
+			}*/
 			if (stack != null && isItem(stack)) {
 				isEntity = true;
 			}

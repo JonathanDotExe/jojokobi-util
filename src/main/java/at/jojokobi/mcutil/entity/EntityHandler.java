@@ -42,7 +42,6 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.event.world.EntitiesUnloadEvent;
@@ -50,8 +49,8 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.plugin.Plugin;
-import org.spigotmc.event.entity.EntityDismountEvent;
-import org.spigotmc.event.entity.EntityMountEvent;
+import org.bukkit.event.entity.EntityDismountEvent;
+import org.bukkit.event.entity.EntityMountEvent;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -628,20 +627,6 @@ public class EntityHandler implements Listener {
 			}
 		}
 		return entities;
-	}
-
-	private void removeEntities(List<Entity> entities, boolean notSaved) {
-		for (Entity entity : entities) {
-			for (CustomEntity<?> e : getEntities()) {
-				if (entity == e.getEntity()) {
-					if (notSaved && e.isSave()) {
-
-					} else {
-						e.delete();
-					}
-				}
-			}
-		}
 	}
 
 	public InventoryGUIHandler getGuiHandler() {
