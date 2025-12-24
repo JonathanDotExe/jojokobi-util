@@ -1,5 +1,8 @@
 package at.jojokobi.mcutil.item;
 
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
 /*import org.bukkit.craftbukkit.v1_21_R6.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -16,19 +19,20 @@ public final class ItemUtil {
 		
 	}
 	
-	/*
-	 * TODO reimplement
-	 * public static void printTagCompount (ItemStack item) {
-		net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
-		CompoundTag root = nmsItem.hasTag() ? nmsItem.getTag() : new CompoundTag();
-		System.out.println(root);
-	}
 	
 	public static ItemStack rename (ItemStack item, String name) {
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(name);
 		item.setItemMeta(meta);
 		return item;
+	}
+	
+	/*
+	 * TODO reimplement
+	 * public static void printTagCompount (ItemStack item) {
+		net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+		CompoundTag root = nmsItem.hasTag() ? nmsItem.getTag() : new CompoundTag();
+		System.out.println(root);
 	}
 	
 	public static void setNBTTag (ItemStack item, String key, Tag value) {
